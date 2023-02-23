@@ -1,8 +1,8 @@
 package com.cxc.test.platform.common.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Slf4j
 @CrossOrigin
-@RestController
+@Controller
 public class BaseController {
 
     @Resource

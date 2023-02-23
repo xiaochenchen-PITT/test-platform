@@ -19,7 +19,7 @@ import com.cxc.test.platform.migration.domain.mapping.TargetMappingItem;
 import com.cxc.test.platform.migration.ext.fieldCheck.FieldCheckExt;
 import com.cxc.test.platform.migration.ext.skip.SkipCheckHandlerChain;
 import com.cxc.test.platform.migration.ext.sourceLocate.SourceLocateExt;
-import com.cxc.test.platform.migration.utils.SpringUtils;
+import com.cxc.test.platform.migration.utils.MigrationSpringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
@@ -78,7 +78,7 @@ public class MigrationCheckService {
             Object targetValue = null;
             try {
                 try {
-                    SkipCheckHandlerChain skipCheckHandlerChain = SpringUtils.getSkipCheckHandlerChain();
+                    SkipCheckHandlerChain skipCheckHandlerChain = MigrationSpringUtils.getSkipCheckHandlerChain();
                     if (skipCheckHandlerChain.shouldSkip(sourceTableName, sourceFieldName, sourceData, migrationCheckConfig)) {
                         return null;
                     }
@@ -294,7 +294,7 @@ public class MigrationCheckService {
         }
 
         String locateBeanName = customizedMethod.getBeanName();
-        SourceLocateExt locateBean = SpringUtils.getLocateBean(locateBeanName);
+        SourceLocateExt locateBean = MigrationSpringUtils.getLocateBean(locateBeanName);
         if (locateBean == null) {
             return String.format("%s = \"%s\"", locateField, sourceId);
         }
@@ -339,7 +339,7 @@ public class MigrationCheckService {
         }
 
         String fcBeanName = mappingRule.getFieldCheckMethod().getBeanName();
-        FieldCheckExt fcBean = SpringUtils.getFcBean(fcBeanName);
+        FieldCheckExt fcBean = MigrationSpringUtils.getFcBean(fcBeanName);
         if (fcBean == null) {
             return sourceValue;
         }
@@ -355,7 +355,7 @@ public class MigrationCheckService {
         }
 
         String fcBeanName = mappingRule.getFieldCheckMethod().getBeanName();
-        FieldCheckExt fcBean = SpringUtils.getFcBean(fcBeanName);
+        FieldCheckExt fcBean = MigrationSpringUtils.getFcBean(fcBeanName);
         if (fcBean == null) {
             return CommonUtils.generalEquals(sourceValue, targetValue);
         }

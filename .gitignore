@@ -7,6 +7,7 @@ target/
 *.iws
 *.iml
 *.ipr
+*.log
 /.idea/
 
 ### Mac OS ###

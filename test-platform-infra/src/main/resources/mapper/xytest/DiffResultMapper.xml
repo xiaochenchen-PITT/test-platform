@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxc.personal.mapper.xytest.DiffResultMapper">
 
-    <resultMap id="ResultMap" type="com.cxc.personal.projects.migration.domain.diff.po.DiffResultPO">
+    <resultMap id="ResultMap" type="com.cxc.test.platform.infra.domain.diff.DiffResultPO">
         <id column="batch_id" property="batchId"/>
         <id column="is_success" property="isSuccess"/>
         <id column="is_equal" property="isEqual"/>
@@ -14,7 +14,7 @@
         <id column="modified_time" property="modifiedTime"/>
     </resultMap>
 
-    <insert id="insert" parameterType="com.cxc.personal.projects.migration.domain.diff.po.DiffResultPO">
+    <insert id="insert" parameterType="com.cxc.test.platform.infra.domain.diff.DiffResultPO">
         insert into t_migration_check_diff_result
         (batch_id, is_success, is_equal, error_message, trigger_url, total_count, failed_count, created_time, modified_time)
         values

@@ -18,7 +18,7 @@ public class GlobalCrosConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("*")
+//                        .allowedOriginPatterns("*")
                         .allowedHeaders("*")
                         .allowedMethods("GET", "HEAD", "POST","PUT", "DELETE", "OPTIONS")
                         .allowCredentials(true)

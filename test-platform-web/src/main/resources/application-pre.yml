@@ -1,0 +1,13 @@
+spring:
+  # 数据源配置
+  datasource:
+    xytest: # 数据源1
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://mysql-0.mysql.xxxx:3306/xytest_fix?characterEncoding=UTF-8&useLocalSessionState=true&serverTimezone=GMT%2b8
+      username: xxxx
+      password: xxxx
+    oms: # 数据源2
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://mysql-0.mysql.xxxxx:3306/oms_pre?useAffectedRows=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+      username: xxxx
+      password: xxxx
