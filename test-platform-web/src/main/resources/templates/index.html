@@ -1,59 +1,220 @@
 <!DOCTYPE html>
-<html lang="zh">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>测试效能平台</title>
-    <!-- 引入sdk的css文件 -->
-    <link rel="stylesheet" href="/sdk/sdk.css">
-    <link rel="stylesheet" href="/sdk/helper.css">
-    <link rel="stylesheet" href="/sdk/iconfont.css">
-    <!-- antd主题 -->
-    <link rel="stylesheet" href="/sdk/antd.css">
-    <!-- 引入sdk.js -->
-    <script src="/sdk/sdk.js"></script>
-    <!-- 页面的样式 -->
-    <style>
-        html,
-        body,
-        .app-wrapper {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-    </style>
+	<!--显示在浏览器地址栏-->
+	<link type="image/x-icon" rel="shortcut icon" href="favicon.ico"/>
+	<!---显示在收藏夹中-->
+	<link type="image/x-icon" rel="bookmark" href="favicon.ico" />
 </head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>Home</title>
 
-<body>
-<!-- 渲染的容器 -->
-<div id="root" class="app-wrapper"></div>
-<!-- 页面的内容 -->
-<script type="text/javascript">
-        (function () {
-            // 初始化
-            let amis = amisRequire('amis/embed');
-            // 通过替换下面这个配置来生成不同页面
-            let amisJSON = {
-              "type": "page",
-              "body": "Hello World!"
-            };
-            // 开始渲染，放入渲染容器#root，渲染的页面内容是amisJSON
-            let amisScoped = amis.embed(
-                '#root',
-                amisJSON,
-                {
-                    // 这里是初始 props
-                },
-                {
-                    theme: 'antd'
-                }
-            );
-        })();
-    </script>
+<!-- favicon -->
+<link href="favicon.png" rel=icon>
+
+<!-- web-fonts -->
+<link href='https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,500' rel='stylesheet' type='text/css'>
+
+<!-- font-awesome -->
+<link href="index/css/font-awesome.min.css" rel="stylesheet">
+
+<!-- Bootstrap -->
+<link href="index/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Style CSS -->
+<link href="index/css/style.css" rel="stylesheet">
+
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+<body id="page-top" data-spy="scroll" data-target=".navbar">
+<div id="main-wrapper">
+<!-- Page Preloader -->
+<div id="preloader">
+	<div id="status">
+		<div class="status-mes"></div>
+	</div>
+</div>
+
+<header class="header">
+	<!-- Navigation -->
+	<nav class="navbar main-menu" role="navigation">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-md-4 col-sm-6">
+					<div class="logo"></div>
+				</div>
+				<div class="col-md-8 col-sm-6">
+					<div class="info-box">
+						<span>Contact us</span>
+						<em>email: cxc0520@hotmail.com</em>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- .container -->
+	</nav>
+	<!-- .nav -->
+</header>
+<!-- .header-->
+
+<div class="jumbotron text-center">
+   <div class="content">
+	   <h1>测试效能平台</h1>
+	   <p class="lead">专注为产研团队提供一站式测试提效解决方案，在低代码测试工具、自动化、资损防控、数据一致性、线上质量、测试规范等方向上通过创新手段助力研发效率与质量双提升，多维度保障集团业务质量</p>
+	   <a href="https://www.baidu.com/">
+		   <button type="button" class="btn btn-primary btn-lg"  data-toggle="modal" data-target=".free-trial-form">开始使用</button>
+	   </a>
+   </div>
+</div>
+
+<section class="feature-icon-wrapper">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="section-title">
+					<h2>平台核心能力</h2>
+					<p class="lead">一站式测试提效解决方案</p>
+				</div>
+			</div>
+		</div>
+		<!-- .row -->
+
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="icon-left-style">
+					<div class="media">
+						<div class="media-left">
+								<img class="media-object" src="index/img/icons/suitcase.svg" alt="...">
+						</div>
+						<div class="media-body">
+							<h3 class="media-heading">开放工具中心</h3>
+							通过前后端低代码方式，降低测试工具编写成本，更好地助力业务提效
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="icon-left-style">
+					<div class="media">
+						<div class="media-left">
+								<img class="media-object" src="index/img/icons/mountain.svg" alt="...">
+						</div>
+						<div class="media-body">
+							<h3 class="media-heading">测试规范&线上质量</h3>
+							测试左移，包括制定SOP规范，PTM机制，开发自测标准，用例维护规范，缺陷模板，CICD集成，测试准入准出门槛等；测试右移，负责通过包括但不限于线上重点商品可售性监控，接口用例巡检，安全生产，多语言检测等事项
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- .row -->
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="icon-left-style">
+					<div class="media">
+						<div class="media-left">
+								<img class="media-object" src="index/img/icons/traveling.svg" alt="...">
+						</div>
+						<div class="media-body">
+							<h3 class="media-heading">数据度量仪表盘</h3>
+							通过自动化、资损防控、数据一致性、测试效能、成本优化数据大盘掌握全局，跟踪进展，以及辅助决策
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="icon-left-style">
+					<div class="media">
+						<div class="media-left">
+								<img class="media-object" src="index/img/icons/megaphone.svg" alt="...">
+						</div>
+						<div class="media-body">
+							<h3 class="media-heading">混沌测试</h3>
+							通过不断试验，了解系统的实际能承受的韧性边界并建立信心，通过不同的试验方法和目的，观察分布式系统的行为和反应，以试验的方法尽早揭露系统弱点。
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!-- .row -->
+<!--		<div class="row">-->
+<!--			<div class="col-sm-6">-->
+<!--				<div class="icon-left-style">-->
+<!--					<div class="media">-->
+<!--						<div class="media-left">-->
+<!--							<img class="media-object" src="index/img/icons/traveling.svg" alt="...">-->
+<!--						</div>-->
+<!--						<div class="media-body">-->
+<!--							<h3 class="media-heading">数据度量仪表盘</h3>-->
+<!--							通过自动化、资损防控、数据一致性、测试效能、成本优化数据大盘掌握全局，跟踪进展，以及辅助决策-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<div class="col-sm-6">-->
+<!--				<div class="icon-left-style">-->
+<!--					<div class="media">-->
+<!--						<div class="media-left">-->
+<!--							<img class="media-object" src="index/img/icons/megaphone.svg" alt="...">-->
+<!--						</div>-->
+<!--						<div class="media-body">-->
+<!--							<h3 class="media-heading">混沌测试</h3>-->
+<!--							通过不断试验，了解系统的实际能承受的韧性边界并建立信心，通过不同的试验方法和目的，观察分布式系统的行为和反应，以试验的方法尽早揭露系统弱点。-->
+<!--						</div>-->
+<!--					</div>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--		</div>&lt;!&ndash; .row &ndash;&gt;-->
+
+	</div>
+</section>
+<!-- .feature-icon-wrapper -->
+
+<section class="section-our-approach gray-bg">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="media">
+					<div class="media-left media-middle">
+						<img class="media-object" src="index/img/img-man-1.png" alt="...">
+					</div>
+					<div class="media-body media-middle">
+						<div class="up-title">我们是谁</div>
+						<h2 class="media-heading">XX技术质量团队</h2>
+						<p>通过深度参与软件研发全流程，评估需求合理性以及代码架构复杂度，识别业务和系统的核心风险点并做专项测试，同时通过创新技术，在自动化/工具/环境/数据等测试基建方面进行提效，建立高效全面的质量保障方案，在业务功能/数据资产/资金安全等方面端到端保障行云业务和系统稳定运行，最终助力业务放心快速奔跑。</p>
+						<p>
+							<a href="https://www.baidu.com/" target="_blank">关于我们</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<!-- .section-our-approach -->
+
+<footer class="footer">
+	<div class="copytext text-center">Copyright &copy; 2023. 测试效能平台 All rights reserved.</div>
+</footer>
+<!-- .footer -->
+
+</div>
+<!-- #main-wrapper -->
+
+
+<!-- jquery -->
+<script src="index/js/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="index/js/bootstrap.min.js"></script>
+<script src="index/js/scripts.js"></script>
 </body>
-
 </html>

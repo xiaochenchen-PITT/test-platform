@@ -16,6 +16,7 @@ import javax.sql.DataSource;
 
 /**
  * 业务DB
+ * 通过不同的MapperScan路径来实现数据源之间的隔离
  */
 @Configuration
 @MapperScan(basePackages = "com.cxc.test.platform.infra.mapper.xytest", sqlSessionFactoryRef = "xytestSqlSessionFactory")

@@ -1,6 +1,6 @@
 package com.cxc.test.platform.web.toolcenter;
 
-import com.cxc.test.platform.common.controller.BaseController;
+import com.cxc.test.platform.web.BaseController;
 import com.cxc.test.platform.common.domain.AmisResult;
 import com.cxc.test.platform.common.domain.ResultDO;
 import com.cxc.test.platform.toolcenter.domain.Tool;
@@ -22,7 +22,7 @@ public class ToolCenterController extends BaseController {
     @Resource
     ToolCenterService toolCenterService;
 
-    @GetMapping("/list")
+    @GetMapping("/test_list")
     public String testList(){
         return "toolcenter/list";
     }

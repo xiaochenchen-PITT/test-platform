@@ -2,12 +2,12 @@ package com.cxc.test.platform.common.domain;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class AmisResult implements Serializable {
 
@@ -91,11 +91,5 @@ public class AmisResult implements Serializable {
                 ", msg=" + msg +
                 ", msgTimeout=" + msgTimeout +
                 '}';
-    }
-
-    public static void main(String[] args) {
-        JSONObject dataJO = new JSONObject();
-        System.out.println(dataJO.toJSONString());
-        System.out.println(StringUtils.isNotEmpty(dataJO.toJSONString()));
     }
 }

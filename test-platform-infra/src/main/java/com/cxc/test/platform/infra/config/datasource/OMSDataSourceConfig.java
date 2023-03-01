@@ -14,7 +14,8 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import javax.sql.DataSource;
 
 /**
- * 业务DB不用了，放这做个多数据源的例子
+ * 业务DB不用了，放这里做个多数据源的例子
+ * 通过不同的MapperScan路径来实现数据源之间的隔离
  */
 @Configuration
 @MapperScan(basePackages = "com.cxc.test.platform.infra.mapper.oms", sqlSessionFactoryRef = "omsSqlSessionFactory")

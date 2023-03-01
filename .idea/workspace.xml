@@ -4,153 +4,76 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="能运行">
-      <change afterPath="$PROJECT_DIR$/test-platform-web/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migration/DemoMigrationCheckController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migration/MigrationCheckBaseController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migration/OneIdMigrationCheckController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/ToolCenterController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/application-pre.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/application-test.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/application.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/logback-spring.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/ang-ie11.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/ang.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/antd-ie11.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/antd.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/barcode.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/charts.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/codemirror.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/color-picker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/cropperjs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/cxd-ie11.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/cxd.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/dark-ie11.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/dark.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/exceljs.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/helper.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/iconfont.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/iconfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/iconfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/iconfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/iconfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/ie11-patch.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/locale/de-DE.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/markdown.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/papaparse.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/rest.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/rich-text.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/sdk-ie11.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/sdk.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/sdk.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/hls.js/hls.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/markdown-it/node_modules/entities/lib/maps/entities.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/base/browser/ui/codicons/codicon/codicon.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/base/worker/workerMain.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/apex/apex.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/azcli/azcli.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/bat/bat.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/clojure/clojure.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/coffee/coffee.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/cpp/cpp.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/csharp/csharp.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/css/css.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/dockerfile/dockerfile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/fsharp/fsharp.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/go/go.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/handlebars/handlebars.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/html/html.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/ini/ini.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/java/java.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/javascript/javascript.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/less/less.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/lua/lua.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/markdown/markdown.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/msdax/msdax.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/objective-c/objective-c.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/php/php.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/postiats/postiats.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/powershell/powershell.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/pug/pug.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/python/python.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/r/r.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/razor/razor.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/redis/redis.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/redshift/redshift.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/ruby/ruby.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/rust/rust.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/sb/sb.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/scheme/scheme.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/scss/scss.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/shell/shell.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/solidity/solidity.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/sql/sql.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/st/st.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/swift/swift.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/typescript/typescript.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/vb/vb.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/xml/xml.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/basic-languages/yaml/yaml.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/editor/editor.main.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/editor/editor.main.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/editor/editor.main.nls.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/editor/editor.main.nls.zh-cn.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/language/css/cssMode.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/language/css/cssWorker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/language/html/htmlMode.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/language/html/htmlWorker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/language/json/jsonMode.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/language/json/jsonWorker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/language/typescript/tsMode.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/language/typescript/tsWorker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/monaco-editor/min/vs/loader.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/thirds/mpegts.js/mpegts.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/sdk/tinymce.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter/list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="首页">
+      <change afterPath="$PROJECT_DIR$/log/SERVICE_NAME-info-20230228.log.0" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/css/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/favicon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img/icons/megaphone.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img/icons/mountain.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img/icons/settings.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img/icons/shirt.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img/icons/suitcase.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img/icons/traveling.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img/img-edu-hero-1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img/img-man-1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img/puff.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/js/bootstrap.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/js/jquery-2.1.4.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/js/scripts.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configSet.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/config/GlobalCrosConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/config/GlobalCrosConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/controller/BaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/controller/BaseController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/controller/BaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/BaseController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/AmisResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/AmisResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/DbConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/DbConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/datasource/OMSDataSourceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/datasource/OMSDataSourceConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/datasource/XytestDateSourceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/datasource/XytestDateSourceConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/DiffDetailMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/DiffDetailMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/DiffResultMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/DiffResultMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/ToolMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/ToolMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/ToolParamMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/ToolParamMapper.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/DiffDetailMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/DiffDetailMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/DiffResultMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/DiffResultMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migration/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/controller/DemoMigrationCheckController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/controller/MigrationCheckBaseController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/controller/OneIdMigrationCheckController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/service/MigrationCheckService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/service/MigrationCheckService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/utils/SpringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/utils/MigrationSpringUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/resources/Dockerfile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/resources/application-pre.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/resources/application-prod.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/resources/application-test.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/resources/application.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/resources/logback-spring.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-server/pom.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-server/src/main/java/com/cxc/test/platform/server/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/controller/ToolCenterController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/domain/CustomizedMethod.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/CustomizedMethod.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/domain/config/MigrationCheckConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/config/MigrationCheckConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/domain/config/MigrationConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/config/MigrationConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/domain/data/MigrationData.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/data/MigrationData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/domain/data/MigrationFullData.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/domain/locate/SourceLocator.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/locate/SourceLocator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/domain/mapping/MappingRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/mapping/MappingRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/domain/mapping/SourceMappingItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/mapping/SourceMappingItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/domain/mapping/TargetMappingItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/mapping/TargetMappingItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/fieldCheck/FieldCheckExt.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/fieldCheck/FieldCheckExt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/fieldCheck/impl/business/oneid/crmCbg/CrmCbgAccountTypeCheck.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/fieldCheck/impl/business/oneid/crmCbg/CrmCbgAccountTypeCheck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/fieldCheck/impl/common/BooleanCompare.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/fieldCheck/impl/common/BooleanCompare.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/fieldCheck/impl/common/CheckNotEmpty.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/fieldCheck/impl/common/CheckNotEmpty.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/fieldCheck/impl/common/ContainsJsonObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/fieldCheck/impl/common/ContainsJsonObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/fieldCheck/impl/common/ContainsJsonValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/fieldCheck/impl/common/ContainsJsonValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/fieldCheck/impl/common/GetJsonValueAndCompare.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/fieldCheck/impl/common/GetJsonValueAndCompare.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/fieldCheck/impl/common/IdIncreaseAndCompare.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/fieldCheck/impl/common/IdIncreaseAndCompare.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/fieldCheck/impl/common/JsonCompare.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/fieldCheck/impl/common/JsonCompare.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/skip/SkipCheckHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/SkipCheckHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/skip/SkipCheckHandlerChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/SkipCheckHandlerChain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/skip/impl/CommonSkipHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/impl/CommonSkipHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/skip/impl/MigrationCheckConfigSkipHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/impl/MigrationCheckConfigSkipHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/skip/impl/business/oneid/FsupplierTypeSkipHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/impl/business/oneid/FsupplierTypeSkipHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/sourceLocate/SourceLocateExt.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/SourceLocateExt.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/sourceLocate/impl/GetJsonAndLocate.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/GetJsonAndLocate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/sourceLocate/impl/business/oneid/JsonExtractSourceId.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/business/oneid/JsonExtractSourceId.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/ext/sourceLocate/impl/business/oneid/ServiceProviderLocate.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/business/oneid/ServiceProviderLocate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/service/DiffService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DiffService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/service/MigrationCheckService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/MigrationCheckService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/service/ThreadPoolFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/ThreadPoolFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/java/com/cxc/test/platform/migration/utils/MigrationSpringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/utils/MigrationSpringUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migration/src/main/resources/templates/字段映射模板.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/resources/templates/字段映射模板.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migration/DemoMigrationCheckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/DemoMigrationCheckController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migration/MigrationCheckBaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/MigrationCheckController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migration/OneIdMigrationCheckController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/ToolCenterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/ToolCenterController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/application-pre.yml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/application-pre.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +124,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "jdk.selected.JAVA_MODULE": "1.8",
-    "last_opened_file_path": "/Users/cxc/IdeaProjects/personal/test-platform/test-platform-web/src/main/resources/templates",
+    "last_opened_file_path": "/Users/cxc/IdeaProjects/personal/test-platform/test-platform-web/src/main/resources/static/index/img",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.31866953",
@@ -210,18 +133,18 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img" />
+      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index_new" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources" />
-      <recent name="$PROJECT_DIR$/test-platform-server/src/main/resources" />
-      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static/page" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates" />
-      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter" />
-      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/" />
-      <recent name="$PROJECT_DIR$/test-platform-server/src/main/resources/static" />
+      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index_new" />
+      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources" />
+      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/indexPage" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.cxc.test.platform.web" />
@@ -265,14 +188,22 @@
       <option name="project" value="LOCAL" />
       <updated>1677042718721</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="能运行">
+      <created>1677143873526</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1677143873526</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="first commit" />
     <MESSAGE value="能运行" />
-    <option name="LAST_COMMIT_MESSAGE" value="能运行" />
+    <MESSAGE value="首页" />
+    <option name="LAST_COMMIT_MESSAGE" value="首页" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

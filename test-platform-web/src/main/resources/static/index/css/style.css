@@ -1,0 +1,677 @@
+/*------------------------------------------------------------------
+# [Color codes]
+
+# Body  (text): #3a4750
+# Heading Color #444444
+# Theme Color (link color) #82b541
+# Mid grey (sub header) #f4f4f4
+# -------------------------------------------------------------------*/
+
+body {
+    font-family : 'Roboto', sans-serif;
+    font-size   : 16px;
+    line-height : 1.6em;
+    color       : #888888;
+    font-weight : normal;
+    background  : #ffffff;
+    }
+
+/* --------------------------------------
+ * Global Typography
+ *------------------------------------------*/
+
+h1, h2, h3, h4, h5, h6 {
+    margin : 0 0 15px;
+    color  : #444444;
+    }
+
+h1 {
+    font-size   : 54px;
+    line-height : 1em;
+    font-weight : 700;
+    }
+
+h2 {
+    font-size   : 37px;
+    line-height : 1em;
+    font-weight : 700;
+    }
+
+h3 {
+    font-size   : 25px;
+    line-height : 1.08em;
+    font-weight : 500;
+    }
+
+h4 {
+    font-size   : 17px;
+    line-height : 1.5em;
+    font-weight : 500;
+    }
+
+h5 {
+    font-size   : 17px;
+    line-height : 1.5em;
+    font-weight : 500;
+    }
+
+h6 {
+    font-size   : 15px;
+    line-height : 1.5em;
+    }
+
+/* --------------------------------------
+ * LINK STYLE
+ *------------------------------------------*/
+a {
+    color              : #82b541;
+    text-decoration    : none;
+    -webkit-transition : all 0.3s ease 0s;
+    -moz-transition    : all 0.3s ease 0s;
+    -o-transition      : all 0.3s ease 0s;
+    transition         : all 0.3s ease 0s;
+    }
+
+a,
+a:active,
+a:focus,
+a:active {
+    text-decoration : none;
+    outline         : none
+    }
+
+a:hover,
+a:focus {
+    text-decoration : none;
+    color           : #365a40;
+    }
+
+p {
+    margin-bottom : 20px;
+    }
+
+ul {
+    margin     : 0;
+    padding    : 0;
+    list-style : none;
+    }
+
+/*------------------
+ * Button Style
+ *------------------*/
+.btn {
+    padding       : 15px 30px;
+    margin-bottom : 0;
+    font-size     : 16px;
+    font-weight   : 500;
+    border-radius : 3px;
+    border        : 0;
+
+    }
+
+.btn-lg {
+    font-weight : 700;
+    font-size   : 24px;
+    padding     : 15px 30px;
+    }
+
+/*btn-primary*/
+.btn-primary {
+    background-color : #82b541;
+    }
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active:focus {
+    background : #70a032;
+    }
+
+/*btn-default*/
+.btn-default {
+    color            : #ffffff;
+    background-color : #f7941d;
+    }
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active:focus {
+    background : #da7b08;
+    color      : #ffffff;
+    }
+
+button:focus,
+.btn:focus,
+.btn:active:focus {
+    outline : none;
+    }
+
+/* --------------------
+ * Section Background
+ * -------------------*/
+
+.gray-bg {
+    background-color : #f5f5f5;
+    border-top       : 1px solid #eeeeee;
+    border-bottom    : 1px solid #eeeeee;
+    }
+
+.white-bg {
+    background-color : #ffffff;
+    }
+
+/* --------------------
+ *  main Wrapper
+ * -------------------*/
+#main-wrapper {
+    background : #ffffff;
+    overflow   : hidden;
+    }
+
+/*-----------------------------
+ * NAVIGATION & HEADER STYLE
+ *-------------------------------*/
+
+.header {
+    position : absolute;
+    left     : 0;
+    right    : 0;
+    top      : 40px;
+    z-index  : 9;
+    }
+
+@media (max-width : 600px) {
+    .header {
+        text-align: center;
+        }
+    }
+
+/*Logo*/
+.logo {
+    position : relative;
+    }
+
+/* header info box */
+
+.info-box {
+    text-align : right;
+    }
+
+.info-box span {
+    font-size : 14px;
+    color     : rgba(255, 255, 255, 0.7);
+    display   : block;
+    }
+
+.info-box strong {
+    color     : #ffffff;
+    font-size : 24px;
+    }
+
+
+@media (max-width : 600px) {
+    .info-box {
+        text-align: center;
+        margin-top: 20px;
+        }
+    }
+
+/*---------------------------
+* Section Title
+*---------------------------*/
+.section-title {
+    margin-bottom : 60px;
+    text-align    : center;
+    }
+
+.section-title h2 {
+    margin-bottom : 5px;
+    }
+
+.section-title p.lead {
+    color     : #888888;
+    }
+
+@media (max-width : 600px){
+    .section-title h2{
+        font-size: 26px;
+        }
+    .section-title p.lead{
+        font-size: 15px;
+        }
+    }
+
+/*-------------------
+ * Jumbotron
+ *-------------------*/
+
+.jumbotron {
+    background            : url("../img/img-edu-hero-1.jpg");
+    background-size       : cover;
+    padding               : 0;
+    margin                : 0;
+    height                : 100vh;
+    min-height            : 700px;
+    vertical-align        : middle;
+    position              : relative;
+    background-attachment : fixed;
+    background-repeat     : no-repeat;
+    background-position   : center center;
+    overflow              : hidden;
+    }
+
+.jumbotron .content {
+    position          : absolute;
+    top               : 50%;
+    left              : 0;
+    right             : 0;
+    height            : 30%;
+    width             : 100%;
+    margin            : 0 auto;
+    padding           : 0 10%;
+    transform         : translateY(-50%);
+    -webkit-transform : translateY(-50%);
+    -moz-transform    : translateY(-50%);
+    }
+
+.jumbotron .content h1 {
+    color       : #ffffff;
+    font-weight : bold;
+    }
+
+.jumbotron .content p {
+    font-size : 1.5em;
+    color     : rgba(255, 255, 255, .7);
+    }
+
+.jumbotron .btn {
+    margin-top : 40px;
+    }
+
+
+@media (max-width : 600px) {
+    .jumbotron .content{
+        min-height: auto;
+        }
+
+    .jumbotron .content h1 {
+        font-size: 26px;
+        }
+
+    .jumbotron .content p.lead{
+        font-size: 15px;
+        }
+    }
+
+/*-------------------
+ * Icon Left Style
+ *-------------------*/
+
+.feature-icon-wrapper {
+    padding : 100px 0 50px;
+    }
+
+.icon-left-style {
+    margin-bottom : 50px;
+    padding       : 0 40px;
+    }
+
+.icon-left-style .media img {
+    width : 80px;
+    }
+
+.icon-left-style .media .media-left {
+    padding-right : 30px;
+    }
+
+.icon-left-style .media .media-heading {
+    font-size     : 18px;
+    margin-bottom : 15px;
+    }
+
+.icon-left-style .media .media-body {
+    font-size : 14px;
+    }
+
+@media (max-width: 600px){
+    .icon-left-style .media{
+        display: block;
+        }
+
+    .icon-left-style .media-object{
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 15px;
+        }
+    .icon-left-style .media-body,
+    .icon-left-style .media-left,
+    .icon-left-style .media-right{
+        display: block;
+        width: 100%;
+
+        }
+    }
+
+/*-------------------
+ * Our Approach
+ *-------------------*/
+.section-our-approach {
+    padding : 80px 0;
+    }
+
+.section-our-approach .up-title {
+    font-size     : 24px;
+    margin-bottom : 15px;
+    }
+
+.section-our-approach .media-heading {
+    margin-bottom : 30px;
+    }
+
+@media (max-width: 768px){
+    .section-our-approach .media{
+        display: block;
+        }
+
+    .section-our-approach .media-object{
+        margin: 0 auto 40px;
+        max-width: 100%;
+        height: auto;
+        }
+    .section-our-approach .media-body,
+    .section-our-approach .media-left,
+    .section-our-approach .media-right{
+        display: block;
+        width: 100%;
+        text-align: center;
+        }
+    }
+
+/*-------------------
+ * Process Block
+ *-------------------*/
+.section-process-wrapper {
+    padding : 80px 0;
+    }
+
+.process-block i {
+    width         : 80px;
+    height        : 80px;
+    line-height   : 80px;
+    text-align    : center;
+    font-style    : normal;
+    font-size     : 30px;
+    font-weight   : 400;
+    display       : block;
+    border        : 2px solid #cccccc;
+    border-radius : 100%;
+    color         : #82b541;
+    margin        : 0 auto;
+    }
+
+.process-block h3 {
+    margin : 30px 0 15px;
+    }
+
+.action-button-wrapper {
+    margin-top : 50px;
+    }
+
+/*-------------------
+ * Section Statistics
+ *-------------------*/
+.section-statistics {
+    padding               : 100px 0;
+    background            : url("../img/img-statistics-bg.jpg");
+    position              : relative;
+    background-attachment : fixed;
+    background-repeat     : no-repeat;
+    background-position   : center center;
+    overflow              : hidden;
+    }
+
+.section-statistics::before {
+    content    : "";
+    position   : absolute;
+    left       : 0;
+    right      : 0;
+    top        : 0;
+    bottom     : 0;
+    background : rgba(0, 0, 0, .8);
+    }
+
+.section-statistics .statistics-item {
+    color      : #ffffff;
+    text-align : center;
+    padding    : 20px;
+    }
+
+.section-statistics .number {
+    font-size     : 60px;
+    line-height   : 1;
+    font-weight   : 700;
+    display       : block;
+    margin-bottom : 20px;
+    }
+
+.section-statistics .statistics-item p {
+    font-size : 18px;
+    color     : rgba(255, 255, 255, .7);
+    margin    : 0;
+    }
+
+/*-------------------
+ * Testimonial
+ *-------------------*/
+.section-testimonial {
+    padding : 80px 0;
+    }
+
+#testimonialSlider .carousel-inner {
+    overflow : visible;
+    }
+
+#testimonialSlider .carousel-inner .item {
+    text-align : center;
+    }
+
+#testimonialSlider .carousel-inner .item img {
+    display       : inline-block;
+    width         : 80px;
+    height        : 80px;
+    border-radius : 100%;
+    }
+
+#testimonialSlider .carousel-inner .item .name {
+    font-size   : 20px;
+    font-weight : 500;
+    color       : #555555;
+    margin-top  : 5px;
+    display     : block;
+    }
+
+#testimonialSlider .carousel-inner .item .desc {
+    color : #999999;
+    }
+
+#testimonialSlider .carousel-inner .item blockquote {
+    border-left : 0;
+    padding: 10px 50px;
+    }
+
+#testimonialSlider .carousel-inner .item blockquote p {
+    font-size   : 20px;
+    line-height : 34px;
+    font-weight : 300;
+    margin      : 30px 0;
+    }
+
+#testimonialSlider .carousel-control.right,
+#testimonialSlider .carousel-control.left {
+    font-size   : 36px;
+    background  : transparent;
+    width       : 34px;
+    height      : 36px;
+    line-height : 36px;
+    margin-top  : -18px;
+    text-align  : center;
+    text-shadow : none;
+    top         : 50%;
+    color       : #333333;
+    }
+
+#testimonialSlider .carousel-indicators{
+    bottom: -60px;
+    }
+
+#testimonialSlider .carousel-indicators li {
+    border : 2px solid #d8d8d8;
+    }
+
+#testimonialSlider .carousel-indicators .active {
+    background-color : #82b541;
+    border-color     : #82b541;
+    }
+
+@media (max-width : 768px) {
+    #testimonialSlider .carousel-control {
+        display: none;
+        }
+    }
+
+@media (max-width : 320px) {
+    #testimonialSlider .carousel-inner .item blockquote {
+        padding-left: 0;
+        padding-right: 0;
+        }
+    #testimonialSlider .carousel-inner .item blockquote p {
+        font-size: 15px;
+        }
+    }
+
+
+/*-------------------
+ * call to action
+ *-------------------*/
+
+.call-to-action {
+    padding          : 80px 0;
+    color            : #ffffff;
+    background-color : #82b541;
+    }
+
+.call-to-action h2 {
+    color : #ffffff;
+    }
+
+.call-to-action .content {
+    margin-bottom : 30px;
+    }
+
+.call-to-action .btn-default {
+    background-color : #ffffff;
+    border           : 2px solid #ffffff;
+    color            : #333333;
+    }
+
+.call-to-action .btn-default:hover,
+.call-to-action .btn-default:focus {
+    background-color   : transparent;
+    color              : #ffffff;
+    border-color       : #ffffff;
+    -webkit-box-shadow : none;
+    -moz-box-shadow    : none;
+    box-shadow         : none;
+    }
+
+/*--------------
+ * Modal Style
+ *--------------*/
+
+.modal .modal-content {
+    padding       : 40px;
+    border-radius : 0;
+    }
+
+.modal .modal-body {
+    padding : 0;
+    }
+
+.modal .modal-header {
+    padding       : 0 0 15px;
+    margin-bottom : 20px;
+    }
+
+.modal .modal-content .form-group {
+    margin-bottom : 20px;
+    }
+
+/*-------------------
+ * Form Style
+ *-------------------*/
+.form-control {
+    height        : 53px;
+    padding       : 6px 20px;
+    font-size     : 13px;
+    line-height   : 24px;
+    color         : #969595;
+    border        : 1px solid #f1f1f1;
+    border-radius : 0;
+    box-shadow    : none;
+    }
+
+.form-control:focus,
+.form-control:active {
+    box-shadow : none;
+    }
+
+/* --------------------------------------------
+ *   Footer
+ *---------------------------------------------- */
+
+/* Copyright */
+
+.footer .copyright-section {
+    font-size : 13px;
+    color     : #888888;
+    padding   : 30px 0;
+    }
+
+.footer .copyright-section .copytext {
+    font-weight : 400;
+    display     : block;
+    }
+
+/* ---------------------------------------------- /*
+ * Preloader
+/* ---------------------------------------------- */
+#preloader {
+    background : #1ABC9C;
+    bottom     : 0;
+    left       : 0;
+    position   : fixed;
+    right      : 0;
+    top        : 0;
+    z-index    : 9999;
+    }
+
+#status,
+.status-mes {
+    /*background-image    : url(../img/preloader.gif);*/
+    background-image    : url(../img/puff.svg);
+    background-position : center;
+    background-repeat   : no-repeat;
+    height              : 200px;
+    left                : 50%;
+    margin              : -100px 0 0 -100px;
+    position            : absolute;
+    top                 : 50%;
+    width               : 200px;
+    }
+
+.status-mes {
+    background : none;
+    left       : 0;
+    margin     : 0;
+    text-align : center;
+    top        : 65%;
+    }

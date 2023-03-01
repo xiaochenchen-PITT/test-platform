@@ -25,7 +25,7 @@
         </dependency>
         <dependency>
             <groupId>com.cxc</groupId>
-            <artifactId>test-platform-migration</artifactId>
+            <artifactId>test-platform-migrationcheck</artifactId>
         </dependency>
         <dependency>
             <groupId>com.cxc</groupId>

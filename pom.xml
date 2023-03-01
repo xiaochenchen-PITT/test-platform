@@ -18,7 +18,7 @@
 
     <modules>
         <module>test-platform-common</module>
-        <module>test-platform-migration</module>
+        <module>test-platform-migrationcheck</module>
         <module>test-platform-infra</module>
         <module>test-platform-toolcenter</module>
         <module>test-platform-web</module>
@@ -46,7 +46,7 @@
             </dependency>
             <dependency>
                 <groupId>com.cxc</groupId>
-                <artifactId>test-platform-migration</artifactId>
+                <artifactId>test-platform-migrationcheck</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
