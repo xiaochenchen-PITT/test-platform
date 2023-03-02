@@ -5,7 +5,7 @@
   <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO">
     <id column="config_id" property="configId" />
     <id column="source_table_name" property="sourceTableName" />
-    <id column="source_field_name" property="sourceFieldName" />
+    <id column="source_field_names" property="sourceFieldNames" />
     <id column="is_primary_key" property="isPrimaryKey" />
     <id column="target_table_name" property="targetTableName" />
     <id column="target_field_name" property="targetFieldName" />
@@ -17,10 +17,10 @@
 
   <insert id="insertBatch" parameterType="java.util.List">
     insert into t_mapping_rule
-    (config_id, source_table_name, source_field_name, is_primary_key, target_table_name, target_field_name, field_check_method_name, field_check_method_args, created_time, modified_time)
+    (config_id, source_table_name, source_field_names, is_primary_key, target_table_name, target_field_name, field_check_method_name, field_check_method_args, created_time, modified_time)
     values
     <foreach collection ="mappingRulePOList" item="mappingRulePO" separator =",">
-      (#{mappingRulePO.configId}, #{mappingRulePO.sourceTableName}, #{mappingRulePO.sourceFieldName}, #{mappingRulePO.isPrimaryKey}, #{mappingRulePO.targetTableName}, #{mappingRulePO.targetFieldName}, #{mappingRulePO.fieldCheckMethodName}, #{mappingRulePO.fieldCheckMethodArg}, now(), now())
+      (#{mappingRulePO.configId}, #{mappingRulePO.sourceTableName}, #{mappingRulePO.sourceFieldNames}, #{mappingRulePO.isPrimaryKey}, #{mappingRulePO.targetTableName}, #{mappingRulePO.targetFieldName}, #{mappingRulePO.fieldCheckMethodName}, #{mappingRulePO.fieldCheckMethodArg}, now(), now())
     </foreach>
   </insert>
 

@@ -5,6 +5,7 @@ import com.cxc.test.platform.common.domain.diff.FieldCheckResult;
 import com.cxc.test.platform.common.utils.CommonUtils;
 import com.cxc.test.platform.common.utils.JsonUtils;
 import com.cxc.test.platform.migrationcheck.ext.fieldCheck.FieldCheckExt;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,15 +19,17 @@ import java.util.List;
 public class ContainsJsonValue implements FieldCheckExt {
 
     @Override
-    public FieldCheckResult check(Object sourceValue, Object targetValue, List<Object> args) {
+    public FieldCheckResult check(List<Object> sourceValues, Object targetValue, List<Object> args) {
+        Object sourceValue = CollectionUtils.isNotEmpty(sourceValues) ? sourceValues.get(0) : null;
+
         String key = String.valueOf(args.get(0));
         String targetValueStr = String.valueOf(targetValue);
 
         String jsonValue = String.valueOf(JsonUtils.getJsonFromPath(JSONObject.parseObject(targetValueStr), "$." + key));
 
         return FieldCheckResult.builder()
-            .isPass(CommonUtils.generalEquals(String.valueOf(sourceValue), jsonValue))
-            .computedValue(sourceValue)
-            .build();
+                .isPass(CommonUtils.generalEquals(String.valueOf(sourceValue), jsonValue))
+                .computedValue(sourceValue)
+                .build();
     }
 }

@@ -3,7 +3,6 @@ package com.cxc.test.platform.infra.utils;
 import com.cxc.test.platform.infra.config.DatabaseConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.http.util.Asserts;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
@@ -41,7 +40,7 @@ public class JdbcUtils {
             return null;
         }
 
-        Asserts.check(result.size() == 1, "result has more than 1 size, sql: %s", sql);
+//        Asserts.check(result.size() == 1, "result has more than 1 size, sql: %s", sql);
         return result.get(0).get(fieldName);
     }
 }

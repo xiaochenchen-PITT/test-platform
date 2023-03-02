@@ -78,9 +78,13 @@ public class DemoMigrationCheckController extends MigrationCheckController {
         Map<String, SourceLocator> tableAndLocatorMap = new HashMap<>();
         for (MappingRule mappingRule : migrationConfig.getValidMappingRuleList()){
             // 所有目标表都用同一个字段（biz_features）承载原表主键id，同时定位方法也都一样
-            tableAndLocatorMap.put(mappingRule.getTargetMappingItem().getTableName(), locator);
+            String targetTable = mappingRule.getTargetMappingItem().getTableName();
+            String targetField = mappingRule.getTargetMappingItem().getFieldName();
+
+            String locatorKey = targetTable + MigrationConfig.TABLE_AND_FIELD_JOINER + targetField;
+            tableAndLocatorMap.put(locatorKey, locator);
         }
-        migrationConfig.setTableAndLocatorMethodMap(tableAndLocatorMap);
+        migrationConfig.setTableFieldAndLocatorMap(tableAndLocatorMap);
 
         Long batchId = System.currentTimeMillis();
         singleExecutorService.submit(() -> {

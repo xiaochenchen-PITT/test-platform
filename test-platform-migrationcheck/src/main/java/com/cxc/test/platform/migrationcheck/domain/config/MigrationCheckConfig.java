@@ -1,6 +1,9 @@
 package com.cxc.test.platform.migrationcheck.domain.config;
 
+import com.cxc.test.platform.migrationcheck.domain.mapping.SourceMappingItem;
+import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
@@ -8,6 +11,11 @@ public class MigrationCheckConfig {
 
     // 部分特殊的字段需要提前校验，和提前结束
     private List<String> CHECK_ADVANCE_FIELDS = Arrays.asList("fcooperation_type");
+
+    // 是否异步执行（线程池）
+    @Getter
+    @Setter
+    private Boolean runAsync = true;
 
     /**
      * 要对比的字段列表配置
@@ -25,7 +33,12 @@ public class MigrationCheckConfig {
         return tableAndCheckFieldsMap;
     }
 
-    public boolean checkInAdvance(String fieldName) {
-        return CHECK_ADVANCE_FIELDS.contains(fieldName);
+    public boolean checkInAdvance(SourceMappingItem sourceMappingItem) {
+        // 和source table无关的target value需要提前校验
+        if (sourceMappingItem == null || StringUtils.isEmpty(sourceMappingItem.getTableName())) {
+            return true;
+        }
+
+        return sourceMappingItem.getFieldNameList().stream().anyMatch(name -> CHECK_ADVANCE_FIELDS.contains(name));
     }
 }

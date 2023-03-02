@@ -1,5 +1,6 @@
 package com.cxc.test.platform.migrationcheck.ext.sourceLocate.impl;
 
+import com.cxc.test.platform.migrationcheck.domain.data.MigrationData;
 import com.cxc.test.platform.migrationcheck.ext.sourceLocate.SourceLocateExt;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class GetJsonAndLocate implements SourceLocateExt {
 
     @Override
-    public String locateSource(String locateField, String sourceTable, String sourceId, List<Object> args) {
+    public String locateSource(String locateField, MigrationData sourceData, String sourceId, List<Object> args) {
         String jsonPath = String.valueOf(args.get(0));
         if (!jsonPath.startsWith("$.")) {
             jsonPath = "$." + jsonPath;

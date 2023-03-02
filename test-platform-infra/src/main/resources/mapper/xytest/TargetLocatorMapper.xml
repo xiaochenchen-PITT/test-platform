@@ -5,6 +5,7 @@
   <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.TargetLocatorPO">
     <id column="config_id" property="configId" />
     <id column="target_table_name" property="targetTableName" />
+    <id column="target_field_name" property="targetFieldName" />
     <id column="locate_field" property="locateField" />
     <id column="locate_method_name" property="locateMethodName" />
     <id column="locate_method_args" property="locateMethodArgs" />
@@ -14,10 +15,10 @@
 
   <insert id="insert" parameterType="java.util.List">
     insert into t_target_locator
-    (config_id, target_table_name, locate_field, locate_method_name, locate_method_args, created_time, modified_time)
+    (config_id, target_table_name, target_field_name, locate_field, locate_method_name, locate_method_args, created_time, modified_time)
     values
     <foreach collection ="targetLocatorPOList" item="targetLocatorPO" separator =",">
-      (#{targetLocatorPO.configId}, #{targetLocatorPO.targetTableName}, #{targetLocatorPO.locateField}, #{targetLocatorPO.locateMethodName}, #{targetLocatorPO.locateMethodArgs}, now(), now())
+      (#{targetLocatorPO.configId}, #{targetLocatorPO.targetTableName}, #{targetLocatorPO.targetFieldName}, #{targetLocatorPO.locateField}, #{targetLocatorPO.locateMethodName}, #{targetLocatorPO.locateMethodArgs}, now(), now())
     </foreach>
   </insert>
 

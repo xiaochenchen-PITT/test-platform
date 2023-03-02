@@ -3,6 +3,7 @@ package com.cxc.test.platform.migrationcheck.ext.fieldCheck.impl.common;
 import com.cxc.test.platform.common.domain.diff.FieldCheckResult;
 import com.cxc.test.platform.common.utils.JsonCompareUtils;
 import com.cxc.test.platform.migrationcheck.ext.fieldCheck.FieldCheckExt;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,12 +16,14 @@ import java.util.List;
 public class JsonCompare implements FieldCheckExt {
 
     @Override
-    public FieldCheckResult check(Object sourceValue, Object targetValue, List<Object> args) {
+    public FieldCheckResult check(List<Object> sourceValues, Object targetValue, List<Object> args) {
+        Object sourceValue = CollectionUtils.isNotEmpty(sourceValues) ? sourceValues.get(0) : null;
+
         return FieldCheckResult.builder()
-            .isPass(JsonCompareUtils.compareJson(String.valueOf(sourceValue), String.valueOf(targetValue), null).getIsEqual())
+                .isPass(JsonCompareUtils.compareJson(String.valueOf(sourceValue), String.valueOf(targetValue), null).getIsEqual())
 //            .isPass(checkEachFeaturePair(Arrays.asList(sourceValue.split(";")), Arrays.asList(targetValue.split(";"))))
-            .computedValue(null)
-            .build();
+                .computedValue(null)
+                .build();
     }
 
 //    // 以下是【feature对需要使用;分割，同时使用:链接key和value】格式的逻辑

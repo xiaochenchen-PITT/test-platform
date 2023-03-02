@@ -3,6 +3,8 @@ package com.cxc.test.platform.migrationcheck.ext.fieldCheck.impl.business.oneid.
 import com.cxc.test.platform.common.domain.diff.FieldCheckResult;
 import com.cxc.test.platform.common.utils.CommonUtils;
 import com.cxc.test.platform.migrationcheck.ext.fieldCheck.FieldCheckExt;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,19 +17,20 @@ import java.util.List;
 public class CrmCbgAccountTypeCheck implements FieldCheckExt {
 
     @Override
-    public FieldCheckResult check(Object sourceValue, Object targetValue, List<Object> args) {
+    public FieldCheckResult check(List<Object> sourceValues, Object targetValue, List<Object> args) {
+        Object sourceValue = CollectionUtils.isNotEmpty(sourceValues) ? sourceValues.get(0) : null;
         String parsed = convert(String.valueOf(sourceValue));
 
         return FieldCheckResult.builder()
-            .isPass(CommonUtils.generalEquals(parsed, targetValue))
-            .computedValue(parsed)
-            .build();
+                .isPass(CommonUtils.generalEquals(parsed, targetValue))
+                .computedValue(parsed)
+                .build();
     }
 
     private String convert(String sourceValue) {
-        if (sourceValue.equals("1")) {
+        if (StringUtils.equals(sourceValue, "1")) {
             return "2";
-        } else if (sourceValue.equals("2")) {
+        } else if (StringUtils.equals(sourceValue, "2")) {
             return "1";
         } else {
             return "3";

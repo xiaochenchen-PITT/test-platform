@@ -13,7 +13,7 @@ public class MappingRulePO {
 
     private String sourceTableName;
 
-    private String sourceFieldName;
+    private String sourceFieldNames;
 
     /**
      * 1：是，0：否

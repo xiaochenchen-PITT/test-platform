@@ -1,5 +1,6 @@
 package com.cxc.test.platform.migrationcheck.ext.sourceLocate.impl.business.oneid;
 
+import com.cxc.test.platform.migrationcheck.domain.data.MigrationData;
 import com.cxc.test.platform.migrationcheck.ext.sourceLocate.SourceLocateExt;
 import com.cxc.test.platform.migrationcheck.ext.sourceLocate.impl.GetJsonAndLocate;
 import org.springframework.stereotype.Component;
@@ -17,10 +18,10 @@ public class JsonExtractSourceId implements SourceLocateExt {
     private final String KEY = "sourceId";
 
     @Override
-    public String locateSource(String locateField, String sourceTable, String sourceId, List<Object> args) {
-        String jsonPath = "$." + sourceTable + "_" + KEY;
+    public String locateSource(String locateField, MigrationData sourceData, String sourceId, List<Object> args) {
+        String jsonPath = "$." + sourceData.getTableName() + "_" + KEY;
 
         args = Arrays.asList(jsonPath);
-        return getJsonAndLocate.locateSource(locateField, sourceTable, sourceId, args);
+        return getJsonAndLocate.locateSource(locateField, sourceData, sourceId, args);
     }
 }

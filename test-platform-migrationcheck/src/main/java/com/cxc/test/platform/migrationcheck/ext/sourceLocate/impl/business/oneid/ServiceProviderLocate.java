@@ -1,5 +1,6 @@
 package com.cxc.test.platform.migrationcheck.ext.sourceLocate.impl.business.oneid;
 
+import com.cxc.test.platform.migrationcheck.domain.data.MigrationData;
 import com.cxc.test.platform.migrationcheck.ext.sourceLocate.SourceLocateExt;
 import com.cxc.test.platform.migrationcheck.ext.sourceLocate.impl.GetJsonAndLocate;
 import org.springframework.stereotype.Component;
@@ -22,13 +23,14 @@ public class ServiceProviderLocate implements SourceLocateExt {
     private final String KEY = "sourceId";
 
     @Override
-    public String locateSource(String locateField, String sourceTable, String sourceId, List<Object> args) {
+    public String locateSource(String locateField, MigrationData sourceData, String sourceId, List<Object> args) {
+        String sourceTable = sourceData.getTableName();
         String jsonPath = "$." + sourceTable + "_" + KEY;
 
         args = Arrays.asList(jsonPath);
-        String jsonFilter = getJsonAndLocate.locateSource(locateField, sourceTable, sourceId, args);
+        String jsonFilter = getJsonAndLocate.locateSource(locateField, sourceData, sourceId, args);
 
-        String serviceTypeFilter = String.format("service_type = %s", getServiceTypeFromSourceTable(sourceTable));
+        String serviceTypeFilter = String.format("service_type = \"%s\"", getServiceTypeFromSourceTable(sourceTable));
 
         return jsonFilter + " and " + serviceTypeFilter;
     }

@@ -24,6 +24,8 @@ public class DiffDetailPO {
 
     private String sourceValue;
 
+    private String computedSourceValue;
+
     private String targetQuerySql;
 
     private String targetTableName;

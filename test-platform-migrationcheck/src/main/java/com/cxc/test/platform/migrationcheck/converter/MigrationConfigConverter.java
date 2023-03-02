@@ -44,7 +44,7 @@ public class MigrationConfigConverter {
                 MappingRulePO mappingRulePO = MappingRulePO.builder()
                         .configId(migrationConfig.getConfigId())
                         .sourceTableName(mappingRule.getSourceMappingItem().getTableName())
-                        .sourceFieldName(mappingRule.getSourceMappingItem().getFieldName())
+                        .sourceFieldNames(String.join(",", mappingRule.getSourceMappingItem().getFieldNameList()))
                         .isPrimaryKey(mappingRule.getSourceMappingItem().isPrimaryKey() ? 1 : 0)
                         .targetTableName(mappingRule.getTargetMappingItem().getTableName())
                         .targetFieldName(mappingRule.getTargetMappingItem().getFieldName())
@@ -80,11 +80,12 @@ public class MigrationConfigConverter {
     public List<TargetLocatorPO> convertTargetLocatorPOList(MigrationConfig migrationConfig) {
         List<TargetLocatorPO> targetLocatorPOList = new ArrayList<>();
 
-        if (MapUtils.isNotEmpty(migrationConfig.getTableAndLocatorMethodMap())) {
-            for (Map.Entry<String, SourceLocator> entry : migrationConfig.getTableAndLocatorMethodMap().entrySet()) {
+        if (MapUtils.isNotEmpty(migrationConfig.getTableFieldAndLocatorMap())) {
+            for (Map.Entry<String, SourceLocator> entry : migrationConfig.getTableFieldAndLocatorMap().entrySet()) {
                 TargetLocatorPO targetLocatorPO = TargetLocatorPO.builder()
                         .configId(migrationConfig.getConfigId())
-                        .targetTableName(entry.getKey())
+                        .targetTableName(entry.getKey().split(MigrationConfig.TABLE_AND_FIELD_JOINER)[0])
+                        .targetFieldName(entry.getKey().split(MigrationConfig.TABLE_AND_FIELD_JOINER)[1])
                         .locateField(entry.getValue().getLocateField())
                         .locateMethodName(entry.getValue().getLocateMethod().getBeanName())
                         .locateMethodArgs(entry.getValue().getLocateMethod().getArgs().stream().map(String::valueOf).toString())
@@ -127,8 +128,8 @@ public class MigrationConfigConverter {
         }
         migrationConfig.setTableAndSourceInitSqlMap(tableAndSourceInitSqlMap);
 
-        // tableAndLocatorMethodMap
-        Map<String, SourceLocator> tableAndLocatorMethodMap = new HashMap<>();
+        // tableFieldAndLocatorMap
+        Map<String, SourceLocator> tableFieldAndLocatorMap = new HashMap<>();
         for (TargetLocatorPO targetLocatorPO : targetLocatorPOList) {
             SourceLocator sourceLocator = SourceLocator.builder()
                     .locateField(targetLocatorPO.getLocateField())
@@ -138,9 +139,10 @@ public class MigrationConfigConverter {
                             .build())
                     .build();
 
-            tableAndLocatorMethodMap.put(targetLocatorPO.getTargetTableName(), sourceLocator);
+            String key = targetLocatorPO.getTargetTableName() + MigrationConfig.TABLE_AND_FIELD_JOINER + targetLocatorPO.getTargetFieldName();
+            tableFieldAndLocatorMap.put(key, sourceLocator);
         }
-        migrationConfig.setTableAndLocatorMethodMap(tableAndLocatorMethodMap);
+        migrationConfig.setTableFieldAndLocatorMap(tableFieldAndLocatorMap);
 
         return migrationConfig;
     }
@@ -149,7 +151,7 @@ public class MigrationConfigConverter {
         MappingRule mappingRule = MappingRule.builder()
                 .sourceMappingItem(SourceMappingItem.builder()
                         .tableName(mappingRulePO.getSourceTableName())
-                        .fieldName(mappingRulePO.getSourceFieldName())
+                        .fieldNames(mappingRulePO.getSourceFieldNames())
                         .isPrimaryKey(mappingRulePO.getIsPrimaryKey() == 1)
                         .build())
                 .targetMappingItem(TargetMappingItem.builder()

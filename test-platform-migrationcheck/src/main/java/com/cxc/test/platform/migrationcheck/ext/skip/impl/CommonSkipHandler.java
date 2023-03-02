@@ -15,6 +15,8 @@ public class CommonSkipHandler implements SkipCheckHandler {
     // 不好处理的字段，检查之后跳过
     private static List<String> SKIP_FIELDS = new ArrayList<>();
 
+    private final static String TABLE_AND_FIELD_JOINER = "#";
+
     static {
         SKIP_FIELDS.add("t_merchants_cooperative_information#fjoint_operation_status"); // 已知问题
         SKIP_FIELDS.add("t_merchants_supplier_basic_info#fsupplier_type"); // 2和true的问题
@@ -34,7 +36,7 @@ public class CommonSkipHandler implements SkipCheckHandler {
             return false;
         }
 
-        if (SKIP_FIELDS.contains(sourceTableName + "#" + sourceFieldName)) {
+        if (SKIP_FIELDS.contains(sourceTableName + TABLE_AND_FIELD_JOINER + sourceFieldName)) {
             return true;
         }
 

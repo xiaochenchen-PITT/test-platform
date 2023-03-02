@@ -37,7 +37,7 @@ public class MigrationCheckController extends BaseController {
     private final String CONFIG_FIELD_SPLIT = ",";
 
     @GetMapping("/config_set")
-    public String configSet(){
+    public String configSet() {
         return "migrationcheck/configSet";
     }
 
@@ -92,22 +92,22 @@ public class MigrationCheckController extends BaseController {
         // mappingRuleList
         List<MappingRule> mappingRuleList = new ArrayList<>();
         JSONArray mappingRuleJA = migrationConfigVO.getExcel();
-        for (Object mappingRuleO:  mappingRuleJA) {
+        for (Object mappingRuleO : mappingRuleJA) {
             JSONObject mappingRuleJO = (JSONObject) mappingRuleO;
 
             MappingRule mappingRule = MappingRule.builder()
                     .sourceMappingItem(SourceMappingItem.builder()
-                            .tableName(mappingRuleJO.getString(MappingRule.SOURCE_TABLE_NAME))
-                            .fieldName(mappingRuleJO.getString(MappingRule.SOURCE_FIELD_NAME))
-                            .isPrimaryKey(mappingRuleJO.getBoolean(MappingRule.IS_PRIMARY_KEY))
+                            .tableName(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_TABLE_NAME))
+                            .fieldNames(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_FIELD_NAME))
+                            .isPrimaryKey(mappingRuleJO.getBoolean(MappingRule.EXCEL_IS_PRIMARY_KEY))
                             .build())
                     .targetMappingItem(TargetMappingItem.builder()
-                            .tableName(mappingRuleJO.getString(MappingRule.TARGET_TABLE_NAME))
-                            .fieldName(mappingRuleJO.getString(MappingRule.TARGET_FIELD_NAME))
+                            .tableName(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_TABLE_NAME))
+                            .fieldName(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_FIELD_NAME))
                             .build())
                     .fieldCheckMethod(CustomizedMethod.builder()
-                            .beanName(mappingRuleJO.getString(MappingRule.FIELD_CHECK_METHOD_NAME))
-                            .args(Arrays.asList(mappingRuleJO.getString(MappingRule.FIELD_CHECK_METHOD_ARGS).split(",")))
+                            .beanName(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_NAME))
+                            .args(Arrays.asList(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_ARGS).split(",")))
                             .build())
                     .build();
 
@@ -119,12 +119,12 @@ public class MigrationCheckController extends BaseController {
         // tableAndSourceInitSqlMap
         Map<String, String> tableAndSourceInitSqlMap = new HashMap<>();
         for (Map.Entry<String, Object> entry : migrationConfigVO.getSourceTableSqlKvs().entrySet()) {
-            tableAndSourceInitSqlMap.put(entry.getKey(), ((JSONObject)entry.getValue()).getString("sourceDataSql"));
+            tableAndSourceInitSqlMap.put(entry.getKey(), ((JSONObject) entry.getValue()).getString("sourceDataSql"));
         }
         migrationConfig.setTableAndSourceInitSqlMap(tableAndSourceInitSqlMap);
 
         // tableAndLocatorMethodMap
-        Map<String, SourceLocator> tableAndLocatorMethodMap = new HashMap<>();
+        Map<String, SourceLocator> tableFieldAndLocatorMap = new HashMap<>();
         for (Map.Entry<String, Object> entry : migrationConfigVO.getTargetLocatorKvs().entrySet()) {
             JSONObject locatorJO = (JSONObject) entry.getValue();
             SourceLocator sourceLocator = SourceLocator.builder()
@@ -135,9 +135,10 @@ public class MigrationCheckController extends BaseController {
                             .build())
                     .build();
 
-            tableAndLocatorMethodMap.put(entry.getKey(), sourceLocator);
+            String key = entry.getKey() + MigrationConfig.TABLE_AND_FIELD_JOINER + locatorJO.getString("targetFieldName");
+            tableFieldAndLocatorMap.put(key, sourceLocator);
         }
-        migrationConfig.setTableAndLocatorMethodMap(tableAndLocatorMethodMap);
+        migrationConfig.setTableFieldAndLocatorMap(tableFieldAndLocatorMap);
 
         return migrationConfig;
     }
@@ -181,24 +182,24 @@ public class MigrationCheckController extends BaseController {
         for (Map<Integer, String> data : dataList) {
             try {
                 MappingRule mappingRule = MappingRule.builder()
-                    .sourceMappingItem(SourceMappingItem.builder()
-                        .tableName(trim(data.get(0)))
-                        .fieldName(trim(data.get(1)))
-                        .isPrimaryKey(Boolean.parseBoolean(trim(data.get(2))))
-                        .build())
-                    .targetMappingItem(TargetMappingItem.builder()
-                        .tableName(trim(data.get(3)))
-                        .fieldName(trim(data.get(4)))
-                        .build())
-                    .fieldCheckMethod(CustomizedMethod.builder()
-                        .beanName(trim(data.get(5)))
-                        .args(parse(data.get(6)))
-                        .build())
-                    .build();
+                        .sourceMappingItem(SourceMappingItem.builder()
+                                .tableName(trim(data.get(0)))
+                                .fieldNames(trim(data.get(1)))
+                                .isPrimaryKey(Boolean.parseBoolean(trim(data.get(2))))
+                                .build())
+                        .targetMappingItem(TargetMappingItem.builder()
+                                .tableName(trim(data.get(3)))
+                                .fieldName(trim(data.get(4)))
+                                .build())
+                        .fieldCheckMethod(CustomizedMethod.builder()
+                                .beanName(trim(data.get(5)))
+                                .args(parse(data.get(6)))
+                                .build())
+                        .build();
 
                 mappingRuleList.add(mappingRule);
             } catch (Exception e) {
-                log.error(String.format("Failed to parse excel row, data: %s", String.valueOf(data)) , e);
+                log.error(String.format("Failed to parse excel row, data: %s", String.valueOf(data)), e);
                 continue;
             }
         }
