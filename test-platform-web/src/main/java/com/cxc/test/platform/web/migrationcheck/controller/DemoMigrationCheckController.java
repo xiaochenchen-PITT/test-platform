@@ -1,4 +1,4 @@
-package com.cxc.test.platform.web.migrationcheck;
+package com.cxc.test.platform.web.migrationcheck.controller;
 
 import com.cxc.test.platform.common.domain.AmisResult;
 import com.cxc.test.platform.common.domain.diff.DiffResult;
@@ -89,6 +89,6 @@ public class DemoMigrationCheckController extends MigrationCheckController {
         });
 
         String retInfo = String.format("starting migration check, env: %s, limit: %s, please check later with batch id: %s", env, limit, batchId);
-        return AmisResult.simpleSuccess(retInfo);
+        return AmisResult.simpleSuccess(retInfo, null);
     }
 }

@@ -4,6 +4,7 @@ import com.cxc.test.platform.infra.config.DatabaseConfig;
 import com.cxc.test.platform.migrationcheck.domain.locate.SourceLocator;
 import com.cxc.test.platform.migrationcheck.domain.mapping.MappingRule;
 import com.cxc.test.platform.migrationcheck.domain.mapping.SourceMappingItem;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.collections4.MapUtils;
@@ -14,8 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+@Data
 public class MigrationConfig {
+
+    private Long configId;
 
     /**
      * 全量字段映射关系

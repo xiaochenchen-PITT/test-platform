@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxc.test.platform.infra.mapper.xytest.DiffDetailMapper">
 
-  <resultMap id="ResultMap" type="com.cxc.test.platform.infra.domain.diff.DiffDetailPO">
+  <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.diff.DiffDetailPO">
     <id column="batch_id" property="batchId" />
     <id column="diff_type" property="diffType" />
     <id column="source_query_sql" property="sourceQuerySql" />

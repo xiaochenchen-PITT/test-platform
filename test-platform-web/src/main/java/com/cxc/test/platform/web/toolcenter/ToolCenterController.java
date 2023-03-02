@@ -35,7 +35,7 @@ public class ToolCenterController extends BaseController {
         String triggerUrl = buildTriggerUrl();
 
 //        toolCenterService.addTool()
-        return AmisResult.simpleSuccess("success");
+        return AmisResult.simpleSuccess("success", null);
     }
 
     @RequestMapping(value = "/querytool", method = RequestMethod.GET)

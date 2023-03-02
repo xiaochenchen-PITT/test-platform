@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxc.test.platform.infra.mapper.xytest.MappingRuleMapper">
+
+  <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO">
+    <id column="config_id" property="configId" />
+    <id column="source_table_name" property="sourceTableName" />
+    <id column="source_field_name" property="sourceFieldName" />
+    <id column="is_primary_key" property="isPrimaryKey" />
+    <id column="target_table_name" property="targetTableName" />
+    <id column="target_field_name" property="targetFieldName" />
+    <id column="field_check_method_name" property="fieldCheckMethodName" />
+    <id column="field_check_method_args" property="fieldCheckMethodArg" />
+    <id column="created_time" property="createdTime" />
+    <id column="modified_time" property="modifiedTime" />
+  </resultMap>
+
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into t_mapping_rule
+    (config_id, source_table_name, source_field_name, is_primary_key, target_table_name, target_field_name, field_check_method_name, field_check_method_args, created_time, modified_time)
+    values
+    <foreach collection ="mappingRulePOList" item="mappingRulePO" separator =",">
+      (#{mappingRulePO.configId}, #{mappingRulePO.sourceTableName}, #{mappingRulePO.sourceFieldName}, #{mappingRulePO.isPrimaryKey}, #{mappingRulePO.targetTableName}, #{mappingRulePO.targetFieldName}, #{mappingRulePO.fieldCheckMethodName}, #{mappingRulePO.fieldCheckMethodArg}, now(), now())
+    </foreach>
+  </insert>
+
+  <select id="getByConfigId" resultMap="resultMap">
+    select * from t_mapping_rule where config_id = #{configId}
+  </select>
+
+</mapper>

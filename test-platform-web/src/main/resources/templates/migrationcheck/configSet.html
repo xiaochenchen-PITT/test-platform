@@ -38,401 +38,356 @@
             let amis = amisRequire('amis/embed');
             // 通过替换下面这个配置来生成不同页面
             let amisJSON = {
-  "type": "page",
-  "body": [
-    {
-      "type": "wizard",
-      "api": "/amis/api/mock2/form/saveForm?waitSeconds=2",
-      "initApi": "/amis/api/mock2/form/initData?waitSeconds=2",
-      "steps": [
-        {
-          "title": "Step 1",
-          "body": [
-            {
-              "type": "panel",
-              "title": "源数据库链接信息",
-              "body": [
-                {
-                  "name": "sourceDriverClassName",
-                  "label": "driverClassName",
-                  "type": "input-text",
-                  "required": true,
-                  "id": "u:9d6c91eaceab",
-                  "showCounter": false,
-                  "validations": {
-                  },
-                  "validationErrors": {
-                  },
-                  "value": "com.mysql.cj.jdbc.Driver",
-                  "readOnly": true
-                },
-                {
-                  "name": "sourceDbUrl",
-                  "label": "URL",
-                  "type": "input-text",
-                  "required": true,
-                  "id": "u:5f94937a07cd",
-                  "value": "",
-                  "placeholder": "例如jdbc:mysql://mysql-0.mysql.bbmallun-middleware.svc.cluster.local:3306/oneid_test"
-                },
-                {
-                  "name": "sourceDbName",
-                  "label": "用户名称",
-                  "type": "input-text",
-                  "required": true,
-                  "id": "u:5f94937a07cd",
-                  "value": ""
-                },
-                {
-                  "name": "sourceDbPassword",
-                  "label": "密码",
-                  "type": "input-password",
-                  "required": true,
-                  "id": "u:5f94937a07cd",
-                  "value": "",
-                  "showCounter": false,
-                  "validations": {
-                  },
-                  "validationErrors": {
-                  }
-                }
-              ],
-              "id": "u:6e4c52b492b9",
-              "affixFooter": false
-            },
-            {
-              "type": "divider",
-              "id": "u:a54a434dddda"
-            },
-            {
-              "type": "panel",
-              "title": "目标数据库链接信息",
-              "body": [
-                {
-                  "name": "targetDriverClassName",
-                  "label": "driverClassName",
-                  "type": "input-text",
-                  "required": true,
-                  "showCounter": false,
-                  "validations": {
-                  },
-                  "validationErrors": {
-                  },
-                  "value": "com.mysql.cj.jdbc.Driver",
-                  "readOnly": true,
-                  "id": "u:f84bea7b88cc"
-                },
-                {
-                  "name": "targetDbUrl",
-                  "label": "URL",
-                  "type": "input-text",
-                  "required": true,
-                  "id": "u:5f94937a07cd",
-                  "value": "",
-                  "placeholder": "例如jdbc:mysql://mysql-0.mysql.bbmallun-middleware.svc.cluster.local:3306/oneid_test"
-                },
-                {
-                  "name": "targetDbName",
-                  "label": "用户名称",
-                  "type": "input-text",
-                  "required": true,
-                  "id": "u:5f94937a07cd",
-                  "value": ""
-                },
-                {
-                  "name": "targetDbPassword",
-                  "label": "密码",
-                  "type": "input-password",
-                  "required": true,
-                  "id": "u:5f94937a07cd",
-                  "value": "",
-                  "showCounter": false,
-                  "validations": {
-                  },
-                  "validationErrors": {
-                  }
-                }
-              ],
-              "id": "u:6e4c52b492b9",
-              "affixFooter": false
-            }
-          ],
-          "id": "u:4a943559b2f2",
-          "mode": "normal"
-        },
-        {
-          "title": "Step 2",
-          "body": [
-            {
-              "type": "panel",
-              "title": "字段映射关系",
-              "body": [
-                {
-                  "type": "input-excel",
-                  "name": "excel",
-                  "label": "上传 Excel",
-                  "id": "u:82175b6cc4c6"
-                },
-                {
-                  "type": "input-table",
-                  "name": "excel",
-                  "visibleOn": "data.excel",
-                  "columns": [
+                  "type": "wizard",
+                  "api": "/migrationcheck/add_config",
+                  "steps": [
                     {
-                      "name": "原表表名",
-                      "label": "原表表名",
-                      "type": "input-text",
-                      "id": "u:2d964faf62f9"
+                      "title": "Step 1",
+                      "body": [
+                        {
+                          "type": "panel",
+                          "title": "源数据库链接信息",
+                          "body": [
+                            {
+                              "name": "sourceDriverClassName",
+                              "label": "driverClassName",
+                              "type": "input-text",
+                              "required": true,
+                              "id": "u:9d6c91eaceab",
+                              "showCounter": false,
+                              "validations": {
+                              },
+                              "validationErrors": {
+                              },
+                              "value": "com.mysql.cj.jdbc.Driver",
+                              "readOnly": true,
+                              "disabled": true
+                            },
+                            {
+                              "name": "sourceDbUrl",
+                              "label": "URL",
+                              "type": "input-text",
+                              "required": true,
+                              "id": "u:5f94937a07cd",
+                              "value": "",
+                              "placeholder": "例如jdbc:mysql://mysql-0.mysql.bbmallun-middleware.svc.cluster.local:3306/oneid_test"
+                            },
+                            {
+                              "name": "sourceUserName",
+                              "label": "用户名",
+                              "type": "input-text",
+                              "required": true,
+                              "id": "u:5f94937a07cd",
+                              "value": ""
+                            },
+                            {
+                              "name": "sourcePassword",
+                              "label": "密码",
+                              "type": "input-password",
+                              "required": true,
+                              "id": "u:5f94937a07cd",
+                              "value": "",
+                              "showCounter": false,
+                              "validations": {
+                              },
+                              "validationErrors": {
+                              }
+                            }
+                          ],
+                          "id": "u:6e4c52b492b9",
+                          "affixFooter": false
+                        },
+                        {
+                          "type": "divider",
+                          "id": "u:a54a434dddda"
+                        },
+                        {
+                          "type": "panel",
+                          "title": "目标数据库链接信息",
+                          "body": [
+                            {
+                              "name": "targetDriverClassName",
+                              "label": "driverClassName",
+                              "type": "input-text",
+                              "required": true,
+                              "showCounter": false,
+                              "validations": {
+                              },
+                              "validationErrors": {
+                              },
+                              "value": "com.mysql.cj.jdbc.Driver",
+                              "readOnly": true,
+                              "id": "u:f84bea7b88cc",
+                              "disabled": true
+                            },
+                            {
+                              "name": "targetDbUrl",
+                              "label": "URL",
+                              "type": "input-text",
+                              "required": true,
+                              "id": "u:5f94937a07cd",
+                              "value": "",
+                              "placeholder": "例如jdbc:mysql://mysql-0.mysql.bbmallun-middleware.svc.cluster.local:3306/oneid_test"
+                            },
+                            {
+                              "name": "targetUserName",
+                              "label": "用户名",
+                              "type": "input-text",
+                              "required": true,
+                              "id": "u:5f94937a07cd",
+                              "value": ""
+                            },
+                            {
+                              "name": "targetPassword",
+                              "label": "密码",
+                              "type": "input-password",
+                              "required": true,
+                              "id": "u:5f94937a07cd",
+                              "value": "",
+                              "showCounter": false,
+                              "validations": {
+                              },
+                              "validationErrors": {
+                              }
+                            }
+                          ],
+                          "id": "u:6e4c52b492b9",
+                          "affixFooter": false
+                        }
+                      ],
+                      "id": "u:4a943559b2f2",
+                      "mode": "normal"
                     },
                     {
-                      "name": "原表字段名",
-                      "label": "原表字段名",
-                      "type": "input-text",
-                      "id": "u:2b42f534bd20"
+                      "title": "Step 2",
+                      "body": [
+                        {
+                          "type": "panel",
+                          "title": "字段映射关系",
+                          "body": [
+                            {
+                              "type": "input-excel",
+                              "name": "excel",
+                              "label": "上传 Excel",
+                              "id": "u:82175b6cc4c6",
+                              "labelRemark": {
+                                "icon": "fa fa-question-circle",
+                                "trigger": [
+                                  "hover"
+                                ],
+                                "className": "Remark--warning",
+                                "placement": "top",
+                                "title": "模板字段",
+                                "content": "原表表名，原表字段名，是否是主键(true/false)，目标表表名，目标表字段名，自定义处理逻辑，自定义处理逻辑入参"
+                              },
+                              "placeholder": "",
+                              "remark": "",
+                              "required": true
+                            },
+                            {
+                              "type": "input-table",
+                              "name": "excel",
+                              "visibleOn": "data.excel",
+                              "columns": [
+                                {
+                                  "name": "原表表名",
+                                  "label": "原表表名",
+                                  "type": "input-text",
+                                  "id": "u:2d964faf62f9"
+                                },
+                                {
+                                  "name": "原表字段名",
+                                  "label": "原表字段名",
+                                  "type": "input-text",
+                                  "id": "u:2b42f534bd20"
+                                },
+                                {
+                                  "name": "是否是主键",
+                                  "label": "是否是主键",
+                                  "type": "input-text",
+                                  "id": "u:2b42f534bd20"
+                                },
+                                {
+                                  "name": "目标表表名",
+                                  "label": "目标表表名",
+                                  "type": "input-text",
+                                  "id": "u:2b42f534bd20"
+                                },
+                                {
+                                  "name": "目标表字段名",
+                                  "label": "目标表字段名",
+                                  "type": "input-text",
+                                  "id": "u:2b42f534bd20"
+                                },
+                                {
+                                  "name": "自定义处理逻辑",
+                                  "label": "自定义处理逻辑",
+                                  "type": "input-text",
+                                  "id": "u:2b42f534bd20"
+                                },
+                                {
+                                  "name": "自定义处理逻辑入参",
+                                  "label": "自定义处理逻辑入参",
+                                  "type": "input-text",
+                                  "id": "u:2b42f534bd20"
+                                }
+                              ],
+                              "id": "u:d889b4fc9022"
+                            }
+                          ],
+                          "id": "u:279a3eeac51e",
+                          "affixFooter": false,
+                          "hidden": false
+                        }
+                      ],
+                      "mode": "normal",
+                      "id": "u:182ee2188877"
                     },
                     {
-                      "name": "是否是主键",
-                      "label": "是否是主键",
-                      "type": "input-text",
-                      "id": "u:2b42f534bd20"
+                      "title": "Step 3",
+                      "body": [
+                        {
+                          "type": "panel",
+                          "title": "目标表中源数据定位",
+                          "body": [
+                            {
+                              "draggable": true,
+                              "multiple": true,
+                              "multiLine": true,
+                              "type": "input-kvs",
+                              "name": "targetLocatorKvs",
+                              "keyItem": {
+                                "label": "目标表名"
+                              },
+                              "valueItems": [
+                                {
+                                  "type": "input-text",
+                                  "name": "targetLocateField",
+                                  "label": "sourceId承载字段"
+                                },
+                                {
+                                  "type": "input-text",
+                                  "name": "targetLocateMethod",
+                                  "label": "定位source表主键id的逻辑"
+                                },
+                                {
+                                  "type": "input-text",
+                                  "name": "targetLocateMethodArgs",
+                                  "label": "定位source表主键id的逻辑参数"
+                                }
+                              ],
+                              "id": "u:d814c5c22daf",
+                              "items": [
+                                {
+                                  "type": "input-text",
+                                  "unique": true,
+                                  "name": "_key",
+                                  "required": true,
+                                  "validateOnChange": true,
+                                  "label": "目标表名"
+                                },
+                                {
+                                  "type": "input-text",
+                                  "name": "targetLocateField",
+                                  "label": "sourceId承载字段"
+                                },
+                                {
+                                  "type": "input-text",
+                                  "name": "targetLocateMethod",
+                                  "label": "定位source表主键id的逻辑"
+                                },
+                                {
+                                  "type": "input-text",
+                                  "name": "targetLocateMethodArgs",
+                                  "label": "定位source表主键id的逻辑参数"
+                                }
+                              ],
+                              "required": true,
+                              "label": "源数据定位",
+                              "labelRemark": {
+                                "icon": "fa fa-question-circle",
+                                "trigger": [
+                                  "hover"
+                                ],
+                                "className": "Remark--warning",
+                                "placement": "top",
+                                "title": "源数据定位是什么",
+                                "content": "在目标表数以万计的数据中，需要唯一定位源表的数据，才能进行进一步的对比。这里采用的方式是：在目标表中记录源表的主键id（可以是主键id，也可以是例如订单号、商品id等唯一性字段），通过源表主键id来唯一定位两边的数据。"
+                              },
+                              "description": "",
+                              "remark": ""
+                            }
+                          ],
+                          "id": "u:5758819d0edd",
+                          "affixFooter": false
+                        }
+                      ],
+                      "mode": "normal",
+                      "id": "u:1a36b75a1cda"
                     },
                     {
-                      "name": "目标表表名",
-                      "label": "目标表表名",
-                      "type": "input-text",
-                      "id": "u:2b42f534bd20"
-                    },
-                    {
-                      "name": "目标表字段名",
-                      "label": "目标表字段名",
-                      "type": "input-text",
-                      "id": "u:2b42f534bd20"
-                    },
-                    {
-                      "name": "自定义处理逻辑",
-                      "label": "自定义处理逻辑",
-                      "type": "input-text",
-                      "id": "u:2b42f534bd20"
-                    },
-                    {
-                      "name": "自定义处理逻辑入参",
-                      "label": "自定义处理逻辑入参",
-                      "type": "input-text",
-                      "id": "u:2b42f534bd20"
+                      "title": "Step 4",
+                      "body": [
+                        {
+                          "type": "panel",
+                          "title": "源数据自定义初始化(Optional)",
+                          "body": [
+                            {
+                              "multiple": true,
+                              "multiLine": true,
+                              "type": "input-kvs",
+                              "name": "sourceTableSqlKvs",
+                              "keyItem": {
+                                "label": "原表名"
+                              },
+                              "valueItems": [
+                                {
+                                  "type": "input-text",
+                                  "name": "sourceDataSql",
+                                  "label": "自定义初始化sql"
+                                }
+                              ],
+                              "id": "u:bcad03a8a83e",
+                              "items": [
+                                {
+                                  "type": "input-text",
+                                  "unique": true,
+                                  "name": "_key",
+                                  "required": true,
+                                  "validateOnChange": true,
+                                  "label": "原表名"
+                                },
+                                {
+                                  "type": "input-text",
+                                  "name": "sourceDataSql",
+                                  "label": "自定义初始化sql"
+                                }
+                              ],
+                              "label": "源数据自定义初始化Sql",
+                              "labelRemark": {
+                                "icon": "fa fa-question-circle",
+                                "trigger": [
+                                  "hover"
+                                ],
+                                "className": "Remark--warning",
+                                "placement": "top",
+                                "content": "可自行定义源数据查询sql。若未自定义，则使用默认的select * from tablexxx 进行全表全字段查询",
+                                "title": "源数据的数据初始化sql"
+                              }
+                            }
+                          ],
+                          "id": "u:686763fa564c"
+                        }
+                      ],
+                      "mode": "normal",
+                      "id": "u:39d3ce6328c0"
                     }
                   ],
-                  "id": "u:d889b4fc9022"
-                }
-              ],
-              "id": "u:279a3eeac51e"
-            }
-          ],
-          "mode": "normal",
-          "id": "u:182ee2188877"
-        },
-        {
-          "title": "Step 3",
-          "body": [
-            {
-              "type": "panel",
-              "title": "目标表中原表主键id定位",
-              "body": [
-                {
-                  "draggable": true,
-                  "multiple": true,
-                  "multiLine": true,
-                  "type": "input-kvs",
-                  "name": "targetDataKvs",
-                  "keyItem": {
-                    "label": "目标表名"
-                  },
-                  "valueItems": [
-                    {
-                      "type": "input-text",
-                      "name": "targetLocateField",
-                      "label": "sourceId承载字段"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "targetLocateMethod",
-                      "label": "定位source表主键id的逻辑"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "targetLocateMethodArgs",
-                      "label": "定位source表主键id的逻辑参数"
-                    }
-                  ],
-                  "id": "u:d814c5c22daf",
-                  "items": [
-                    {
-                      "type": "input-text",
-                      "unique": true,
-                      "name": "_key",
-                      "required": true,
-                      "validateOnChange": true,
-                      "label": "目标表名"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "targetLocateField",
-                      "label": "sourceId承载字段"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "targetLocateMethod",
-                      "label": "定位source表主键id的逻辑"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "targetLocateMethodArgs",
-                      "label": "定位source表主键id的逻辑参数"
-                    }
-                  ]
-                }
-              ],
-              "id": "u:5758819d0edd"
-            }
-          ],
-          "mode": "normal",
-          "id": "u:1a36b75a1cda"
-        },
-        {
-          "title": "Step 4",
-          "body": [
-            {
-              "type": "panel",
-              "title": "源数据自定义初始化(Optional)",
-              "body": [
-                {
-                  "draggable": true,
-                  "multiple": true,
-                  "multiLine": true,
-                  "type": "input-kvs",
-                  "name": "sourceDataKvs",
-                  "keyItem": {
-                    "label": "原表名"
-                  },
-                  "valueItems": [
-                    {
-                      "type": "input-text",
-                      "name": "sourceDataSql",
-                      "label": "自定义初始化sql"
-                    }
-                  ],
-                  "id": "u:bcad03a8a83e",
-                  "items": [
-                    {
-                      "type": "input-text",
-                      "unique": true,
-                      "name": "_key",
-                      "required": true,
-                      "validateOnChange": true,
-                      "label": "原表名"
-                    },
-                    {
-                      "type": "input-text",
-                      "name": "sourceDataSql",
-                      "label": "自定义初始化sql"
-                    }
-                  ]
-                }
-              ],
-              "id": "u:686763fa564c"
-            }
-          ],
-          "mode": "normal",
-          "id": "u:39d3ce6328c0"
-        }
-      ],
-      "id": "u:add7e767eede",
-      "mode": "horizontal"
-    }
-  ],
-  "id": "u:c4ca0c3abcfc",
-  "title": "数据迁移验证配置",
-  "aside": [
-    {
-      "type": "nav",
-      "stacked": true,
-      "links": [
-        {
-          "label": "首页",
-          "to": "/index"
-        },
-        {
-          "label": "仪表盘",
-          "unfolded": false,
-          "children": [
-            {
-              "label": "自动化数据大盘",
-              "to": "/docs/api-2-1"
-            },
-            {
-              "label": "测试效能大盘",
-              "to": "/docs/api-2-2"
-            },
-            {
-              "label": "成本优化大盘",
-              "to": "/docs/api-2-3"
-            }
-          ]
-        },
-        {
-          "label": "开放工具中心",
-          "unfolded": false,
-          "children": [
-            {
-              "label": "工具管理",
-              "to": "/docs/api-3-1"
-            },
-            {
-              "label": "工具调用",
-              "to": "/docs/api-3-2"
-            }
-          ]
-        },
-        {
-          "label": "数据迁移验证工具",
-          "unfolded": false,
-          "children": [
-            {
-              "label": "配置录入",
-              "to": "/docs/api-4-1"
-            },
-            {
-              "label": "开始验证",
-              "to": "/docs/api-4-2"
-            }
-          ]
-        },
-        {
-          "label": "测试云机房",
-          "to": "http://www.baidu.com/",
-          "target": "_blank"
-        }
-      ],
-      "className": "w-md",
-      "id": "u:46bce8f505a1"
-    }
-  ],
-  "toolbar": [
-    {
-      "type": "tpl",
-      "tpl": "你好，",
-      "inline": true,
-      "wrapperComponent": "",
-      "id": "u:72639ae11673"
-    },
-    {
-      "type": "avatar",
-      "text": "小辰",
-      "src": "$other",
-      "icon": "fa fa-user",
-      "id": "u:f81392144086"
-    }
-  ]
-};
+                  "id": "u:add7e767eede",
+                  "mode": "horizontal"
+                };
+
+
             // 开始渲染，放入渲染容器#root，渲染的页面内容是amisJSON
             let amisScoped = amis.embed(
                 '#root',
