@@ -1,7 +1,8 @@
 package com.cxc.test.platform.common.domain;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +10,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+@Data
 public class AmisResult implements Serializable {
+
+    private static final String DEFAULT_SUCCESS_MSG = "保存成功";
 
     /**
      * 返回 0，表示当前接口正确返回，否则按错误请求处理
@@ -19,7 +23,7 @@ public class AmisResult implements Serializable {
     /**
      * json格式，必须返回一个具有 key-value 结构的对象
      */
-    private String data;
+    private JSONObject data;
 
     /**
      * 错误信息
@@ -31,22 +35,23 @@ public class AmisResult implements Serializable {
      */
     private Long msgTimeout;
     
-    private AmisResult(Integer status, String data, String msg, Long msgTimeout) {
+    private AmisResult(Integer status, JSONObject data, String msg, Long msgTimeout) {
         this.status = status;
         this.data = data;
         this.msg = msg;
         this.msgTimeout = msgTimeout;
     }
 
-    public static AmisResult success(String data) {
-        return new AmisResult(0, data, null, null);
+    public static AmisResult success(JSONObject data, String msg) {
+        return new AmisResult(0, data, msg, null);
     }
 
-    public static AmisResult simpleSuccess(String data) {
+    public static AmisResult simpleSuccess(String data, String msg) {
         JSONObject dataJO = new JSONObject();
         dataJO.put("key", data);
 
-        return new AmisResult(0, dataJO.toJSONString(), null, null);
+        String retMsg = StringUtils.isEmpty(msg) ? DEFAULT_SUCCESS_MSG : msg;
+        return new AmisResult(0, dataJO, retMsg, null);
     }
 
     public static AmisResult fail(String msg, Long msgTimeout) {
@@ -56,28 +61,23 @@ public class AmisResult implements Serializable {
     public static AmisResult from(ResultDO resultDO) {
         Integer status = resultDO.getIsSuccess() ? 0 : -1;
 
-        String data = null;
+        JSONObject data = null;
         if (resultDO.getData() == null) {
             data = null;
-        } else if (resultDO.getData() instanceof Map) {
-            data = JSONObject.toJSONString((Map) resultDO.getData());
-        } else if (resultDO.getData() instanceof Collection) {
+        } else if (resultDO.getData() instanceof Map) { // map
+            data = (JSONObject) resultDO.getData();
+        } else if (resultDO.getData() instanceof Collection) { // collections
             List<String> list = new ArrayList<>();
             for (Object o : (Collection) resultDO.getData()) {
                 list.add(String.valueOf(o));
             }
 
-            JSONObject dataJO = new JSONObject();
-            dataJO.put("count", list.size());
-            dataJO.put("rows", list);
-
-            data = dataJO.toJSONString();
-        } else if (resultDO.getData() instanceof String) {
-            JSONObject dataJO = new JSONObject();
-            dataJO.put("key", String.valueOf(resultDO.getData()));
-            data = dataJO.toJSONString();
-        } else {
-            data = JSON.toJSONString(resultDO.getData());
+            data.put("count", list.size());
+            data.put("rows", list);
+        } else if (resultDO.getData() instanceof String) { // String
+            data.put("key", String.valueOf(resultDO.getData()));
+        } else { // 对象
+            data = (JSONObject) resultDO.getData();
         }
 
         return new AmisResult(status, data, resultDO.getErrorMessage(), null);
