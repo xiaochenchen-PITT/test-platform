@@ -13,8 +13,6 @@ public class TargetLocatorPO {
 
     private String targetTableName;
 
-    private String targetFieldName;
-
     private String locateField;
 
     /**

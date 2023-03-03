@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public interface MigrationConfigMapper {
 
+    // TODO: 2023/3/3 db链接的密码需要加密存储
     int insert(MigrationConfigPO migrationConfigPO);
 
     MigrationConfigPO getByConfigId(Long configId);

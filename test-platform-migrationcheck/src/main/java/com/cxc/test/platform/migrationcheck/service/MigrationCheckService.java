@@ -212,11 +212,11 @@ public class MigrationCheckService {
         return diffResult;
     }
 
-    private  List<MigrationData> initSourceDataList(MigrationConfig migrationConfig, DataSource sourceDataSource) {
+    private List<MigrationData> initSourceDataList(MigrationConfig migrationConfig, DataSource sourceDataSource) {
         List<MigrationData> sourceDataList = new ArrayList<>();
-        Map<String, String> tableAndSourceInitSqlMap = migrationConfig.getTableAndSourceInitSqlMap();
+        Map<String, String> tableAndInitSqlMap = migrationConfig.getTableAndInitSqlMap();
         // 遍历每一张表
-        for (Map.Entry<String, String> entry : tableAndSourceInitSqlMap.entrySet()) {
+        for (Map.Entry<String, String> entry : tableAndInitSqlMap.entrySet()) {
             String tableName = entry.getKey();
             String initSourceDataSql = entry.getValue();
 
@@ -329,10 +329,8 @@ public class MigrationCheckService {
                                   MigrationConfig migrationConfig) {
         String sourceId = String.valueOf(sourceData.getValue(sourcePrimaryKey));
 
-        String locatorKey = targetTable + MigrationConfig.TABLE_AND_FIELD_JOINER + targetField;
-
         Map<String, SourceLocator> tableFieldAndLocatorMap = migrationConfig.getTableFieldAndLocatorMap();
-        SourceLocator locator = tableFieldAndLocatorMap.get(locatorKey);
+        SourceLocator locator = tableFieldAndLocatorMap.get(targetTable);
         String locateField = locator.getLocateField();
 
         CustomizedMethod customizedMethod = locator.getLocateMethod();

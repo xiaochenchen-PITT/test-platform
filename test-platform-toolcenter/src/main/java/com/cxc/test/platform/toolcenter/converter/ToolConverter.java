@@ -5,6 +5,7 @@ import com.cxc.test.platform.infra.domain.toolcenter.ToolParamPO;
 import com.cxc.test.platform.toolcenter.domain.Tool;
 import com.cxc.test.platform.toolcenter.domain.ToolParam;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -89,7 +90,8 @@ public class ToolConverter {
             .hasDefault(toolParamPO.getHasDefault() == 1)
             .defaultValue(toolParamPO.getDefaultValue())
             .inputType(toolParamPO.getInputType())
-            .optionValueList(Arrays.asList(toolParamPO.getOptionValues().split(",")))
+            .optionValueList(StringUtils.isNotEmpty(toolParamPO.getOptionValues()) ?
+                    Arrays.asList(toolParamPO.getOptionValues().split(",")) : null)
             .status(toolParamPO.getStatus())
             .createdTime(toolParamPO.getCreatedTime())
             .modifiedTime(toolParamPO.getModifiedTime())

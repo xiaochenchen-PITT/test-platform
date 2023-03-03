@@ -19,10 +19,12 @@ import com.cxc.test.platform.web.migrationcheck.vo.MigrationConfigVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @CrossOrigin
@@ -46,7 +48,13 @@ public class MigrationCheckController extends BaseController {
     public AmisResult addConfig(@RequestBody MigrationConfigVO migrationConfigVO) {
         String triggerUrl = buildTriggerUrl();
 
-        ResultDO<Long> ret = migrationService.addConfig(convert(migrationConfigVO));
+        MigrationConfig migrationConfig = convert(migrationConfigVO);
+        Assert.isTrue(migrationConfig.getTableAndInitSqlMap().size() == migrationConfig.getRelatedSourceTables().size(),
+                "【源数据初始化】和【字段映射关系】中源表数量不一致，请检查配置");
+        Assert.isTrue(migrationConfig.getTableFieldAndLocatorMap().size() == migrationConfig.getRelatedTargetTables().size(),
+                "【目标表中源数据定位】和【字段映射关系】中目标表数量不一致，请检查配置");
+
+        ResultDO<Long> ret = migrationService.addConfig(migrationConfig);
         if (ret.getIsSuccess()) {
             return AmisResult.simpleSuccess("success", "保存成功，config id:" + ret.getData());
         } else {
@@ -69,45 +77,44 @@ public class MigrationCheckController extends BaseController {
         }
     }
 
-
     private MigrationConfig convert(MigrationConfigVO migrationConfigVO) {
         MigrationConfig migrationConfig = new MigrationConfig();
         migrationConfig.setConfigId(System.currentTimeMillis());
 
         // db链接
         migrationConfig.setSourceDbConfig(DatabaseConfig.builder()
-                .driverClassName(migrationConfigVO.getSourceDriverClassName())
-                .url(migrationConfigVO.getSourceDbUrl())
-                .name(migrationConfigVO.getSourceUserName())
-                .pwd(migrationConfigVO.getSourcePassword())
+                .driverClassName(trim(migrationConfigVO.getSourceDriverClassName()))
+                .url(trim(migrationConfigVO.getSourceDbUrl()))
+                .name(trim(migrationConfigVO.getSourceUserName()))
+                .pwd(trim(migrationConfigVO.getSourcePassword()))
                 .build());
 
         migrationConfig.setTargetDbConfig(DatabaseConfig.builder()
-                .driverClassName(migrationConfigVO.getTargetDriverClassName())
-                .url(migrationConfigVO.getTargetDbUrl())
-                .name(migrationConfigVO.getTargetUserName())
-                .pwd(migrationConfigVO.getTargetPassword())
+                .driverClassName(trim(migrationConfigVO.getTargetDriverClassName()))
+                .url(trim(migrationConfigVO.getTargetDbUrl()))
+                .name(trim(migrationConfigVO.getTargetUserName()))
+                .pwd(trim(migrationConfigVO.getTargetPassword()))
                 .build());
 
         // mappingRuleList
         List<MappingRule> mappingRuleList = new ArrayList<>();
         JSONArray mappingRuleJA = migrationConfigVO.getExcel();
         for (Object mappingRuleO : mappingRuleJA) {
-            JSONObject mappingRuleJO = (JSONObject) mappingRuleO;
+            JSONObject mappingRuleJO = new JSONObject((LinkedHashMap) mappingRuleO);
 
             MappingRule mappingRule = MappingRule.builder()
                     .sourceMappingItem(SourceMappingItem.builder()
-                            .tableName(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_TABLE_NAME))
-                            .fieldNames(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_FIELD_NAME))
-                            .isPrimaryKey(mappingRuleJO.getBoolean(MappingRule.EXCEL_IS_PRIMARY_KEY))
+                            .tableName(trim(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_TABLE_NAME)))
+                            .fieldNames(trim(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_FIELD_NAME)))
+                            .isPrimaryKey(mappingRuleJO.getBooleanValue(MappingRule.EXCEL_IS_PRIMARY_KEY))
                             .build())
                     .targetMappingItem(TargetMappingItem.builder()
-                            .tableName(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_TABLE_NAME))
-                            .fieldName(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_FIELD_NAME))
+                            .tableName(trim(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_TABLE_NAME)))
+                            .fieldName(trim(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_FIELD_NAME)))
                             .build())
                     .fieldCheckMethod(CustomizedMethod.builder()
-                            .beanName(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_NAME))
-                            .args(Arrays.asList(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_ARGS).split(",")))
+                            .beanName(trim(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_NAME)))
+                            .args(parseArgFromVO(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_ARGS)))
                             .build())
                     .build();
 
@@ -116,33 +123,53 @@ public class MigrationCheckController extends BaseController {
 
         migrationConfig.setMappingRuleList(mappingRuleList);
 
-        // tableAndSourceInitSqlMap
-        Map<String, String> tableAndSourceInitSqlMap = new HashMap<>();
-        for (Map.Entry<String, Object> entry : migrationConfigVO.getSourceTableSqlKvs().entrySet()) {
-            tableAndSourceInitSqlMap.put(entry.getKey(), ((JSONObject) entry.getValue()).getString("sourceDataSql"));
+        // tableAndInitSqlMap
+        Map<String, String> tableAndInitSqlMap = new HashMap<>();
+        Set<String> sourceTableList = migrationConfig.getRelatedSourceTables();
+        for (String sourceTable : sourceTableList) {
+            // 默认补充select * from tablexxx
+            tableAndInitSqlMap.put(sourceTable, "select * from " + sourceTable);
         }
-        migrationConfig.setTableAndSourceInitSqlMap(tableAndSourceInitSqlMap);
+
+        JSONArray initSqlComboJA = migrationConfigVO.getInitSqlCombo();
+        if (initSqlComboJA != null) {
+            for (Object initSqlComboO : initSqlComboJA) {
+                JSONObject initSqlComboJO = new JSONObject((LinkedHashMap) initSqlComboO);
+                // 自定义初始化sql
+                tableAndInitSqlMap.put(trim(initSqlComboJO.getString("sourceTableName")), trim(initSqlComboJO.getString("sourceDataSql")));
+            }
+        }
+        migrationConfig.setTableAndInitSqlMap(tableAndInitSqlMap);
 
         // tableAndLocatorMethodMap
         Map<String, SourceLocator> tableFieldAndLocatorMap = new HashMap<>();
-        for (Map.Entry<String, Object> entry : migrationConfigVO.getTargetLocatorKvs().entrySet()) {
-            JSONObject locatorJO = (JSONObject) entry.getValue();
+        JSONArray locatorComboJA = migrationConfigVO.getLocatorCombo();
+        for (Object locatorComboO : locatorComboJA) {
+            JSONObject locatorComboJO = new JSONObject((LinkedHashMap) locatorComboO);
             SourceLocator sourceLocator = SourceLocator.builder()
-                    .locateField(locatorJO.getString("targetLocateField"))
+                    .locateField(trim(locatorComboJO.getString("targetLocateField")))
                     .locateMethod(CustomizedMethod.builder()
-                            .beanName(locatorJO.getString("targetLocateMethod"))
-                            .args(Arrays.asList(locatorJO.getString("targetLocateMethodArgs").split(",")))
+                            .beanName(trim(locatorComboJO.getString("targetLocateMethod")))
+                            .args(parseArgFromVO(locatorComboJO.getString("targetLocateMethodArgs")))
                             .build())
                     .build();
 
-            String key = entry.getKey() + MigrationConfig.TABLE_AND_FIELD_JOINER + locatorJO.getString("targetFieldName");
-            tableFieldAndLocatorMap.put(key, sourceLocator);
+            tableFieldAndLocatorMap.put(trim(locatorComboJO.getString("targetTableName")), sourceLocator);
         }
         migrationConfig.setTableFieldAndLocatorMap(tableFieldAndLocatorMap);
 
         return migrationConfig;
     }
 
+    private List<Object> parseArgFromVO(String argsStr) {
+        if (StringUtils.isBlank(argsStr)) {
+            return null;
+        }
+
+        return Arrays.stream(argsStr.split(","))
+                .map(s -> trim((s)))
+                .collect(Collectors.toList());
+    }
 
     /**********************************************************************************
      * old
@@ -209,7 +236,7 @@ public class MigrationCheckController extends BaseController {
 
     private static String trim(String input) {
         if (StringUtils.isEmpty(input)) {
-            return null;
+            return "";
         }
 
         return input.trim();

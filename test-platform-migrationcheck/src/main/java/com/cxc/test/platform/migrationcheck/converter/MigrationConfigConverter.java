@@ -13,6 +13,7 @@ import com.cxc.test.platform.migrationcheck.domain.mapping.SourceMappingItem;
 import com.cxc.test.platform.migrationcheck.domain.mapping.TargetMappingItem;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -49,7 +50,7 @@ public class MigrationConfigConverter {
                         .targetTableName(mappingRule.getTargetMappingItem().getTableName())
                         .targetFieldName(mappingRule.getTargetMappingItem().getFieldName())
                         .fieldCheckMethodName(mappingRule.getFieldCheckMethod().getBeanName())
-                        .fieldCheckMethodArgs(mappingRule.getFieldCheckMethod().getArgs().stream().map(String::valueOf).toString())
+                        .fieldCheckMethodArgs(String.valueOf(mappingRule.getFieldCheckMethod().getArgs()))
                         .build();
 
                 mappingRulePOList.add(mappingRulePO);
@@ -62,8 +63,8 @@ public class MigrationConfigConverter {
     public List<SourceInitSqlPO> convertSourceInitSqlPOList(MigrationConfig migrationConfig) {
         List<SourceInitSqlPO> sourceInitSqlPOList = new ArrayList<>();
 
-        if (MapUtils.isNotEmpty(migrationConfig.getTableAndSourceInitSqlMap())) {
-            for (Map.Entry<String, String> entry : migrationConfig.getTableAndSourceInitSqlMap().entrySet()) {
+        if (MapUtils.isNotEmpty(migrationConfig.getTableAndInitSqlMap())) {
+            for (Map.Entry<String, String> entry : migrationConfig.getTableAndInitSqlMap().entrySet()) {
                 SourceInitSqlPO sourceInitSqlPO = SourceInitSqlPO.builder()
                         .configId(migrationConfig.getConfigId())
                         .sourceTableName(entry.getKey())
@@ -84,11 +85,10 @@ public class MigrationConfigConverter {
             for (Map.Entry<String, SourceLocator> entry : migrationConfig.getTableFieldAndLocatorMap().entrySet()) {
                 TargetLocatorPO targetLocatorPO = TargetLocatorPO.builder()
                         .configId(migrationConfig.getConfigId())
-                        .targetTableName(entry.getKey().split(MigrationConfig.TABLE_AND_FIELD_JOINER)[0])
-                        .targetFieldName(entry.getKey().split(MigrationConfig.TABLE_AND_FIELD_JOINER)[1])
+                        .targetTableName(entry.getKey())
                         .locateField(entry.getValue().getLocateField())
                         .locateMethodName(entry.getValue().getLocateMethod().getBeanName())
-                        .locateMethodArgs(entry.getValue().getLocateMethod().getArgs().stream().map(String::valueOf).toString())
+                        .locateMethodArgs(String.valueOf(entry.getValue().getLocateMethod().getArgs()))
                         .build();
 
                 targetLocatorPOList.add(targetLocatorPO);
@@ -126,7 +126,7 @@ public class MigrationConfigConverter {
         for (SourceInitSqlPO sourceInitSqlPO : sourceInitSqlPOList) {
             tableAndSourceInitSqlMap.put(sourceInitSqlPO.getSourceTableName(), sourceInitSqlPO.getInitSql());
         }
-        migrationConfig.setTableAndSourceInitSqlMap(tableAndSourceInitSqlMap);
+        migrationConfig.setTableAndInitSqlMap(tableAndSourceInitSqlMap);
 
         // tableFieldAndLocatorMap
         Map<String, SourceLocator> tableFieldAndLocatorMap = new HashMap<>();
@@ -135,12 +135,12 @@ public class MigrationConfigConverter {
                     .locateField(targetLocatorPO.getLocateField())
                     .locateMethod(CustomizedMethod.builder()
                             .beanName(targetLocatorPO.getLocateMethodName())
-                            .args(Arrays.asList(targetLocatorPO.getLocateMethodArgs().split(",")))
+                            .args(StringUtils.isNotEmpty(targetLocatorPO.getLocateMethodArgs()) ?
+                                    Arrays.asList(targetLocatorPO.getLocateMethodArgs().split(",")) : null)
                             .build())
                     .build();
 
-            String key = targetLocatorPO.getTargetTableName() + MigrationConfig.TABLE_AND_FIELD_JOINER + targetLocatorPO.getTargetFieldName();
-            tableFieldAndLocatorMap.put(key, sourceLocator);
+            tableFieldAndLocatorMap.put(targetLocatorPO.getTargetTableName(), sourceLocator);
         }
         migrationConfig.setTableFieldAndLocatorMap(tableFieldAndLocatorMap);
 
@@ -160,7 +160,8 @@ public class MigrationConfigConverter {
                         .build())
                 .fieldCheckMethod(CustomizedMethod.builder()
                         .beanName(mappingRulePO.getFieldCheckMethodName())
-                        .args(Arrays.asList(mappingRulePO.getFieldCheckMethodArgs().split(",")))
+                        .args(StringUtils.isNotEmpty(mappingRulePO.getFieldCheckMethodArgs()) ?
+                                Arrays.asList(mappingRulePO.getFieldCheckMethodArgs().split(",")) : null)
                         .build())
                 .build();
 

@@ -176,7 +176,7 @@
                                   "hover"
                                 ],
                                 "className": "Remark--warning",
-                                "placement": "top",
+                                "placement": "right",
                                 "title": "模板字段",
                                 "content": "原表表名，原表字段名，是否是主键(true/false)，目标表表名，目标表字段名，自定义处理逻辑，自定义处理逻辑入参"
                               },
@@ -251,81 +251,54 @@
                           "title": "目标表中源数据定位",
                           "body": [
                             {
-                              "draggable": true,
+                              "type": "combo",
+                              "name": "locatorCombo",
+                              "label": "源数据定位",
                               "multiple": true,
-                              "multiLine": true,
-                              "type": "input-kvs",
-                              "name": "targetLocatorKvs",
-                              "keyItem": {
-                                "label": "目标表名"
-                              },
-                              "valueItems": [
-                                {
-                                  "type": "input-text",
-                                  "name": "targetFieldName",
-                                  "label": "目标字段名"
-                                },
-                                {
-                                  "type": "input-text",
-                                  "name": "targetLocateField",
-                                  "label": "sourceId承载字段"
-                                },
-                                {
-                                  "type": "input-text",
-                                  "name": "targetLocateMethod",
-                                  "label": "定位source表主键id的逻辑"
-                                },
-                                {
-                                  "type": "input-text",
-                                  "name": "targetLocateMethodArgs",
-                                  "label": "定位source表主键id的逻辑参数"
-                                }
-                              ],
-                              "id": "u:d814c5c22daf",
                               "items": [
                                 {
+                                  "type": "tpl",
+                                  "tpl": "<%= this.index + 1%>",
+                                  "className": "p-t-xs",
+                                  "mode": "inline"
+                                },
+                                {
+                                  "name": "targetTableName",
+                                  "label": "目标表名",
                                   "type": "input-text",
-                                  "unique": true,
-                                  "name": "_key",
                                   "required": true,
-                                  "validateOnChange": true,
-                                  "label": "目标表名"
+                                  "unique": true
                                 },
                                 {
-                                  "type": "input-text",
-                                  "name": "targetFieldName",
-                                  "label": "目标字段名"
-                                },
-                                {
-                                  "type": "input-text",
                                   "name": "targetLocateField",
-                                  "label": "sourceId承载字段"
+                                  "label": "sourceId承载字段",
+                                  "type": "input-text",
+                                  "required": true
                                 },
                                 {
-                                  "type": "input-text",
                                   "name": "targetLocateMethod",
-                                  "label": "定位source表主键id的逻辑"
+                                  "label": "定位source表主键id的逻辑",
+                                  "type": "input-text"
                                 },
                                 {
-                                  "type": "input-text",
                                   "name": "targetLocateMethodArgs",
-                                  "label": "定位source表主键id的逻辑参数"
+                                  "label": "定位source表主键id的逻辑参数",
+                                  "type": "input-text"
                                 }
                               ],
-                              "required": true,
-                              "label": "源数据定位",
+                              "id": "u:836572dbde62",
                               "labelRemark": {
                                 "icon": "fa fa-question-circle",
                                 "trigger": [
                                   "hover"
                                 ],
                                 "className": "Remark--warning",
-                                "placement": "top",
-                                "title": "源数据定位是什么",
-                                "content": "在目标表数以万计的数据中，需要唯一定位源表的数据，才能进行进一步的对比。这里采用的方式是：在目标表中记录源表的主键id（可以是主键id，也可以是例如订单号、商品id等唯一性字段），通过源表主键id来唯一定位两边的数据。"
+                                "placement": "right",
+                                "content": "在目标表数以万计的数据中，需要唯一定位源表的数据，才能进行进一步的对比。建议：在目标表中记录源表的主键id（可以是主键id，也可以是例如订单号、商品id等唯一性字段），通过源表主键id来唯一定位两边的数据。",
+                                "title": "源数据定位是什么"
                               },
-                              "description": "",
-                              "remark": ""
+                              "multiLine": true,
+                              "required": true
                             }
                           ],
                           "id": "u:5758819d0edd",
@@ -343,47 +316,43 @@
                           "title": "源数据自定义初始化(Optional)",
                           "body": [
                             {
+                              "type": "combo",
+                              "name": "initSqlCombo",
+                              "label": "源数据自定义初始化Sql",
                               "multiple": true,
-                              "multiLine": true,
-                              "type": "input-kvs",
-                              "name": "sourceTableSqlKvs",
-                              "keyItem": {
-                                "label": "原表名"
-                              },
-                              "valueItems": [
-                                {
-                                  "type": "input-text",
-                                  "name": "sourceDataSql",
-                                  "label": "自定义初始化sql"
-                                }
-                              ],
-                              "id": "u:bcad03a8a83e",
                               "items": [
                                 {
-                                  "type": "input-text",
-                                  "unique": true,
-                                  "name": "_key",
-                                  "required": true,
-                                  "validateOnChange": true,
-                                  "label": "原表名"
+                                  "type": "tpl",
+                                  "tpl": "<%= this.index + 1%>",
+                                  "className": "p-t-xs",
+                                  "mode": "inline"
                                 },
                                 {
+                                  "name": "sourceTableName",
+                                  "label": "源表名",
                                   "type": "input-text",
+                                  "required": true,
+                                  "unique": true
+                                },
+                                {
                                   "name": "sourceDataSql",
-                                  "label": "自定义初始化sql"
+                                  "label": "自定义初始化sql",
+                                  "type": "input-text",
+                                  "required": true
                                 }
                               ],
-                              "label": "源数据自定义初始化Sql",
+                              "id": "u:836572dbde62",
                               "labelRemark": {
                                 "icon": "fa fa-question-circle",
                                 "trigger": [
                                   "hover"
                                 ],
                                 "className": "Remark--warning",
-                                "placement": "top",
-                                "content": "可自行定义源数据查询sql。若未自定义，则使用默认的select * from tablexxx 进行全表全字段查询",
+                                "placement": "right",
+                                "content": "可自行定义源数据查询sql。若未自定义，则使用默认的select * from tablexxx 进行全字段查询",
                                 "title": "源数据的数据初始化sql"
-                              }
+                              },
+                              "multiLine": true
                             }
                           ],
                           "id": "u:686763fa564c"

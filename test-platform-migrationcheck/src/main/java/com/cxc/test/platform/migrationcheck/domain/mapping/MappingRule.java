@@ -37,15 +37,6 @@ public class MappingRule {
     private CustomizedMethod fieldCheckMethod;
 
     /**
-     * 在根据source table查询valid mapping rule的方法中，
-     * 针对没有source table的数据，为了避免重复添加，
-     * 需要加一个标识判断是否已经添加过了
-     */
-    @Getter
-    @Setter
-    private boolean isAdded;
-
-    /**
      * target表中的值可能和source表无关
      * 例如target字段校验写死值，或者有其他和source表无关的校验方式
      * @return

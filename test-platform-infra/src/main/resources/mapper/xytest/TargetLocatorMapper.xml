@@ -2,28 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxc.test.platform.infra.mapper.xytest.TargetLocatorMapper">
 
-  <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.TargetLocatorPO">
-    <id column="config_id" property="configId" />
-    <id column="target_table_name" property="targetTableName" />
-    <id column="target_field_name" property="targetFieldName" />
-    <id column="locate_field" property="locateField" />
-    <id column="locate_method_name" property="locateMethodName" />
-    <id column="locate_method_args" property="locateMethodArgs" />
-    <id column="created_time" property="createdTime" />
-    <id column="modified_time" property="modifiedTime" />
-  </resultMap>
+    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.TargetLocatorPO">
+        <id column="config_id" property="configId"/>
+        <id column="target_table_name" property="targetTableName"/>
+        <id column="locate_field" property="locateField"/>
+        <id column="locate_method_name" property="locateMethodName"/>
+        <id column="locate_method_args" property="locateMethodArgs"/>
+        <id column="created_time" property="createdTime"/>
+        <id column="modified_time" property="modifiedTime"/>
+    </resultMap>
 
-  <insert id="insert" parameterType="java.util.List">
-    insert into t_target_locator
-    (config_id, target_table_name, target_field_name, locate_field, locate_method_name, locate_method_args, created_time, modified_time)
-    values
-    <foreach collection ="targetLocatorPOList" item="targetLocatorPO" separator =",">
-      (#{targetLocatorPO.configId}, #{targetLocatorPO.targetTableName}, #{targetLocatorPO.targetFieldName}, #{targetLocatorPO.locateField}, #{targetLocatorPO.locateMethodName}, #{targetLocatorPO.locateMethodArgs}, now(), now())
-    </foreach>
-  </insert>
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into t_migration_target_locator
+        (config_id, target_table_name, locate_field, locate_method_name, locate_method_args, created_time, modified_time)
+        values
+        <foreach collection="list" item="targetLocatorPO" separator=",">
+            (#{targetLocatorPO.configId}, #{targetLocatorPO.targetTableName}, #{targetLocatorPO.locateField}, #{targetLocatorPO.locateMethodName}, #{targetLocatorPO.locateMethodArgs}, now(), now())
+        </foreach>
+    </insert>
 
-  <select id="getByConfigId" resultMap="resultMap">
-    select * from t_target_locator where config_id = #{configId}
-  </select>
+    <select id="getByConfigId" resultMap="resultMap">
+        select * from t_migration_target_locator where config_id = #{configId}
+    </select>
 
 </mapper>

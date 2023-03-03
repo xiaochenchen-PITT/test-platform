@@ -46,18 +46,19 @@ public class MigrationService {
             Assert.isTrue(ret1 == 1, "failed to add migrationConfig");
 
             int ret2 = mappingRuleMapper.insertBatch(migrationConfigConverter.convertMappingRulePOList(migrationConfig));
-            Assert.isTrue(ret2 == 1, "failed to add mappingRule");
+            Assert.isTrue(ret2 >= 1, "failed to add mappingRule");
 
             int ret3 = sourceInitSqlMapper.insertBatch(migrationConfigConverter.convertSourceInitSqlPOList(migrationConfig));
-            Assert.isTrue(ret3 == 1, "failed to add sourceInitSql");
-
+            Assert.isTrue(ret3 >= 1, "failed to add sourceInitSql");
+//
             int ret4 = targetLocatorMapper.insertBatch(migrationConfigConverter.convertTargetLocatorPOList(migrationConfig));
-            Assert.isTrue(ret4 == 1, "failed to add targetLocator");
+            Assert.isTrue(ret4 >= 1, "failed to add targetLocator");
 
             return ResultDO.success(migrationConfig.getConfigId());
         } catch (Exception e) {
             log.error("addConfig failed. ", e);
-            return ResultDO.fail(ErrorMessageUtils.getMessage(e));
+//            return ResultDO.fail(ErrorMessageUtils.getMessage(e)); // 回滚必须要抛异常，这里不return了
+            throw new RuntimeException("addConfig failed, please check log"); // 回滚默认需要抛RuntimeException或者Error类
         }
     }
 

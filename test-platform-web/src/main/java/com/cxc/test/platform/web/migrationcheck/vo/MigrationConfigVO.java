@@ -1,7 +1,6 @@
 package com.cxc.test.platform.web.migrationcheck.vo;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 
 @Data
@@ -32,12 +31,12 @@ public class MigrationConfigVO {
      * 目标表中，原表主键id定位方法
      * key: 目标表名
      */
-    private JSONObject targetLocatorKvs;
+    private JSONArray locatorCombo;
 
     /**
      * 源数据的数据初始化sql
      * key: 源表名
      */
-    private JSONObject sourceTableSqlKvs;
+    private JSONArray initSqlCombo;
 
 }

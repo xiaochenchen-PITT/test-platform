@@ -59,14 +59,14 @@ public class DemoMigrationCheckController extends MigrationCheckController {
         // 源数据初始化
         String sqlLimit = buildSqlLimitClause(limit);
 
-        Map<String, String> tableAndSourceInitSqlMap = new HashMap<>();
-        tableAndSourceInitSqlMap.put("t_bb_company", String.format("select * from t_bb_company %s", sqlLimit));
-        tableAndSourceInitSqlMap.put("t_bb_company_balance_account", String.format("select * from t_bb_company_balance_account %s", sqlLimit));
-        tableAndSourceInitSqlMap.put("t_bb_company_info", String.format("select * from t_bb_company_info %s", sqlLimit));
-        tableAndSourceInitSqlMap.put("t_bb_company_link", String.format("select * from t_bb_company_link %s", sqlLimit));
-        tableAndSourceInitSqlMap.put("t_bb_company_role", String.format("select * from t_bb_company_role %s", sqlLimit));
-        tableAndSourceInitSqlMap.put("t_bb_company_voucher", String.format("select * from t_bb_company_voucher %s", sqlLimit));
-        migrationConfig.setTableAndSourceInitSqlMap(tableAndSourceInitSqlMap);
+        Map<String, String> tableAndInitSqlMap = new HashMap<>();
+        tableAndInitSqlMap.put("t_bb_company", String.format("select * from t_bb_company %s", sqlLimit));
+        tableAndInitSqlMap.put("t_bb_company_balance_account", String.format("select * from t_bb_company_balance_account %s", sqlLimit));
+        tableAndInitSqlMap.put("t_bb_company_info", String.format("select * from t_bb_company_info %s", sqlLimit));
+        tableAndInitSqlMap.put("t_bb_company_link", String.format("select * from t_bb_company_link %s", sqlLimit));
+        tableAndInitSqlMap.put("t_bb_company_role", String.format("select * from t_bb_company_role %s", sqlLimit));
+        tableAndInitSqlMap.put("t_bb_company_voucher", String.format("select * from t_bb_company_voucher %s", sqlLimit));
+        migrationConfig.setTableAndInitSqlMap(tableAndInitSqlMap);
 
         // 目标表中原表主键id定位
         SourceLocator locator = SourceLocator.builder()
@@ -81,8 +81,7 @@ public class DemoMigrationCheckController extends MigrationCheckController {
             String targetTable = mappingRule.getTargetMappingItem().getTableName();
             String targetField = mappingRule.getTargetMappingItem().getFieldName();
 
-            String locatorKey = targetTable + MigrationConfig.TABLE_AND_FIELD_JOINER + targetField;
-            tableAndLocatorMap.put(locatorKey, locator);
+            tableAndLocatorMap.put(targetTable, locator);
         }
         migrationConfig.setTableFieldAndLocatorMap(tableAndLocatorMap);
 

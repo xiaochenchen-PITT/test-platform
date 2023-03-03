@@ -2,25 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxc.test.platform.infra.mapper.xytest.SourceInitSqlMapper">
 
-  <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO">
-    <id column="config_id" property="configId" />
-    <id column="source_table_name" property="sourceTableName" />
-    <id column="init_sql" property="initSql" />
-    <id column="created_time" property="createdTime" />
-    <id column="modified_time" property="modifiedTime" />
-  </resultMap>
+    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO">
+        <id column="config_id" property="configId"/>
+        <id column="source_table_name" property="sourceTableName"/>
+        <id column="init_sql" property="initSql"/>
+        <id column="created_time" property="createdTime"/>
+        <id column="modified_time" property="modifiedTime"/>
+    </resultMap>
 
-  <insert id="insertBatch" parameterType="java.util.List">
-    insert into t_source_init_sql
-    (config_id, source_table_name, init_sql, created_time, modified_time)
-    values
-    <foreach collection ="sourceInitSqlPOList" item="sourceInitSqlPO" separator =",">
-      (#{sourceInitSqlPO.configId}, #{sourceInitSqlPO.sourceTableName}, #{sourceInitSqlPO.initSql}, now(), now())
-    </foreach>
-  </insert>
+    <insert id="insertBatch" parameterType="java.util.List">
+        insert into t_migration_source_init_sql
+        (config_id, source_table_name, init_sql, created_time, modified_time)
+        values
+        <foreach collection="list" item="sourceInitSqlPO" separator=",">
+            (#{sourceInitSqlPO.configId}, #{sourceInitSqlPO.sourceTableName}, #{sourceInitSqlPO.initSql}, now(), now())
+        </foreach>
+    </insert>
 
-  <select id="getByConfigId" resultMap="resultMap">
-    select * from t_source_init_sql where config_id = #{configId}
-  </select>
+    <select id="getByConfigId" resultMap="resultMap">
+        select * from t_migration_source_init_sql where config_id = #{configId}
+    </select>
 
 </mapper>

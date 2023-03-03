@@ -4,12 +4,12 @@ spring:
     xytest: # 数据源1
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://mysql-0.mysql.bbmall-middleware.svc.cluster.bbmall:3306/xytest_test?characterEncoding=UTF-8&useLocalSessionState=true&serverTimezone=GMT%2b8
-      username: xytest
-      password: xytest
+      jdbcUrl: jdbc:mysql://127.0.0.1:3306/cxc?characterEncoding=UTF-8&useLocalSessionState=true&serverTimezone=GMT%2b8
+      username: root
+      password: Mymysql0520@
     oms: # 数据源2
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://mysql-0.mysql.ibwms-middleware-service.svc.cluster.local:3306/oms_test?useAffectedRows=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+      jdbcUrl: jdbc:mysql://127.0.0.1:3306/oms_test?useAffectedRows=true&rewriteBatchedStatements=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
       username: oms_test
       password: oms_test

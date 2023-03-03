@@ -4,9 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-/**
- * todo 暂时在这写死，后续落到db中作为配置项
- */
 @Slf4j
 @Component
 public class DbConfig {
