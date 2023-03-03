@@ -9,6 +9,11 @@ import java.sql.Date;
 @Builder
 public class SourceInitSqlPO {
 
+    /**
+     * 主键id，无实际业务意义
+     */
+    private Long id;
+
     private Long configId;
 
     private String sourceTableName;

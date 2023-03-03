@@ -3,6 +3,7 @@
 <mapper namespace="com.cxc.test.platform.infra.mapper.xytest.MappingRuleMapper">
 
     <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO">
+        <id column="id" property="id"/>
         <id column="config_id" property="configId"/>
         <id column="source_table_name" property="sourceTableName"/>
         <id column="source_field_names" property="sourceFieldNames"/>
@@ -30,5 +31,40 @@
     <select id="getByConfigId" resultMap="resultMap">
         select * from t_migration_mapping_rule where config_id = #{configId}
     </select>
+
+    <select id="getById" resultType="com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO">
+        select * from t_migration_mapping_rule where id = #{id}
+    </select>
+
+    <update id="update" parameterType="com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO">
+        update t_migration_mapping_rule set
+        <if test="sourceTableName != null">
+            `source_table_name` = #{sourceTableName},
+        </if>
+        <if test="sourceFieldNames != null">
+            `source_field_names` = #{sourceFieldNames},
+        </if>
+        <if test="isPrimaryKey != null">
+            `is_primary_key` = #{isPrimaryKey},
+        </if>
+        <if test="targetTableName != null">
+            `target_table_name` = #{targetTableName},
+        </if>
+        <if test="targetFieldName != null">
+            `target_field_name` = #{targetFieldName},
+        </if>
+        <if test="fieldCheckMethodName != null">
+            `field_check_method_name` = #{fieldCheckMethodName},
+        </if>
+        <if test="fieldCheckMethodArgs != null">
+            `field_check_method_args` = #{fieldCheckMethodArgs},
+        </if>
+        `modified_time` = now()
+        where id = #{id}
+    </update>
+
+    <delete id="delete">
+        delete from t_migration_mapping_rule where id = #{id}
+    </delete>
 
 </mapper>

@@ -17,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 public class MigrationConfigConverter {
@@ -43,6 +44,7 @@ public class MigrationConfigConverter {
         if (CollectionUtils.isNotEmpty(migrationConfig.getMappingRuleList())) {
             for (MappingRule mappingRule : migrationConfig.getMappingRuleList()) {
                 MappingRulePO mappingRulePO = MappingRulePO.builder()
+                        .id(mappingRule.getId())
                         .configId(migrationConfig.getConfigId())
                         .sourceTableName(mappingRule.getSourceMappingItem().getTableName())
                         .sourceFieldNames(String.join(",", mappingRule.getSourceMappingItem().getFieldNameList()))
@@ -135,8 +137,7 @@ public class MigrationConfigConverter {
                     .locateField(targetLocatorPO.getLocateField())
                     .locateMethod(CustomizedMethod.builder()
                             .beanName(targetLocatorPO.getLocateMethodName())
-                            .args(StringUtils.isNotEmpty(targetLocatorPO.getLocateMethodArgs()) ?
-                                    Arrays.asList(targetLocatorPO.getLocateMethodArgs().split(",")) : null)
+                            .args(convertArg(targetLocatorPO.getLocateMethodArgs()))
                             .build())
                     .build();
 
@@ -149,6 +150,7 @@ public class MigrationConfigConverter {
 
     public MappingRule convertPO2DO(MappingRulePO mappingRulePO) {
         MappingRule mappingRule = MappingRule.builder()
+                .id(mappingRulePO.getId())
                 .sourceMappingItem(SourceMappingItem.builder()
                         .tableName(mappingRulePO.getSourceTableName())
                         .fieldNames(mappingRulePO.getSourceFieldNames())
@@ -160,8 +162,7 @@ public class MigrationConfigConverter {
                         .build())
                 .fieldCheckMethod(CustomizedMethod.builder()
                         .beanName(mappingRulePO.getFieldCheckMethodName())
-                        .args(StringUtils.isNotEmpty(mappingRulePO.getFieldCheckMethodArgs()) ?
-                                Arrays.asList(mappingRulePO.getFieldCheckMethodArgs().split(",")) : null)
+                        .args(convertArg(mappingRulePO.getFieldCheckMethodArgs()))
                         .build())
                 .build();
 
@@ -179,4 +180,22 @@ public class MigrationConfigConverter {
         return mappingRuleList;
     }
 
+    private List<Object> convertArg(String argsStr) {
+        if (StringUtils.isEmpty(argsStr)) {
+            return null;
+        }
+
+        if (argsStr.startsWith("[")) {
+            argsStr = argsStr.substring(1);
+        }
+
+        if (argsStr.endsWith("]")) {
+            argsStr = argsStr.substring(0, argsStr.length() - 1);
+        }
+
+        return Arrays.stream(argsStr.split(","))
+                .filter(StringUtils::isNotEmpty)
+                .map(String::trim)
+                .collect(Collectors.toList());
+    }
 }

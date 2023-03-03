@@ -13,4 +13,10 @@ public interface MappingRuleMapper {
     int insertBatch(List<MappingRulePO> mappingRulePOList);
 
     List<MappingRulePO> getByConfigId(Long configId);
+
+    MappingRulePO getById(Long id);
+
+    int update(MappingRulePO mappingRulePO);
+
+    int delete(Long id);
 }

@@ -3,6 +3,7 @@
 <mapper namespace="com.cxc.test.platform.infra.mapper.xytest.SourceInitSqlMapper">
 
     <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO">
+        <id column="id" property="id"/>
         <id column="config_id" property="configId"/>
         <id column="source_table_name" property="sourceTableName"/>
         <id column="init_sql" property="initSql"/>

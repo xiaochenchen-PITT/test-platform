@@ -6,6 +6,8 @@ import com.cxc.test.platform.common.domain.AmisResult;
 import com.cxc.test.platform.common.domain.ResultDO;
 import com.cxc.test.platform.common.utils.ExcelUtils;
 import com.cxc.test.platform.infra.config.DatabaseConfig;
+import com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO;
+import com.cxc.test.platform.infra.mapper.xytest.MappingRuleMapper;
 import com.cxc.test.platform.migrationcheck.domain.CustomizedMethod;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationCheckConfig;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
@@ -35,6 +37,9 @@ public class MigrationCheckController extends BaseController {
     @Resource
     MigrationService migrationService;
 
+    @Resource
+    MappingRuleMapper mappingRuleMapper;
+
     private final String CONFIG_TABLE_SPLIT = "@";
     private final String CONFIG_FIELD_SPLIT = ",";
 
@@ -43,12 +48,18 @@ public class MigrationCheckController extends BaseController {
         return "migrationcheck/configSet";
     }
 
+    @GetMapping("/config_detail")
+    public String configDetail() {
+        return "migrationcheck/configDetail";
+    }
+
     @RequestMapping(value = "/add_config", method = RequestMethod.POST)
     @ResponseBody
     public AmisResult addConfig(@RequestBody MigrationConfigVO migrationConfigVO) {
         String triggerUrl = buildTriggerUrl();
 
         MigrationConfig migrationConfig = convert(migrationConfigVO);
+
         Assert.isTrue(migrationConfig.getTableAndInitSqlMap().size() == migrationConfig.getRelatedSourceTables().size(),
                 "【源数据初始化】和【字段映射关系】中源表数量不一致，请检查配置");
         Assert.isTrue(migrationConfig.getTableFieldAndLocatorMap().size() == migrationConfig.getRelatedTargetTables().size(),
@@ -62,19 +73,89 @@ public class MigrationCheckController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/get_config", method = RequestMethod.GET)
+    @RequestMapping(value = "/get_mapping_rule_config", method = RequestMethod.GET)
     @ResponseBody
-    public AmisResult getConfig(@RequestParam Long configId) {
+    public AmisResult getMappingRuleConfig(@RequestParam Long configId, @RequestParam(required = false) String sourceTableNameSearch,
+                                           @RequestParam(required = false) String targetTableNameSearch) {
         String triggerUrl = buildTriggerUrl();
 
         ResultDO<MigrationConfig> ret = migrationService.getConfig(configId);
-
-
-        if (ret.getIsSuccess()) {
-            return AmisResult.simpleSuccess("success", "保存成功，config id:" + ret.getData());
-        } else {
+        if (!ret.getIsSuccess()) {
             return AmisResult.fail(ret.getErrorMessage(), null);
         }
+
+        List<MappingRule> mappingRuleList = ret.getData().getMappingRuleList();
+
+        JSONObject retData = new JSONObject();
+        JSONArray rowJA = new JSONArray();
+        for (MappingRule mappingRule : mappingRuleList) {
+            if (StringUtils.isNotEmpty(sourceTableNameSearch) && StringUtils.isNotEmpty(mappingRule.getSourceMappingItem().getTableName())
+                    && !mappingRule.getSourceMappingItem().getTableName().contains(sourceTableNameSearch)) {
+                continue;
+            }
+
+            if (StringUtils.isNotEmpty(targetTableNameSearch) && StringUtils.isNotEmpty(mappingRule.getTargetMappingItem().getTableName())
+                    && !mappingRule.getTargetMappingItem().getTableName().contains(targetTableNameSearch)) {
+                continue;
+            }
+
+            JSONObject rowJO = new JSONObject();
+            rowJO.put("id", mappingRule.getId());
+            rowJO.put("sourceTableName", mappingRule.getSourceMappingItem().getTableName());
+            rowJO.put("sourceFieldNames", mappingRule.getSourceMappingItem().getFieldNameList());
+            rowJO.put("isPrimaryKey", mappingRule.getSourceMappingItem().isPrimaryKey());
+            rowJO.put("targetTableName", mappingRule.getTargetMappingItem().getTableName());
+            rowJO.put("targetFieldName", mappingRule.getTargetMappingItem().getFieldName());
+            rowJO.put("fieldCheckMethodName", mappingRule.getFieldCheckMethod().getBeanName());
+            rowJO.put("fieldCheckMethodArgs", mappingRule.getFieldCheckMethod().getArgs());
+
+            rowJA.add(rowJO);
+        }
+        retData.put("rows", rowJA);
+        retData.put("count", rowJA.size());
+
+        return AmisResult.success(retData, "ok");
+    }
+
+    @RequestMapping(value = "/delete_mapping_rule", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult deleteMappingRuleConfig(@RequestParam Long id) {
+        String triggerUrl = buildTriggerUrl();
+
+        MappingRulePO mappingRulePO = mappingRuleMapper.getById(id);
+        if (mappingRulePO.getIsPrimaryKey() == 1) {
+            return AmisResult.fail("主键primary key为true的不能删除", null);
+        }
+
+        int ret = mappingRuleMapper.delete(id);
+        Assert.isTrue(ret == 1, "delete mapping rule failed");
+
+        return AmisResult.simpleSuccess("success", "删除成功");
+    }
+
+    @RequestMapping(value = "/update_mapping_rule", method = RequestMethod.POST)
+    @ResponseBody
+    public AmisResult updateMappingRuleConfig(@RequestParam Long id, @RequestParam String sourceTableName,
+                                              @RequestParam String sourceFieldNames, @RequestParam String isPrimaryKey,
+                                              @RequestParam String targetTableName, @RequestParam String targetFieldName,
+                                              @RequestParam String fieldCheckMethodName, @RequestParam String fieldCheckMethodArgs) {
+        String triggerUrl = buildTriggerUrl();
+
+        MappingRulePO mappingRulePO = MappingRulePO.builder()
+                .id(id)
+                .sourceTableName(sourceTableName)
+                .sourceFieldNames(sourceFieldNames)
+                .isPrimaryKey(isPrimaryKey.equalsIgnoreCase("true") ? 1 : 0)
+                .targetTableName(targetTableName)
+                .targetFieldName(targetFieldName)
+                .fieldCheckMethodName(fieldCheckMethodName)
+                .fieldCheckMethodArgs(fieldCheckMethodArgs)
+                .build();
+
+        int ret = mappingRuleMapper.update(mappingRulePO);
+        Assert.isTrue(ret == 1, "update mapping rule failed");
+
+        return AmisResult.simpleSuccess("success", "编辑成功");
     }
 
     private MigrationConfig convert(MigrationConfigVO migrationConfigVO) {
@@ -167,7 +248,7 @@ public class MigrationCheckController extends BaseController {
         }
 
         return Arrays.stream(argsStr.split(","))
-                .map(s -> trim((s)))
+                .map(s -> trim(s))
                 .collect(Collectors.toList());
     }
 

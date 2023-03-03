@@ -3,6 +3,7 @@
 <mapper namespace="com.cxc.test.platform.infra.mapper.xytest.TargetLocatorMapper">
 
     <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.TargetLocatorPO">
+        <id column="id" property="id"/>
         <id column="config_id" property="configId"/>
         <id column="target_table_name" property="targetTableName"/>
         <id column="locate_field" property="locateField"/>

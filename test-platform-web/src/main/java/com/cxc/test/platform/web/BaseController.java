@@ -25,7 +25,6 @@ public class BaseController {
 
     public String buildTriggerUrl() {
         StringBuffer triggerUrlSb = request.getRequestURL();
-        triggerUrlSb.append("?");
         boolean first = true;
         for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
             if (first) {

@@ -397,7 +397,7 @@ public class MigrationCheckService {
         }
 
         Assert.isTrue(sourceTableAndPrimaryKeyMap.size() == migrationConfig.getRelatedSourceTables().size(),
-                "some of the source tables do not have primary key configed, please check.");
+                "部分源表没有配置主键(primary key)，请检查配置");
 
         return sourceTableAndPrimaryKeyMap;
     }

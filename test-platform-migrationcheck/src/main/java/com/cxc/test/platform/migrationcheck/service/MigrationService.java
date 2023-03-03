@@ -50,7 +50,7 @@ public class MigrationService {
 
             int ret3 = sourceInitSqlMapper.insertBatch(migrationConfigConverter.convertSourceInitSqlPOList(migrationConfig));
             Assert.isTrue(ret3 >= 1, "failed to add sourceInitSql");
-//
+
             int ret4 = targetLocatorMapper.insertBatch(migrationConfigConverter.convertTargetLocatorPOList(migrationConfig));
             Assert.isTrue(ret4 >= 1, "failed to add targetLocator");
 
@@ -68,6 +68,10 @@ public class MigrationService {
             List<MappingRulePO> mappingRulePOList = mappingRuleMapper.getByConfigId(configId);
             List<SourceInitSqlPO> sourceInitSqlPOList = sourceInitSqlMapper.getByConfigId(configId);
             List<TargetLocatorPO> targetLocatorPOList = targetLocatorMapper.getByConfigId(configId);
+
+            if (migrationConfigPO == null) {
+                return ResultDO.fail("Did not find config, config id: " + configId);
+            }
 
             MigrationConfig migrationConfig = migrationConfigConverter.convertPO2DO(migrationConfigPO, mappingRulePOList,
                     targetLocatorPOList, sourceInitSqlPOList);
