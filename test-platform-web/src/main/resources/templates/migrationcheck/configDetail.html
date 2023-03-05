@@ -48,10 +48,62 @@
                           "title": "源数据库链接信息",
                           "body": [
                             {
-                              "type": "tpl",
-                              "tpl": "选项卡内容1",
-                              "inline": false,
-                              "id": "u:31665284b35d"
+                              "type": "crud",
+                              "name": "migrationCrud",
+                              "api": {
+                                "method": "get",
+                                "url": "/migrationcheck/get_migration_db_config?configId=${configId}"
+                              },
+                              "loadDataOnce": true,
+                              "syncLocation": false,
+                              "columns": [
+                                {
+                                  "name": "configId",
+                                  "label": "配置id",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "sourceDriverClassName",
+                                  "label": "源数据库DriverClassName",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "sourceDbUrl",
+                                  "label": "源数据库Url",
+                                  "id": "u:92fdad445603"
+                                },
+                                {
+                                  "name": "sourceUserName",
+                                  "label": "源数据库用户名",
+                                  "id": "u:3a9c584a5cc3"
+                                },
+                                {
+                                  "name": "sourcePassword",
+                                  "label": "源数据库密码",
+                                  "id": "u:e2b9df648687"
+                                },
+                                {
+                                  "name": "targetDriverClassName",
+                                  "label": "目标数据库DriverClassName",
+                                  "id": "u:86cbcf96da7c"
+                                },
+                                {
+                                  "name": "targetDbUrl",
+                                  "label": "目标数据库Url",
+                                  "id": "u:1dadd1276db4"
+                                },
+                                {
+                                  "name": "targetUserName",
+                                  "label": "目标数据库用户名",
+                                  "id": "u:86cbcf96da7c"
+                                },
+                                {
+                                  "name": "targetPassword",
+                                  "label": "目标数据库密码",
+                                  "id": "u:1dadd1276db4"
+                                }
+                              ],
+                              "id": "u:28024f3e550b"
                             }
                           ],
                           "id": "u:b523ba08103b"
@@ -66,8 +118,8 @@
                                 "method": "get",
                                 "url": "/migrationcheck/get_mapping_rule_config?configId=${configId}",
                                 "data": {
-                                    "sourceTableNameSearch": "${sourceTableNameSearch | default:undefined}",
-                                    "targetTableNameSearch": "${targetTableNameSearch | default:undefined}"
+                                  "sourceTableNameSearch": "${sourceTableNameSearch | default:undefined}",
+                                  "targetTableNameSearch": "${targetTableNameSearch | default:undefined}"
                                 }
                               },
                               "loadDataOnce": true,
@@ -118,6 +170,11 @@
                                 {
                                   "name": "id",
                                   "label": "ID",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "configId",
+                                  "label": "配置id",
                                   "id": "u:97e6ae8cc007"
                                 },
                                 {
@@ -216,7 +273,7 @@
                                       "actionType": "ajax",
                                       "level": "danger",
                                       "confirmText": "确认要删除？",
-                                      "api": "/migrationcheck/delete_mapping_rule?id=${id}",
+                                      "api": "get:/migrationcheck/delete_mapping_rule?id=${id}",
                                       "id": "u:1fd57e4b4497"
                                     }
                                   ],
@@ -232,10 +289,127 @@
                           "title": "目标表中源数据定位",
                           "body": [
                             {
-                              "type": "tpl",
-                              "tpl": "选项卡内容3",
-                              "inline": false,
-                              "id": "u:f5dbcbeb660b"
+                              "type": "crud",
+                              "name": "locatorCrud",
+                              "api": {
+                                "method": "get",
+                                "url": "/migrationcheck/get_locator_config?configId=${configId}",
+                                "data": {
+                                  "targetTableNameSearch": "${targetTableNameSearch | default:undefined}"
+                                }
+                              },
+                              "loadDataOnce": true,
+                              "syncLocation": false,
+                              "filter": {
+                                "debug": false,
+                                "title": "条件搜索",
+                                "body": [
+                                  {
+                                    "type": "group",
+                                    "body": [
+                                      {
+                                        "type": "input-text",
+                                        "name": "targetTableNameSearch",
+                                        "label": "目标表表名",
+                                        "clearable": true,
+                                        "size": "md",
+                                        "id": "u:bdbc1cbbcb6c"
+                                      }
+                                    ],
+                                    "id": "u:edbf77d9c5d8"
+                                  }
+                                ],
+                                "actions": [
+                                  {
+                                    "type": "reset",
+                                    "label": "重置",
+                                    "id": "u:67e8ccf7a7f0"
+                                  },
+                                  {
+                                    "type": "submit",
+                                    "level": "primary",
+                                    "label": "查询",
+                                    "id": "u:ef895ce62e1d"
+                                  }
+                                ],
+                                "id": "u:a00bd4fb9858"
+                              },
+                              "columns": [
+                                {
+                                  "name": "id",
+                                  "label": "ID",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "configId",
+                                  "label": "配置id",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "targetTableName",
+                                  "label": "目标表名",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "locateField",
+                                  "label": "sourceId承载字段",
+                                  "id": "u:92fdad445603"
+                                },
+                                {
+                                  "name": "locateMethodName",
+                                  "label": "定位source表主键id的逻辑",
+                                  "id": "u:3a9c584a5cc3"
+                                },
+                                {
+                                  "name": "locateMethodArgs",
+                                  "label": "定位source表主键id的逻辑参数",
+                                  "id": "u:e2b9df648687"
+                                },
+                                {
+                                  "type": "button-toolbar",
+                                  "label": "操作",
+                                  "buttons": [
+                                    {
+                                      "label": "修改",
+                                      "type": "button",
+                                      "actionType": "drawer",
+                                      "drawer": {
+                                        "title": "编辑源数据定位",
+                                        "size": "lg",
+                                        "body": {
+                                          "type": "form",
+                                          "api": "post:/migrationcheck/update_locator?id=${id}",
+                                          "body": [
+                                            {
+                                              "name": "targetTableName",
+                                              "label": "目标表名",
+                                              "type": "input-text"
+                                            },
+                                            {
+                                              "name": "locateField",
+                                              "label": "sourceId承载字段",
+                                              "type": "input-text"
+                                            },
+                                            {
+                                              "name": "locateMethodName",
+                                              "label": "定位source表主键id的逻辑",
+                                              "type": "input-text"
+                                            },
+                                            {
+                                              "name": "locateMethodArgs",
+                                              "label": "定位source表主键id的逻辑参数",
+                                              "type": "input-text"
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "id": "u:46e308e46b4c"
+                                    }
+                                  ],
+                                  "id": "u:0bdd3201ab9f"
+                                }
+                              ],
+                              "id": "u:28024f3e550b"
                             }
                           ],
                           "id": "u:18e93972399e"
@@ -244,11 +418,110 @@
                           "title": "源数据初始化",
                           "body": [
                             {
-                              "type": "tpl",
-                              "tpl": "选项卡内容3",
-                              "inline": false
+                              "type": "crud",
+                              "id": "u:28024f3e550b",
+                              "name": "locatorCrud",
+                              "api": {
+                                "method": "get",
+                                "url": "/migrationcheck/get_init_sql_config?configId=${configId}",
+                                "data": {
+                                  "sourceTableNameSearch": "${sourceTableNameSearch | default:undefined}"
+                                }
+                              },
+                              "loadDataOnce": true,
+                              "syncLocation": false,
+                              "filter": {
+                                "debug": false,
+                                "title": "条件搜索",
+                                "body": [
+                                  {
+                                    "type": "group",
+                                    "body": [
+                                      {
+                                        "type": "input-text",
+                                        "name": "sourceTableNameSearch",
+                                        "label": "原表表名",
+                                        "clearable": true,
+                                        "size": "md",
+                                        "id": "u:bdbc1cbbcb6c"
+                                      }
+                                    ],
+                                    "id": "u:edbf77d9c5d8"
+                                  }
+                                ],
+                                "actions": [
+                                  {
+                                    "type": "reset",
+                                    "label": "重置",
+                                    "id": "u:67e8ccf7a7f0"
+                                  },
+                                  {
+                                    "type": "submit",
+                                    "level": "primary",
+                                    "label": "查询",
+                                    "id": "u:ef895ce62e1d"
+                                  }
+                                ],
+                                "id": "u:a00bd4fb9858"
+                              },
+                              "columns": [
+                                {
+                                  "name": "id",
+                                  "label": "ID",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "configId",
+                                  "label": "配置id",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "sourceTableName",
+                                  "label": "原表表名",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "initSql",
+                                  "label": "初始化sql",
+                                  "id": "u:92fdad445603"
+                                },
+                                {
+                                  "label": "操作",
+                                  "id": "u:0bdd3201ab9f",
+                                  "type": "button-toolbar",
+                                  "buttons": [
+                                    {
+                                      "label": "修改",
+                                      "type": "button",
+                                      "actionType": "drawer",
+                                      "drawer": {
+                                        "title": "编辑源数据初始化",
+                                        "size": "lg",
+                                        "body": {
+                                          "type": "form",
+                                          "api": "post:/migrationcheck/update_init_sql?id=${id}",
+                                          "body": [
+                                            {
+                                              "name": "sourceTableName",
+                                              "label": "源表表名",
+                                              "type": "input-text"
+                                            },
+                                            {
+                                              "name": "initSql",
+                                              "label": "初始化sql",
+                                              "type": "input-text"
+                                            }
+                                          ]
+                                        }
+                                      },
+                                      "id": "u:46e308e46b4c"
+                                    }
+                                  ]
+                                }
+                              ]
                             }
-                          ]
+                          ],
+                          "id": "u:18e93972399e"
                         }
                       ],
                       "id": "u:dd788efa5149",

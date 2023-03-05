@@ -24,4 +24,16 @@
         select * from t_migration_source_init_sql where config_id = #{configId}
     </select>
 
+    <update id="update" parameterType="com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO">
+        update t_migration_source_init_sql set
+        <if test="sourceTableName != null and sourceTableName != ''">
+            `source_table_name` = #{sourceTableName},
+        </if>
+        <if test="initSql != null and initSql != ''">
+            `init_sql` = #{initSql},
+        </if>
+        `modified_time` = now()
+        where id = #{id}
+    </update>
+
 </mapper>

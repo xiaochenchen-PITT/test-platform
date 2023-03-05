@@ -20,13 +20,6 @@ public class MappingRule {
     public final static String EXCEL_FIELD_CHECK_METHOD_NAME = "自定义处理逻辑";
     public final static String EXCEL_FIELD_CHECK_METHOD_ARGS = "自定义处理逻辑入参";
 
-    /**
-     * 主键id，无实际业务意义
-     */
-    @Getter
-    @Setter
-    private Long id;
-
     @Getter
     @Setter
     private SourceMappingItem sourceMappingItem;

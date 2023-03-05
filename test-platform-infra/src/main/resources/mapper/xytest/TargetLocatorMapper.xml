@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cxc.test.platform.infra.mapper.xytest.TargetLocatorMapper">
+<mapper namespace="com.cxc.test.platform.infra.mapper.xytest.SourceLocatorMapper">
 
-    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.TargetLocatorPO">
+    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.SourceLocatorPO">
         <id column="id" property="id"/>
         <id column="config_id" property="configId"/>
         <id column="target_table_name" property="targetTableName"/>
@@ -14,16 +14,34 @@
     </resultMap>
 
     <insert id="insertBatch" parameterType="java.util.List">
-        insert into t_migration_target_locator
+        insert into t_migration_source_locator
         (config_id, target_table_name, locate_field, locate_method_name, locate_method_args, created_time, modified_time)
         values
-        <foreach collection="list" item="targetLocatorPO" separator=",">
-            (#{targetLocatorPO.configId}, #{targetLocatorPO.targetTableName}, #{targetLocatorPO.locateField}, #{targetLocatorPO.locateMethodName}, #{targetLocatorPO.locateMethodArgs}, now(), now())
+        <foreach collection="list" item="sourceLocatorPO" separator=",">
+            (#{sourceLocatorPO.configId}, #{sourceLocatorPO.targetTableName}, #{sourceLocatorPO.locateField}, #{sourceLocatorPO.locateMethodName}, #{sourceLocatorPO.locateMethodArgs}, now(), now())
         </foreach>
     </insert>
 
     <select id="getByConfigId" resultMap="resultMap">
-        select * from t_migration_target_locator where config_id = #{configId}
+        select * from t_migration_source_locator where config_id = #{configId}
     </select>
+
+    <update id="update" parameterType="com.cxc.test.platform.infra.domain.migrationcheck.SourceLocatorPO">
+        update t_migration_source_locator set
+        <if test="targetTableName != null and targetTableName != ''">
+            `target_table_name` = #{targetTableName},
+        </if>
+        <if test="locateField != null and locateField != ''">
+            `locate_field` = #{locateField},
+        </if>
+        <if test="locateMethodName != null and locateMethodName != ''">
+            `locate_method_name` = #{locateMethodName},
+        </if>
+        <if test="locateMethodArgs != null and locateMethodArgs != ''">
+            `locate_method_args` = #{locateMethodArgs},
+        </if>
+        `modified_time` = now()
+        where id = #{id}
+    </update>
 
 </mapper>

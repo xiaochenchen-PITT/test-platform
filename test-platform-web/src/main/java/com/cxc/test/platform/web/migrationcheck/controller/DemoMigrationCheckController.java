@@ -6,7 +6,7 @@ import com.cxc.test.platform.infra.config.DbConfig;
 import com.cxc.test.platform.migrationcheck.domain.CustomizedMethod;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationCheckConfig;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
-import com.cxc.test.platform.migrationcheck.domain.locate.SourceLocator;
+import com.cxc.test.platform.migrationcheck.domain.SourceLocator;
 import com.cxc.test.platform.migrationcheck.domain.mapping.MappingRule;
 import com.cxc.test.platform.migrationcheck.service.MigrationCheckService;
 import lombok.extern.slf4j.Slf4j;
@@ -83,7 +83,7 @@ public class DemoMigrationCheckController extends MigrationCheckController {
 
             tableAndLocatorMap.put(targetTable, locator);
         }
-        migrationConfig.setTableFieldAndLocatorMap(tableAndLocatorMap);
+        migrationConfig.setTableAndLocatorMap(tableAndLocatorMap);
 
         Long batchId = System.currentTimeMillis();
         singleExecutorService.submit(() -> {

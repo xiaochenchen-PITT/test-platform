@@ -4,10 +4,10 @@ import com.cxc.test.platform.infra.config.DatabaseConfig;
 import com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO;
 import com.cxc.test.platform.infra.domain.migrationcheck.MigrationConfigPO;
 import com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO;
-import com.cxc.test.platform.infra.domain.migrationcheck.TargetLocatorPO;
+import com.cxc.test.platform.infra.domain.migrationcheck.SourceLocatorPO;
 import com.cxc.test.platform.migrationcheck.domain.CustomizedMethod;
+import com.cxc.test.platform.migrationcheck.domain.SourceLocator;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
-import com.cxc.test.platform.migrationcheck.domain.locate.SourceLocator;
 import com.cxc.test.platform.migrationcheck.domain.mapping.MappingRule;
 import com.cxc.test.platform.migrationcheck.domain.mapping.SourceMappingItem;
 import com.cxc.test.platform.migrationcheck.domain.mapping.TargetMappingItem;
@@ -44,7 +44,6 @@ public class MigrationConfigConverter {
         if (CollectionUtils.isNotEmpty(migrationConfig.getMappingRuleList())) {
             for (MappingRule mappingRule : migrationConfig.getMappingRuleList()) {
                 MappingRulePO mappingRulePO = MappingRulePO.builder()
-                        .id(mappingRule.getId())
                         .configId(migrationConfig.getConfigId())
                         .sourceTableName(mappingRule.getSourceMappingItem().getTableName())
                         .sourceFieldNames(String.join(",", mappingRule.getSourceMappingItem().getFieldNameList()))
@@ -80,12 +79,12 @@ public class MigrationConfigConverter {
         return sourceInitSqlPOList;
     }
 
-    public List<TargetLocatorPO> convertTargetLocatorPOList(MigrationConfig migrationConfig) {
-        List<TargetLocatorPO> targetLocatorPOList = new ArrayList<>();
+    public List<SourceLocatorPO> convertLocatorPOList(MigrationConfig migrationConfig) {
+        List<SourceLocatorPO> sourceLocatorPOList = new ArrayList<>();
 
-        if (MapUtils.isNotEmpty(migrationConfig.getTableFieldAndLocatorMap())) {
-            for (Map.Entry<String, SourceLocator> entry : migrationConfig.getTableFieldAndLocatorMap().entrySet()) {
-                TargetLocatorPO targetLocatorPO = TargetLocatorPO.builder()
+        if (MapUtils.isNotEmpty(migrationConfig.getTableAndLocatorMap())) {
+            for (Map.Entry<String, SourceLocator> entry : migrationConfig.getTableAndLocatorMap().entrySet()) {
+                SourceLocatorPO sourceLocatorPO = SourceLocatorPO.builder()
                         .configId(migrationConfig.getConfigId())
                         .targetTableName(entry.getKey())
                         .locateField(entry.getValue().getLocateField())
@@ -93,15 +92,15 @@ public class MigrationConfigConverter {
                         .locateMethodArgs(String.valueOf(entry.getValue().getLocateMethod().getArgs()))
                         .build();
 
-                targetLocatorPOList.add(targetLocatorPO);
+                sourceLocatorPOList.add(sourceLocatorPO);
             }
         }
 
-        return targetLocatorPOList;
+        return sourceLocatorPOList;
     }
 
     public MigrationConfig convertPO2DO(MigrationConfigPO migrationConfigPO, List<MappingRulePO> mappingRulePOList,
-                                        List<TargetLocatorPO> targetLocatorPOList, List<SourceInitSqlPO> sourceInitSqlPOList) {
+                                        List<SourceLocatorPO> sourceLocatorPOList, List<SourceInitSqlPO> sourceInitSqlPOList) {
         MigrationConfig migrationConfig = new MigrationConfig();
         migrationConfig.setConfigId(migrationConfigPO.getConfigId());
 
@@ -130,27 +129,26 @@ public class MigrationConfigConverter {
         }
         migrationConfig.setTableAndInitSqlMap(tableAndSourceInitSqlMap);
 
-        // tableFieldAndLocatorMap
-        Map<String, SourceLocator> tableFieldAndLocatorMap = new HashMap<>();
-        for (TargetLocatorPO targetLocatorPO : targetLocatorPOList) {
+        // tableAndLocatorMap
+        Map<String, SourceLocator> tableAndLocatorMap = new HashMap<>();
+        for (SourceLocatorPO sourceLocatorPO : sourceLocatorPOList) {
             SourceLocator sourceLocator = SourceLocator.builder()
-                    .locateField(targetLocatorPO.getLocateField())
+                    .locateField(sourceLocatorPO.getLocateField())
                     .locateMethod(CustomizedMethod.builder()
-                            .beanName(targetLocatorPO.getLocateMethodName())
-                            .args(convertArg(targetLocatorPO.getLocateMethodArgs()))
+                            .beanName(sourceLocatorPO.getLocateMethodName())
+                            .args(convertArg(sourceLocatorPO.getLocateMethodArgs()))
                             .build())
                     .build();
 
-            tableFieldAndLocatorMap.put(targetLocatorPO.getTargetTableName(), sourceLocator);
+            tableAndLocatorMap.put(sourceLocatorPO.getTargetTableName(), sourceLocator);
         }
-        migrationConfig.setTableFieldAndLocatorMap(tableFieldAndLocatorMap);
+        migrationConfig.setTableAndLocatorMap(tableAndLocatorMap);
 
         return migrationConfig;
     }
 
     public MappingRule convertPO2DO(MappingRulePO mappingRulePO) {
         MappingRule mappingRule = MappingRule.builder()
-                .id(mappingRulePO.getId())
                 .sourceMappingItem(SourceMappingItem.builder()
                         .tableName(mappingRulePO.getSourceTableName())
                         .fieldNames(mappingRulePO.getSourceFieldNames())

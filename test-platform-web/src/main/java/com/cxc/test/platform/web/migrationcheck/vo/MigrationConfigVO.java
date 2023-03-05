@@ -24,6 +24,7 @@ public class MigrationConfigVO {
 
     /**
      * 字段映射关系
+     * 通过前端excel解析得出
      */
     private JSONArray excel;
 

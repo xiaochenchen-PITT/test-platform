@@ -1,7 +1,7 @@
 package com.cxc.test.platform.migrationcheck.domain.config;
 
 import com.cxc.test.platform.infra.config.DatabaseConfig;
-import com.cxc.test.platform.migrationcheck.domain.locate.SourceLocator;
+import com.cxc.test.platform.migrationcheck.domain.SourceLocator;
 import com.cxc.test.platform.migrationcheck.domain.mapping.MappingRule;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -38,7 +38,7 @@ public class MigrationConfig {
      * 目标表中，原表主键id定位方法
      * key：目标表名，value：定位方法
      */
-    private Map<String, SourceLocator> tableFieldAndLocatorMap = new HashMap<>();
+    private Map<String, SourceLocator> tableAndLocatorMap = new HashMap<>();
 
     public Set<String> getRelatedSourceTables() {
         return mappingRuleList.stream()

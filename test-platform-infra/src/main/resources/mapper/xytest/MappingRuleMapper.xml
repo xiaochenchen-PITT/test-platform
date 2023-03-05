@@ -38,25 +38,25 @@
 
     <update id="update" parameterType="com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO">
         update t_migration_mapping_rule set
-        <if test="sourceTableName != null">
+        <if test="sourceTableName != null and sourceTableName != ''">
             `source_table_name` = #{sourceTableName},
         </if>
-        <if test="sourceFieldNames != null">
+        <if test="sourceFieldNames != null and sourceFieldNames != ''">
             `source_field_names` = #{sourceFieldNames},
         </if>
-        <if test="isPrimaryKey != null">
+        <if test="isPrimaryKey != null and isPrimaryKey != ''">
             `is_primary_key` = #{isPrimaryKey},
         </if>
-        <if test="targetTableName != null">
+        <if test="targetTableName != null and targetTableName != ''">
             `target_table_name` = #{targetTableName},
         </if>
-        <if test="targetFieldName != null">
+        <if test="targetFieldName != null and targetFieldName != ''">
             `target_field_name` = #{targetFieldName},
         </if>
-        <if test="fieldCheckMethodName != null">
+        <if test="fieldCheckMethodName != null and fieldCheckMethodName != ''">
             `field_check_method_name` = #{fieldCheckMethodName},
         </if>
-        <if test="fieldCheckMethodArgs != null">
+        <if test="fieldCheckMethodArgs != null and fieldCheckMethodArgs != ''">
             `field_check_method_args` = #{fieldCheckMethodArgs},
         </if>
         `modified_time` = now()

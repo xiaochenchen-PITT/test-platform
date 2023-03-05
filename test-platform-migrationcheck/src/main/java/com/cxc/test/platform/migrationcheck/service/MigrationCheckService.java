@@ -11,7 +11,7 @@ import com.cxc.test.platform.migrationcheck.domain.CustomizedMethod;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationCheckConfig;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
 import com.cxc.test.platform.migrationcheck.domain.data.MigrationData;
-import com.cxc.test.platform.migrationcheck.domain.locate.SourceLocator;
+import com.cxc.test.platform.migrationcheck.domain.SourceLocator;
 import com.cxc.test.platform.migrationcheck.domain.mapping.MappingRule;
 import com.cxc.test.platform.migrationcheck.domain.mapping.SourceMappingItem;
 import com.cxc.test.platform.migrationcheck.ext.fieldCheck.FieldCheckExt;
@@ -329,8 +329,8 @@ public class MigrationCheckService {
                                   MigrationConfig migrationConfig) {
         String sourceId = String.valueOf(sourceData.getValue(sourcePrimaryKey));
 
-        Map<String, SourceLocator> tableFieldAndLocatorMap = migrationConfig.getTableFieldAndLocatorMap();
-        SourceLocator locator = tableFieldAndLocatorMap.get(targetTable);
+        Map<String, SourceLocator> tableAndLocatorMap = migrationConfig.getTableAndLocatorMap();
+        SourceLocator locator = tableAndLocatorMap.get(targetTable);
         String locateField = locator.getLocateField();
 
         CustomizedMethod customizedMethod = locator.getLocateMethod();

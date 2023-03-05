@@ -1,6 +1,5 @@
-package com.cxc.test.platform.migrationcheck.domain.locate;
+package com.cxc.test.platform.migrationcheck.domain;
 
-import com.cxc.test.platform.migrationcheck.domain.CustomizedMethod;
 import lombok.Builder;
 import lombok.Data;
 

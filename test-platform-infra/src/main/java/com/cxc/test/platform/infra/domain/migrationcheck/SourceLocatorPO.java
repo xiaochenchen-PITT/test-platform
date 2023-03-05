@@ -7,7 +7,7 @@ import java.sql.Date;
 
 @Data
 @Builder
-public class TargetLocatorPO {
+public class SourceLocatorPO {
 
     /**
      * 主键id，无实际业务意义

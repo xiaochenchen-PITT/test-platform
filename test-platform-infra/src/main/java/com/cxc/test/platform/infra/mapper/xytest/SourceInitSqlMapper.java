@@ -13,4 +13,6 @@ public interface SourceInitSqlMapper {
     int insertBatch(List<SourceInitSqlPO> sourceInitSqlPOList);
 
     List<SourceInitSqlPO> getByConfigId(Long configId);
+
+    int update(SourceInitSqlPO sourceInitSqlPO);
 }

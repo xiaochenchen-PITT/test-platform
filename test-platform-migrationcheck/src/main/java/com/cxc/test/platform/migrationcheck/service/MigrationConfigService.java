@@ -5,11 +5,11 @@ import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO;
 import com.cxc.test.platform.infra.domain.migrationcheck.MigrationConfigPO;
 import com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO;
-import com.cxc.test.platform.infra.domain.migrationcheck.TargetLocatorPO;
+import com.cxc.test.platform.infra.domain.migrationcheck.SourceLocatorPO;
 import com.cxc.test.platform.infra.mapper.xytest.MappingRuleMapper;
 import com.cxc.test.platform.infra.mapper.xytest.MigrationConfigMapper;
 import com.cxc.test.platform.infra.mapper.xytest.SourceInitSqlMapper;
-import com.cxc.test.platform.infra.mapper.xytest.TargetLocatorMapper;
+import com.cxc.test.platform.infra.mapper.xytest.SourceLocatorMapper;
 import com.cxc.test.platform.migrationcheck.converter.MigrationConfigConverter;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.util.List;
 
 @Slf4j
 @Component
-public class MigrationService {
+public class MigrationConfigService {
 
     @Resource
     MigrationConfigConverter migrationConfigConverter;
@@ -37,7 +37,7 @@ public class MigrationService {
     SourceInitSqlMapper sourceInitSqlMapper;
 
     @Resource
-    TargetLocatorMapper targetLocatorMapper;
+    SourceLocatorMapper sourceLocatorMapper;
 
     @Transactional
     public ResultDO<Long> addConfig(MigrationConfig migrationConfig) {
@@ -51,8 +51,8 @@ public class MigrationService {
             int ret3 = sourceInitSqlMapper.insertBatch(migrationConfigConverter.convertSourceInitSqlPOList(migrationConfig));
             Assert.isTrue(ret3 >= 1, "failed to add sourceInitSql");
 
-            int ret4 = targetLocatorMapper.insertBatch(migrationConfigConverter.convertTargetLocatorPOList(migrationConfig));
-            Assert.isTrue(ret4 >= 1, "failed to add targetLocator");
+            int ret4 = sourceLocatorMapper.insertBatch(migrationConfigConverter.convertLocatorPOList(migrationConfig));
+            Assert.isTrue(ret4 >= 1, "failed to add sourceLocator");
 
             return ResultDO.success(migrationConfig.getConfigId());
         } catch (Exception e) {
@@ -67,14 +67,14 @@ public class MigrationService {
             MigrationConfigPO migrationConfigPO = migrationConfigMapper.getByConfigId(configId);
             List<MappingRulePO> mappingRulePOList = mappingRuleMapper.getByConfigId(configId);
             List<SourceInitSqlPO> sourceInitSqlPOList = sourceInitSqlMapper.getByConfigId(configId);
-            List<TargetLocatorPO> targetLocatorPOList = targetLocatorMapper.getByConfigId(configId);
+            List<SourceLocatorPO> sourceLocatorPOList = sourceLocatorMapper.getByConfigId(configId);
 
             if (migrationConfigPO == null) {
                 return ResultDO.fail("Did not find config, config id: " + configId);
             }
 
             MigrationConfig migrationConfig = migrationConfigConverter.convertPO2DO(migrationConfigPO, mappingRulePOList,
-                    targetLocatorPOList, sourceInitSqlPOList);
+                    sourceLocatorPOList, sourceInitSqlPOList);
 
             return ResultDO.success(migrationConfig);
         } catch (Exception e) {
