@@ -4,91 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="迁移配置管理 final">
-      <change afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/FeatureKeyConstant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/diff/TaskStatusConstant.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/DiffResultMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DemoMigrationCheckService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/vo/DiffDetailVO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/vo/DiffResultVO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/vo/MigrationRunningItemVO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/menu.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/image/bg.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/add.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/automation.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/dashboard.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/home.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/it.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/list.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/migration_check.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/money.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/qa.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/test_efficiency.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/tool_center.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configManage.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/diffDetail.html" afterDir="false" />
+    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="数据迁移校验模块 final">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/AmisResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/AmisResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/diff/DiffDetail.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/diff/DiffDetail.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/diff/DiffResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/diff/DiffResult.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/utils/CommonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/utils/CommonUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/datasource/XytestDateSourceConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/datasource/MasterDateSourceConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/converter/DiffConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/converter/DiffConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/diff/DiffDetailPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/diff/DiffDetailPO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/diff/DiffResultPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/diff/DiffResultPO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/migrationcheck/MappingRulePO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/migrationcheck/MappingRulePO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/migrationcheck/MigrationConfigPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/migrationcheck/MigrationConfigPO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/migrationcheck/SourceInitSqlPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/migrationcheck/SourceInitSqlPO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/migrationcheck/SourceLocatorPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/migrationcheck/SourceLocatorPO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/toolcenter/ToolPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/toolcenter/ToolPO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/toolcenter/ToolParamPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/toolcenter/ToolParamPO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/DiffDetailMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/DiffDetailMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/DiffResultMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/DiffResultMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/MappingRuleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/MappingRuleMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/MigrationConfigMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/MigrationConfigMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/SourceInitSqlMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/SourceInitSqlMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/SourceLocatorMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/SourceLocatorMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/ToolMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/ToolMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/xytest/ToolParamMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/ToolParamMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/DiffDetailMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/DiffDetailMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/DiffResultMapper.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/MappingRuleMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/MappingRuleMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/MigrationConfigMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/MigrationConfigMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/SourceInitSqlMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/SourceInitSqlMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest/TargetLocatorMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/TargetLocatorMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/converter/MigrationConfigConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/converter/MigrationConfigConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/config/MigrationCheckConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/config/MigrationCheckConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/data/MigrationData.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/domain/MigrationData.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/SkipCheckHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/SkipCheckHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/SkipCheckHandlerChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/SkipCheckHandlerChain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/impl/CommonSkipHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/impl/CommonSkipHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/impl/MigrationCheckConfigSkipHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/impl/MigrationCheckConfigSkipHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/impl/business/oneid/FsupplierTypeSkipHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/skip/impl/business/oneid/FsupplierTypeSkipHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/SourceLocateExt.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/SourceLocateExt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/GetJsonAndLocate.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/GetJsonAndLocate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/business/oneid/JsonExtractSourceId.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/business/oneid/JsonExtractSourceId.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/business/oneid/ServiceProviderLocate.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/business/oneid/ServiceProviderLocate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/common/ArgValueLocate.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/ext/sourceLocate/impl/common/ArgValueLocate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DiffService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DiffService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/MigrationCheckService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/MigrationCheckService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DemoMigrationCheckService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DemoMigrationCheckService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/MigrationConfigService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/MigrationConfigService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/ThreadPoolFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/ThreadPoolFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/converter/ToolConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/converter/ToolConverter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/Tool.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/Tool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/ToolParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/ToolParam.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/service/ToolCenterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/service/ToolCenterService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/BaseController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/BaseController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/controller/DemoMigrationCheckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/controller/DemoMigrationCheckController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/controller/MigrationCheckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/controller/MigrationCheckController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/ToolCenterController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/ToolCenterController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/application-pre.yml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/application-pre.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/application-test.yml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/application-test.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configDetail.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configDetail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configSet.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configManage.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configManage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/diffDetail.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/diffDetail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -261,7 +183,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678007007403</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="数据迁移校验模块 final">
+      <created>1678344937318</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1678344937318</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -274,18 +203,8 @@
     <MESSAGE value="迁移配置add - final" />
     <MESSAGE value="迁移配置管理" />
     <MESSAGE value="迁移配置管理 final" />
-    <option name="LAST_COMMIT_MESSAGE" value="迁移配置管理 final" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/MigrationCheckService.java</url>
-          <line>261</line>
-          <option name="timeStamp" value="92" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="数据迁移校验模块 final" />
+    <option name="LAST_COMMIT_MESSAGE" value="数据迁移校验模块 final" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -115,7 +115,7 @@ public class MigrationCheckController extends BaseController {
 
             ResultDO<MigrationConfig> queryRet = migrationConfigService.getConfig(configId);
             if (!queryRet.getIsSuccess()) {
-                return AmisResult.fail("Did not find this config id: " + configId, null);
+                return AmisResult.fail("没有找到配置，config id: " + configId, null);
             }
 
             MigrationConfig migrationConfig = queryRet.getData();
@@ -184,12 +184,28 @@ public class MigrationCheckController extends BaseController {
         return 0L;
     }
 
+    private boolean filterNotStarted(String statusSearch, DiffResultPO diffResultPO) {
+        if (StringUtils.isEmpty(statusSearch)) {
+            return true;
+        }
+
+        if (TaskStatusConstant.NOT_STARTED.equalsIgnoreCase(statusSearch) && diffResultPO != null) {
+            return false;
+        }
+
+        if (diffResultPO == null && !TaskStatusConstant.NOT_STARTED.equalsIgnoreCase(statusSearch)) {
+            return false;
+        }
+
+        return true;
+    }
+
     @RequestMapping(value = "/get_config_list", method = RequestMethod.GET)
     @ResponseBody
-    public AmisResult getConfigList(@RequestParam(required = false) Long configIdSearch) {
+    public AmisResult getConfigList(@RequestParam(required = false) Long configIdSearch, @RequestParam(required = false) String statusSearch) {
         String triggerUrl = buildTriggerUrl();
 
-        ResultDO<Map<Long, List<DiffResultPO>>> queryRet = migrationConfigService.getConfigList(configIdSearch);
+        ResultDO<Map<Long, List<DiffResultPO>>> queryRet = migrationConfigService.getConfigList(configIdSearch, statusSearch);
         if (!queryRet.getIsSuccess()) {
             return AmisResult.emptySuccess();
         }
@@ -199,22 +215,25 @@ public class MigrationCheckController extends BaseController {
             Long configId = entry.getKey();
             DiffResultPO lastDiffResultPO = getLastDiffResult(entry.getValue());
 
-            MigrationRunningItemVO migrationRunningItemVO = MigrationRunningItemVO.builder()
-                .batchId(lastDiffResultPO == null ? null : lastDiffResultPO.getBatchId())
-                .configId(configId)
-                .mappingRuleCount(parseMappingRuleCount(lastDiffResultPO))
-                .status(lastDiffResultPO == null ? TaskStatusConstant.NOT_STARTED : lastDiffResultPO.getStatus())
-                .progress(lastDiffResultPO == null ? "0" : lastDiffResultPO.getProgress().substring(0, lastDiffResultPO.getProgress().length() - 1))
-                .runner(lastDiffResultPO == null || StringUtils.isBlank(lastDiffResultPO.getRunner()) ? "" :
-                    lastDiffResultPO.getRunner())
-                .totalTaskCount(lastDiffResultPO == null ? 0 : lastDiffResultPO.getTotalCount())
-                .failedTaskCount(lastDiffResultPO == null || lastDiffResultPO.getFailedCount() == null ? 0 :
-                    lastDiffResultPO.getFailedCount())
-                .createdTime(lastDiffResultPO == null ? "" : CommonUtils.getPrettyDate(lastDiffResultPO.getCreatedTime()))
-                .modifiedTime(lastDiffResultPO == null ? "" : CommonUtils.getPrettyDate(lastDiffResultPO.getModifiedTime()))
-                .build();
+            // 需要单独处理一下not_started，因为这是个默认值，不在diffResultPOList中
+            if (filterNotStarted(statusSearch, lastDiffResultPO)) {
+                MigrationRunningItemVO migrationRunningItemVO = MigrationRunningItemVO.builder()
+                    .batchId(lastDiffResultPO == null ? null : lastDiffResultPO.getBatchId())
+                    .configId(configId)
+                    .mappingRuleCount(parseMappingRuleCount(lastDiffResultPO))
+                    .status(lastDiffResultPO == null ? TaskStatusConstant.NOT_STARTED : lastDiffResultPO.getStatus())
+                    .progress(lastDiffResultPO == null ? "0" : lastDiffResultPO.getProgress().substring(0, lastDiffResultPO.getProgress().length() - 1))
+                    .runner(lastDiffResultPO == null || StringUtils.isBlank(lastDiffResultPO.getRunner()) ? "" :
+                        lastDiffResultPO.getRunner())
+                    .totalTaskCount(lastDiffResultPO == null ? 0 : lastDiffResultPO.getTotalCount())
+                    .failedTaskCount(lastDiffResultPO == null || lastDiffResultPO.getFailedCount() == null ? 0 :
+                        lastDiffResultPO.getFailedCount())
+                    .createdTime(lastDiffResultPO == null ? "" : CommonUtils.getPrettyDate(lastDiffResultPO.getCreatedTime()))
+                    .modifiedTime(lastDiffResultPO == null ? "" : CommonUtils.getPrettyDate(lastDiffResultPO.getModifiedTime()))
+                    .build();
 
-            migrationRunningItemVOList.add(migrationRunningItemVO);
+                migrationRunningItemVOList.add(migrationRunningItemVO);
+            }
         }
 
         JSONObject retData = new JSONObject();
@@ -462,7 +481,16 @@ public class MigrationCheckController extends BaseController {
     public AmisResult getResult(@RequestParam Long batchId) {
         String triggerUrl = buildTriggerUrl();
 
+        if (batchId == null) {
+            return AmisResult.fail("batchId缺失", null);
+        }
+
         DiffResultPO diffResultPO = diffResultMapper.getByBatchId(batchId);
+        if (diffResultPO == null) {
+            log.info("Did not find result for batch id: " + batchId);
+            return AmisResult.fail("没有找到对比结果，batchId:" + batchId, null);
+        }
+
         DiffResultVO diffResultVO = DiffResultVO.builder()
             .batchId(batchId)
             .configId(diffResultPO.getConfigId())
@@ -486,6 +514,10 @@ public class MigrationCheckController extends BaseController {
                                     @RequestParam(required = false) String sourceSearch,
                                     @RequestParam(required = false) String targetSearch) {
         String triggerUrl = buildTriggerUrl();
+
+        if (batchId == null) {
+            return AmisResult.fail("batchId缺失", null);
+        }
 
         List<DiffDetailPO> detailPOList = diffDetailMapper.getByBatchId(batchId);
         if (CollectionUtils.isEmpty(detailPOList)) {

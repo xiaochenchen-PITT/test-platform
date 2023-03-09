@@ -12,6 +12,7 @@ import com.cxc.test.platform.migrationcheck.converter.MigrationConfigConverter;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -88,7 +90,7 @@ public class MigrationConfigService {
         }
     }
 
-    public ResultDO<Map<Long, List<DiffResultPO>>> getConfigList(Long configIdSearch) {
+    public ResultDO<Map<Long, List<DiffResultPO>>> getConfigList(Long configIdSearch, String statusSearch) {
         try {
             List<MigrationConfigPO> migrationConfigPOList = new ArrayList<>();
             if (configIdSearch != null && configIdSearch > 0) {
@@ -110,7 +112,10 @@ public class MigrationConfigService {
             for (MigrationConfigPO migrationConfigPO : migrationConfigPOList) {
                 Long configId = migrationConfigPO.getConfigId();
                 List<DiffResultPO> diffResultPOList = diffResultMapper.getByConfigId(configId);
-                configIdAndDiffResultMap.put(configId, diffResultPOList);
+                List<DiffResultPO> diffResultPOListFiltered = diffResultPOList.stream()
+                    .filter(diffResultPO -> StringUtils.isEmpty(statusSearch) || statusSearch.equalsIgnoreCase(diffResultPO.getStatus()))
+                    .collect(Collectors.toList());
+                configIdAndDiffResultMap.put(configId, diffResultPOListFiltered);
             }
 
             return ResultDO.success(configIdAndDiffResultMap);

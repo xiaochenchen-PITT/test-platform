@@ -132,7 +132,8 @@
                                 "method": "get",
                                 "url": "/migrationcheck/get_config_list",
                                 "data": {
-                                  "configIdSearch": "${configIdSearch | default:undefined}"
+                                  "configIdSearch": "${configIdSearch | default:undefined}",
+                                  "statusSearch": "${statusSearch | default:undefined}"
                                 }
                               },
                               "loadDataOnce": true,
@@ -149,8 +150,35 @@
                                         "name": "configIdSearch",
                                         "label": "配置id",
                                         "clearable": true,
-                                        "size": "md",
+                                        "size": "sm",
                                         "id": "u:bdbc1cbbcb6c"
+                                      },
+                                      {
+                                        "type": "select",
+                                        "name": "statusSearch",
+                                        "label": "运行状态",
+                                        "clearable": true,
+                                        "size": "sm",
+                                        "id": "u:5f43212ae5d8",
+                                        "options": [
+                                          {
+                                            "label": "not_started",
+                                            "value": "not_started"
+                                          },
+                                          {
+                                            "label": "running",
+                                            "value": "running"
+                                          },
+                                          {
+                                            "label": "finished",
+                                            "value": "finished"
+                                          },
+                                          {
+                                            "label": "failed",
+                                            "value": "failed"
+                                          }
+                                        ],
+                                        "multiple": false
                                       }
                                     ],
                                     "id": "u:edbf77d9c5d8"
@@ -249,6 +277,7 @@
                                       "label": "执行详情",
                                       "type": "button",
                                       "actionType": "url",
+                                      "disabledOn": "status===\"not_started\"",
                                       "url": "/migrationcheck/diff_detail?batchId=${batchId}",
                                       "id": "u:c923a341faad",
                                       "blank": true

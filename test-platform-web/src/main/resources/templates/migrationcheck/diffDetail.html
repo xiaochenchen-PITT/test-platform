@@ -229,32 +229,6 @@
                                     "id": "u:edbf77d9c5d8",
                                     "body": [
                                       {
-                                        "type": "select",
-                                        "name": "diffTypeSearch",
-                                        "label": "错误类型",
-                                        "clearable": true,
-                                        "id": "u:5f43212ae5d8",
-                                        "options": [
-                                          {
-                                            "label": "仅源",
-                                            "value": "only_in_source"
-                                          },
-                                          {
-                                            "label": "仅目标",
-                                            "value": "only_in_target"
-                                          },
-                                          {
-                                            "label": "不一致",
-                                            "value": "value_check_fail"
-                                          },
-                                          {
-                                            "label": "有报错",
-                                            "value": "encounter_error"
-                                          }
-                                        ],
-                                        "multiple": false
-                                      },
-                                      {
                                         "type": "input-text",
                                         "name": "sourceSearch",
                                         "label": "源查询条件",
@@ -269,6 +243,33 @@
                                         "clearable": true,
                                         "size": "md",
                                         "id": "u:bdbc1cbbcb6c"
+                                      },
+                                      {
+                                        "type": "select",
+                                        "name": "diffTypeSearch",
+                                        "label": "错误类型",
+                                        "size": "sm",
+                                        "clearable": true,
+                                        "id": "u:5f43212ae5d8",
+                                        "options": [
+                                          {
+                                            "label": "仅在源中存在",
+                                            "value": "only_in_source"
+                                          },
+                                          {
+                                            "label": "仅在目标中存在",
+                                            "value": "only_in_target"
+                                          },
+                                          {
+                                            "label": "对比不一致",
+                                            "value": "value_check_fail"
+                                          },
+                                          {
+                                            "label": "对比时报错",
+                                            "value": "encounter_error"
+                                          }
+                                        ],
+                                        "multiple": false
                                       }
                                     ]
                                   }
