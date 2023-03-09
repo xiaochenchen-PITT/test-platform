@@ -1,6 +1,7 @@
 package com.cxc.test.platform.web.migrationcheck.controller;
 
 import com.cxc.test.platform.common.domain.AmisResult;
+import com.cxc.test.platform.common.domain.ResultDO;
 import com.cxc.test.platform.common.domain.diff.DiffResult;
 import com.cxc.test.platform.infra.config.DbConfig;
 import com.cxc.test.platform.migrationcheck.domain.CustomizedMethod;
@@ -87,11 +88,11 @@ public class DemoMigrationCheckController extends MigrationCheckController {
 
         Long batchId = System.currentTimeMillis();
         singleExecutorService.submit(() -> {
-            DiffResult diffResult = migrationCheckService.compare(batchId, migrationConfig, migrationCheckConfig, triggerUrl);
-//        System.out.println(diffResult);
+            ResultDO<DiffResult> ret = migrationCheckService.compare(batchId, 0L, migrationConfig, migrationCheckConfig, triggerUrl);
+//        System.out.println(ret);
         });
 
-        String retInfo = String.format("starting migration check, env: %s, limit: %s, please check later with batch id: %s", env, limit, batchId);
+        String retInfo = String.format("starting migratrion check, env: %s, limit: %s, please check later with batch id: %s", env, limit, batchId);
         return AmisResult.simpleSuccess(retInfo, null);
     }
 }

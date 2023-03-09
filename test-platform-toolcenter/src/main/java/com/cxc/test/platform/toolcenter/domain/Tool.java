@@ -3,7 +3,7 @@ package com.cxc.test.platform.toolcenter.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 

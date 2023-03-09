@@ -3,16 +3,21 @@ package com.cxc.test.platform.web.migrationcheck.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cxc.test.platform.common.domain.AmisResult;
+import com.cxc.test.platform.common.domain.FeatureKeyConstant;
 import com.cxc.test.platform.common.domain.ResultDO;
+import com.cxc.test.platform.common.domain.diff.DiffResult;
+import com.cxc.test.platform.common.domain.diff.TaskStatusConstant;
+import com.cxc.test.platform.common.utils.CommonUtils;
+import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import com.cxc.test.platform.common.utils.ExcelUtils;
 import com.cxc.test.platform.infra.config.DatabaseConfig;
+import com.cxc.test.platform.infra.domain.diff.DiffDetailPO;
+import com.cxc.test.platform.infra.domain.diff.DiffResultPO;
 import com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO;
+import com.cxc.test.platform.infra.domain.migrationcheck.MigrationConfigPO;
 import com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO;
 import com.cxc.test.platform.infra.domain.migrationcheck.SourceLocatorPO;
-import com.cxc.test.platform.infra.mapper.xytest.MappingRuleMapper;
-import com.cxc.test.platform.infra.mapper.xytest.MigrationConfigMapper;
-import com.cxc.test.platform.infra.mapper.xytest.SourceInitSqlMapper;
-import com.cxc.test.platform.infra.mapper.xytest.SourceLocatorMapper;
+import com.cxc.test.platform.infra.mapper.master.*;
 import com.cxc.test.platform.migrationcheck.domain.CustomizedMethod;
 import com.cxc.test.platform.migrationcheck.domain.SourceLocator;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationCheckConfig;
@@ -20,25 +25,37 @@ import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
 import com.cxc.test.platform.migrationcheck.domain.mapping.MappingRule;
 import com.cxc.test.platform.migrationcheck.domain.mapping.SourceMappingItem;
 import com.cxc.test.platform.migrationcheck.domain.mapping.TargetMappingItem;
+import com.cxc.test.platform.migrationcheck.service.DemoMigrationCheckService;
 import com.cxc.test.platform.migrationcheck.service.MigrationConfigService;
 import com.cxc.test.platform.web.BaseController;
 import com.cxc.test.platform.web.migrationcheck.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
+
+// TODO: 2023/3/8 断点续跑
 
 @Slf4j
 @CrossOrigin
 @Controller
 @RequestMapping(value = "/migrationcheck")
 public class MigrationCheckController extends BaseController {
+
+    @Autowired
+    @Qualifier("demoMigrationCheckService")
+//    MigrationCheckService migrationCheckService;
+    DemoMigrationCheckService migrationCheckService;
 
     @Resource
     MigrationConfigService migrationConfigService;
@@ -55,6 +72,14 @@ public class MigrationCheckController extends BaseController {
     @Resource
     SourceInitSqlMapper sourceInitSqlMapper;
 
+    @Resource
+    DiffResultMapper diffResultMapper;
+
+    @Resource
+    DiffDetailMapper diffDetailMapper;
+
+    public final ExecutorService singleExecutorService = Executors.newFixedThreadPool(1);
+
     private final String CONFIG_TABLE_SPLIT = "@";
     private final String CONFIG_FIELD_SPLIT = ",";
 
@@ -63,9 +88,140 @@ public class MigrationCheckController extends BaseController {
         return "migrationcheck/configSet";
     }
 
+    @GetMapping("/config_manage")
+    public String configManage() {
+        return "migrationcheck/configManage";
+    }
+
     @GetMapping("/config_detail")
     public String configDetail() {
         return "migrationcheck/configDetail";
+    }
+
+    @GetMapping("/diff_detail")
+    public String diffDetail() {
+        return "migrationcheck/diffDetail";
+    }
+
+    @RequestMapping(value = "/trigger", method = RequestMethod.POST)
+    @ResponseBody
+    public AmisResult trigger(@RequestParam Long configId) {
+        try {
+            if (migrationCheckService.isRunning()) {
+                return AmisResult.fail("当前机器已有任务在运行，请等待其结束之后再触发", null);
+            }
+
+            String triggerUrl = buildTriggerUrl();
+
+            ResultDO<MigrationConfig> queryRet = migrationConfigService.getConfig(configId);
+            if (!queryRet.getIsSuccess()) {
+                return AmisResult.fail("Did not find this config id: " + configId, null);
+            }
+
+            MigrationConfig migrationConfig = queryRet.getData();
+            MigrationCheckConfig migrationCheckConfig = MigrationCheckConfig.newInstance(true);
+            Long batchId = System.currentTimeMillis();
+            singleExecutorService.submit(() -> {
+                ResultDO<DiffResult> ret = migrationCheckService.compare(batchId, configId, migrationConfig, migrationCheckConfig, triggerUrl);
+            });
+
+            return AmisResult.simpleSuccess("success", "触发成功");
+        } catch (Exception e) {
+            log.error("failed to trigger compare", e);
+            return AmisResult.fail(ErrorMessageUtils.getMessage(e), null);
+        }
+    }
+
+    @RequestMapping(value = "/stop", method = RequestMethod.POST)
+    @ResponseBody
+    public AmisResult stop() {
+        try {
+            String triggerUrl = buildTriggerUrl();
+
+            boolean ret = migrationCheckService.stop();
+            if (ret) {
+                return AmisResult.simpleSuccess("success", "停止成功");
+            } else {
+                return AmisResult.fail("停止失败", null);
+            }
+
+        } catch (Exception e) {
+            log.error("failed to stop compare", e);
+            return AmisResult.fail(ErrorMessageUtils.getMessage(e), null);
+        }
+    }
+
+    private DiffResultPO getLastDiffResult(List<DiffResultPO> diffResultPOList) {
+        DiffResultPO last = null;
+
+        if (CollectionUtils.isEmpty(diffResultPOList)) {
+            return last;
+        }
+
+        for (DiffResultPO diffResultPO : diffResultPOList) {
+            if (last == null) {
+                last = diffResultPO;
+            } else {
+                if (last.getCreatedTime().compareTo(diffResultPO.getCreatedTime()) < 0) {
+                    last = diffResultPO;
+                }
+            }
+        }
+
+        return last;
+    }
+
+    private Long parseMappingRuleCount(DiffResultPO diffResultPO) {
+        if (diffResultPO == null) {
+            return 0L;
+        }
+
+        String value = CommonUtils.convterToMap(diffResultPO.getFeatures()).get(FeatureKeyConstant.MAPPING_RULE_COUNT);
+        if (StringUtils.isNumeric(value)) {
+            return Long.valueOf(value);
+        }
+
+        return 0L;
+    }
+
+    @RequestMapping(value = "/get_config_list", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult getConfigList(@RequestParam(required = false) Long configIdSearch) {
+        String triggerUrl = buildTriggerUrl();
+
+        ResultDO<Map<Long, List<DiffResultPO>>> queryRet = migrationConfigService.getConfigList(configIdSearch);
+        if (!queryRet.getIsSuccess()) {
+            return AmisResult.emptySuccess();
+        }
+
+        List<MigrationRunningItemVO> migrationRunningItemVOList = new ArrayList<>();
+        for (Map.Entry<Long, List<DiffResultPO>> entry : queryRet.getData().entrySet()) {
+            Long configId = entry.getKey();
+            DiffResultPO lastDiffResultPO = getLastDiffResult(entry.getValue());
+
+            MigrationRunningItemVO migrationRunningItemVO = MigrationRunningItemVO.builder()
+                .batchId(lastDiffResultPO == null ? null : lastDiffResultPO.getBatchId())
+                .configId(configId)
+                .mappingRuleCount(parseMappingRuleCount(lastDiffResultPO))
+                .status(lastDiffResultPO == null ? TaskStatusConstant.NOT_STARTED : lastDiffResultPO.getStatus())
+                .progress(lastDiffResultPO == null ? "0" : lastDiffResultPO.getProgress().substring(0, lastDiffResultPO.getProgress().length() - 1))
+                .runner(lastDiffResultPO == null || StringUtils.isBlank(lastDiffResultPO.getRunner()) ? "" :
+                    lastDiffResultPO.getRunner())
+                .totalTaskCount(lastDiffResultPO == null ? 0 : lastDiffResultPO.getTotalCount())
+                .failedTaskCount(lastDiffResultPO == null || lastDiffResultPO.getFailedCount() == null ? 0 :
+                    lastDiffResultPO.getFailedCount())
+                .createdTime(lastDiffResultPO == null ? "" : CommonUtils.getPrettyDate(lastDiffResultPO.getCreatedTime()))
+                .modifiedTime(lastDiffResultPO == null ? "" : CommonUtils.getPrettyDate(lastDiffResultPO.getModifiedTime()))
+                .build();
+
+            migrationRunningItemVOList.add(migrationRunningItemVO);
+        }
+
+        JSONObject retData = new JSONObject();
+        retData.put("rows", migrationRunningItemVOList);
+        retData.put("count", migrationRunningItemVOList.size());
+
+        return AmisResult.success(retData, "ok");
     }
 
     @RequestMapping(value = "/add_config", method = RequestMethod.POST)
@@ -76,9 +232,9 @@ public class MigrationCheckController extends BaseController {
         MigrationConfig migrationConfig = convert(migrationConfigVO);
 
         Assert.isTrue(migrationConfig.getTableAndInitSqlMap().size() == migrationConfig.getRelatedSourceTables().size(),
-                "【源数据初始化】和【字段映射关系】中源表数量不一致，请检查配置");
+            "【源数据初始化】和【字段映射关系】中源表数量不一致，请检查配置");
         Assert.isTrue(migrationConfig.getTableAndLocatorMap().size() == migrationConfig.getRelatedTargetTables().size(),
-                "【目标表中源数据定位】和【字段映射关系】中目标表数量不一致，请检查配置");
+            "【目标表中源数据定位】和【字段映射关系】中目标表数量不一致，请检查配置");
 
         ResultDO<Long> ret = migrationConfigService.addConfig(migrationConfig);
         if (ret.getIsSuccess()) {
@@ -96,33 +252,34 @@ public class MigrationCheckController extends BaseController {
 
         List<MappingRulePO> ret = mappingRuleMapper.getByConfigId(configId);
         if (CollectionUtils.isEmpty(ret)) {
-            return AmisResult.fail("Did not find config for config id: " + configId, null);
+            log.info("Did not find config for config id: " + configId);
+            return AmisResult.emptySuccess();
         }
 
         JSONObject retData = new JSONObject();
         JSONArray rowJA = new JSONArray();
         for (MappingRulePO mappingRulePO : ret) {
             if (StringUtils.isNotEmpty(sourceTableNameSearch) && StringUtils.isNotEmpty(mappingRulePO.getSourceTableName())
-                    && !mappingRulePO.getSourceTableName().contains(sourceTableNameSearch)) {
+                && !mappingRulePO.getSourceTableName().contains(sourceTableNameSearch)) {
                 continue;
             }
 
             if (StringUtils.isNotEmpty(targetTableNameSearch) && StringUtils.isNotEmpty(mappingRulePO.getTargetTableName())
-                    && !mappingRulePO.getTargetTableName().contains(targetTableNameSearch)) {
+                && !mappingRulePO.getTargetTableName().contains(targetTableNameSearch)) {
                 continue;
             }
 
             MappingRuleVO mappingRuleVO = MappingRuleVO.builder()
-                    .id(mappingRulePO.getId())
-                    .configId(mappingRulePO.getConfigId())
-                    .sourceTableName(mappingRulePO.getSourceTableName())
-                    .sourceFieldNames(mappingRulePO.getSourceFieldNames())
-                    .isPrimaryKey(mappingRulePO.getIsPrimaryKey() == 1 ? "true" : "false")
-                    .targetTableName(mappingRulePO.getTargetTableName())
-                    .targetFieldName(mappingRulePO.getTargetFieldName())
-                    .fieldCheckMethodName(mappingRulePO.getFieldCheckMethodName())
-                    .fieldCheckMethodArgs(mappingRulePO.getFieldCheckMethodArgs())
-                    .build();
+                .id(mappingRulePO.getId())
+                .configId(mappingRulePO.getConfigId())
+                .sourceTableName(mappingRulePO.getSourceTableName())
+                .sourceFieldNames(mappingRulePO.getSourceFieldNames())
+                .isPrimaryKey(mappingRulePO.getIsPrimaryKey() == 1 ? "true" : "false")
+                .targetTableName(mappingRulePO.getTargetTableName())
+                .targetFieldName(mappingRulePO.getTargetFieldName())
+                .fieldCheckMethodName(mappingRulePO.getFieldCheckMethodName())
+                .fieldCheckMethodArgs(mappingRulePO.getFieldCheckMethodArgs())
+                .build();
 
             rowJA.add(mappingRuleVO);
         }
@@ -137,16 +294,15 @@ public class MigrationCheckController extends BaseController {
     public AmisResult updateMappingRuleConfig(@RequestParam Long id, @RequestBody MappingRuleVO mappingRuleVO) {
         String triggerUrl = buildTriggerUrl();
 
-        MappingRulePO mappingRulePO = MappingRulePO.builder()
-                .id(id)
-                .sourceTableName(mappingRuleVO.getSourceTableName())
-                .sourceFieldNames(mappingRuleVO.getSourceFieldNames())
-                .isPrimaryKey(StringUtils.equalsIgnoreCase(mappingRuleVO.getIsPrimaryKey(), "true") ? 1 : 0)
-                .targetTableName(mappingRuleVO.getTargetTableName())
-                .targetFieldName(mappingRuleVO.getTargetFieldName())
-                .fieldCheckMethodName(mappingRuleVO.getFieldCheckMethodName())
-                .fieldCheckMethodArgs(mappingRuleVO.getFieldCheckMethodArgs())
-                .build();
+        MappingRulePO mappingRulePO = new MappingRulePO();
+        mappingRulePO.setId(id);
+        mappingRulePO.setSourceTableName(mappingRuleVO.getSourceTableName());
+        mappingRulePO.setSourceFieldNames(mappingRuleVO.getSourceFieldNames());
+        mappingRulePO.setIsPrimaryKey(StringUtils.equalsIgnoreCase(mappingRuleVO.getIsPrimaryKey(), "true") ? 1 : 0);
+        mappingRulePO.setTargetTableName(mappingRuleVO.getTargetTableName());
+        mappingRulePO.setTargetFieldName(mappingRuleVO.getTargetFieldName());
+        mappingRulePO.setFieldCheckMethodName(mappingRuleVO.getFieldCheckMethodName());
+        mappingRulePO.setFieldCheckMethodArgs(mappingRuleVO.getFieldCheckMethodArgs());
 
         int ret = mappingRuleMapper.update(mappingRulePO);
         Assert.isTrue(ret == 1, "update mapping rule failed");
@@ -175,31 +331,24 @@ public class MigrationCheckController extends BaseController {
     public AmisResult getMigrationDbConfig(@RequestParam Long configId) {
         String triggerUrl = buildTriggerUrl();
 
-        ResultDO<MigrationConfig> ret = migrationConfigService.getConfig(configId);
-        if (!ret.getIsSuccess()) {
-            return AmisResult.fail(ret.getErrorMessage(), null);
+        MigrationConfigPO migrationConfigPO = migrationConfigMapper.getByConfigId(configId);
+        if (migrationConfigPO == null) {
+            log.info("Did not find config for config id: " + configId);
+            return AmisResult.emptySuccess();
         }
 
-        DatabaseConfig sourceDbConfig = ret.getData().getSourceDbConfig();
-        DatabaseConfig targetDbConfig = ret.getData().getTargetDbConfig();
-
-        JSONObject retData = new JSONObject();
-        JSONArray rowJA = new JSONArray();
         MigrationDbConfigVO migrationDbConfigVO = MigrationDbConfigVO.builder()
-                .sourceDriverClassName(sourceDbConfig.getDriverClassName())
-                .sourceDbUrl(sourceDbConfig.getUrl())
-                .sourceUserName(sourceDbConfig.getName())
-                .sourcePassword(sourceDbConfig.getPwd())
-                .targetDriverClassName(targetDbConfig.getDriverClassName())
-                .targetDbUrl(targetDbConfig.getUrl())
-                .targetUserName(targetDbConfig.getName())
-                .targetPassword(targetDbConfig.getPwd())
-                .build();
-        rowJA.add(migrationDbConfigVO);
+            .sourceDriverClassName(migrationConfigPO.getSourceDriverClassName())
+            .sourceDbUrl(migrationConfigPO.getSourceDbUrl())
+            .sourceUserName(migrationConfigPO.getSourceUserName())
+            .sourcePassword(migrationConfigPO.getSourcePassword())
+            .targetDriverClassName(migrationConfigPO.getTargetDriverClassName())
+            .targetDbUrl(migrationConfigPO.getTargetDbUrl())
+            .targetUserName(migrationConfigPO.getTargetUserName())
+            .targetPassword(migrationConfigPO.getTargetPassword())
+            .build();
 
-        retData.put("rows", rowJA);
-
-        return AmisResult.success(retData, "ok");
+        return AmisResult.success((JSONObject) JSONObject.toJSON(migrationDbConfigVO), "ok");
     }
 
     @RequestMapping(value = "/get_locator_config", method = RequestMethod.GET)
@@ -209,7 +358,8 @@ public class MigrationCheckController extends BaseController {
 
         List<SourceLocatorPO> ret = sourceLocatorMapper.getByConfigId(configId);
         if (CollectionUtils.isEmpty(ret)) {
-            return AmisResult.fail("Did not find config for config id: " + configId, null);
+            log.info("Did not find config for config id: " + configId);
+            return AmisResult.emptySuccess();
         }
 
         JSONObject retData = new JSONObject();
@@ -217,18 +367,18 @@ public class MigrationCheckController extends BaseController {
         for (SourceLocatorPO sourceLocatorPO : ret) {
             String targetTable = sourceLocatorPO.getTargetTableName();
             if (StringUtils.isNotEmpty(targetTableNameSearch) && StringUtils.isNotEmpty(targetTable)
-                    && !targetTable.contains(targetTableNameSearch)) {
+                && !targetTable.contains(targetTableNameSearch)) {
                 continue;
             }
 
             SourceLocatorVO sourceLocatorVO = SourceLocatorVO.builder()
-                    .id(sourceLocatorPO.getId())
-                    .configId(sourceLocatorPO.getConfigId())
-                    .targetTableName(targetTable)
-                    .locateField(sourceLocatorPO.getLocateField())
-                    .locateMethodName(sourceLocatorPO.getLocateMethodName())
-                    .locateMethodArgs(sourceLocatorPO.getLocateMethodArgs())
-                    .build();
+                .id(sourceLocatorPO.getId())
+                .configId(sourceLocatorPO.getConfigId())
+                .targetTableName(targetTable)
+                .locateField(sourceLocatorPO.getLocateField())
+                .locateMethodName(sourceLocatorPO.getLocateMethodName())
+                .locateMethodArgs(sourceLocatorPO.getLocateMethodArgs())
+                .build();
 
             rowJA.add(sourceLocatorVO);
         }
@@ -243,13 +393,12 @@ public class MigrationCheckController extends BaseController {
     public AmisResult updateLocator(@RequestParam Long id, @RequestBody SourceLocatorVO sourceLocatorVO) {
         String triggerUrl = buildTriggerUrl();
 
-        SourceLocatorPO sourceLocatorPO = SourceLocatorPO.builder()
-                .id(id)
-                .targetTableName(sourceLocatorVO.getTargetTableName())
-                .locateField(sourceLocatorVO.getLocateField())
-                .locateMethodName(sourceLocatorVO.getLocateMethodName())
-                .locateMethodArgs(sourceLocatorVO.getLocateMethodArgs())
-                .build();
+        SourceLocatorPO sourceLocatorPO = new SourceLocatorPO();
+        sourceLocatorPO.setId(id);
+        sourceLocatorPO.setTargetTableName(sourceLocatorVO.getTargetTableName());
+        sourceLocatorPO.setLocateField(sourceLocatorVO.getLocateField());
+        sourceLocatorPO.setLocateMethodName(sourceLocatorVO.getLocateMethodName());
+        sourceLocatorPO.setLocateMethodArgs(sourceLocatorVO.getLocateMethodArgs());
 
         int ret = sourceLocatorMapper.update(sourceLocatorPO);
         Assert.isTrue(ret == 1, "update source locator failed");
@@ -264,7 +413,8 @@ public class MigrationCheckController extends BaseController {
 
         List<SourceInitSqlPO> ret = sourceInitSqlMapper.getByConfigId(configId);
         if (CollectionUtils.isEmpty(ret)) {
-            return AmisResult.fail("Did not find config for config id: " + configId, null);
+            log.info("Did not find config for config id: " + configId);
+            return AmisResult.emptySuccess();
         }
 
         JSONObject retData = new JSONObject();
@@ -272,16 +422,16 @@ public class MigrationCheckController extends BaseController {
         for (SourceInitSqlPO sourceInitSqlPO : ret) {
             String sourceTable = sourceInitSqlPO.getSourceTableName();
             if (StringUtils.isNotEmpty(sourceTableNameSearch) && StringUtils.isNotEmpty(sourceTable)
-                    && !sourceTable.contains(sourceTableNameSearch)) {
+                && !sourceTable.contains(sourceTableNameSearch)) {
                 continue;
             }
 
             SourceInitSqlVO sourceInitSqlVO = SourceInitSqlVO.builder()
-                    .id(sourceInitSqlPO.getId())
-                    .configId(sourceInitSqlPO.getConfigId())
-                    .sourceTableName(sourceTable)
-                    .initSql(sourceInitSqlPO.getInitSql())
-                    .build();
+                .id(sourceInitSqlPO.getId())
+                .configId(sourceInitSqlPO.getConfigId())
+                .sourceTableName(sourceTable)
+                .initSql(sourceInitSqlPO.getInitSql())
+                .build();
 
             rowJA.add(sourceInitSqlVO);
         }
@@ -296,16 +446,91 @@ public class MigrationCheckController extends BaseController {
     public AmisResult updateInitSql(@RequestParam Long id, @RequestBody SourceInitSqlVO sourceInitSqlVO) {
         String triggerUrl = buildTriggerUrl();
 
-        SourceInitSqlPO sourceInitSqlPO = SourceInitSqlPO.builder()
-                .id(id)
-                .sourceTableName(sourceInitSqlVO.getSourceTableName())
-                .initSql(sourceInitSqlVO.getInitSql())
-                .build();
+        SourceInitSqlPO sourceInitSqlPO = new SourceInitSqlPO();
+        sourceInitSqlPO.setId(id);
+        sourceInitSqlPO.setSourceTableName(sourceInitSqlVO.getSourceTableName());
+        sourceInitSqlPO.setInitSql(sourceInitSqlVO.getInitSql());
 
         int ret = sourceInitSqlMapper.update(sourceInitSqlPO);
         Assert.isTrue(ret == 1, "update source init sql failed");
 
         return AmisResult.simpleSuccess("success", "编辑成功");
+    }
+
+    @RequestMapping(value = "/get_result", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult getResult(@RequestParam Long batchId) {
+        String triggerUrl = buildTriggerUrl();
+
+        DiffResultPO diffResultPO = diffResultMapper.getByBatchId(batchId);
+        DiffResultVO diffResultVO = DiffResultVO.builder()
+            .batchId(batchId)
+            .configId(diffResultPO.getConfigId())
+            .isSuccess(diffResultPO.getIsSuccess() == 1 ? "成功" : "失败")
+            .isEqual(diffResultPO.getIsEqual() == 1 ? "一致" : "不一致")
+            .status(diffResultPO.getStatus())
+            .progress(diffResultPO.getProgress().substring(0, diffResultPO.getProgress().length() - 1))
+            .runner(diffResultPO.getRunner())
+            .errorMessage(diffResultPO.getErrorMessage())
+            .triggerUrl(diffResultPO.getTriggerUrl())
+            .totalCount(diffResultPO.getTotalCount())
+            .failedCount(diffResultPO.getFailedCount())
+            .build();
+
+        return AmisResult.success((JSONObject) JSONObject.toJSON(diffResultVO), "ok");
+    }
+
+    @RequestMapping(value = "/get_detail_list", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult getDetailList(@RequestParam Long batchId, @RequestParam(required = false) String diffTypeSearch,
+                                    @RequestParam(required = false) String sourceSearch,
+                                    @RequestParam(required = false) String targetSearch) {
+        String triggerUrl = buildTriggerUrl();
+
+        List<DiffDetailPO> detailPOList = diffDetailMapper.getByBatchId(batchId);
+        if (CollectionUtils.isEmpty(detailPOList)) {
+            log.info("Did not find result for batch id: " + batchId);
+            return AmisResult.emptySuccess();
+        }
+
+        List<DiffDetailVO> detailVOList = new ArrayList<>();
+        for (DiffDetailPO diffDetailPO : detailPOList) {
+            if (StringUtils.isNotEmpty(diffTypeSearch) && !diffTypeSearch.equalsIgnoreCase(diffDetailPO.getDiffType())) {
+                continue;
+            }
+
+            if (StringUtils.isNotEmpty(sourceSearch) && !sourceSearch.equalsIgnoreCase(diffDetailPO.getSourceQuery())) {
+                continue;
+            }
+
+            if (StringUtils.isNotEmpty(targetSearch) && !targetSearch.equalsIgnoreCase(diffDetailPO.getTargetQuery())) {
+                continue;
+            }
+
+            DiffDetailVO diffDetailVO = DiffDetailVO.builder()
+                .batchId(diffDetailPO.getBatchId())
+                .configId(diffDetailPO.getConfigId())
+                .diffType(diffDetailPO.getDiffType())
+                .sourceQuery(diffDetailPO.getSourceQuery())
+                .sourceTableName(diffDetailPO.getSourceTableName())
+                .sourceFieldName(diffDetailPO.getSourceFieldName())
+                .sourceValue(diffDetailPO.getSourceValue())
+                .computedSourceValue(diffDetailPO.getComputedSourceValue())
+                .targetQuery(diffDetailPO.getTargetQuery())
+                .targetTableName(diffDetailPO.getTargetTableName())
+                .targetFieldName(diffDetailPO.getTargetFieldName())
+                .targetValue(diffDetailPO.getTargetValue())
+                .errorMessage(diffDetailPO.getErrorMessage())
+                .build();
+
+            detailVOList.add(diffDetailVO);
+        }
+
+        JSONObject retData = new JSONObject();
+        retData.put("rows", detailVOList);
+        retData.put("count", detailVOList.size());
+
+        return AmisResult.success(retData, "ok");
     }
 
     private MigrationConfig convert(MigrationConfigVO migrationConfigVO) {
@@ -315,18 +540,18 @@ public class MigrationCheckController extends BaseController {
 
         // db链接
         migrationConfig.setSourceDbConfig(DatabaseConfig.builder()
-                .driverClassName(trim(migrationConfigVO.getSourceDriverClassName()))
-                .url(trim(migrationConfigVO.getSourceDbUrl()))
-                .name(trim(migrationConfigVO.getSourceUserName()))
-                .pwd(trim(migrationConfigVO.getSourcePassword()))
-                .build());
+            .driverClassName(trim(migrationConfigVO.getSourceDriverClassName()))
+            .url(trim(migrationConfigVO.getSourceDbUrl()))
+            .name(trim(migrationConfigVO.getSourceUserName()))
+            .pwd(trim(migrationConfigVO.getSourcePassword()))
+            .build());
 
         migrationConfig.setTargetDbConfig(DatabaseConfig.builder()
-                .driverClassName(trim(migrationConfigVO.getTargetDriverClassName()))
-                .url(trim(migrationConfigVO.getTargetDbUrl()))
-                .name(trim(migrationConfigVO.getTargetUserName()))
-                .pwd(trim(migrationConfigVO.getTargetPassword()))
-                .build());
+            .driverClassName(trim(migrationConfigVO.getTargetDriverClassName()))
+            .url(trim(migrationConfigVO.getTargetDbUrl()))
+            .name(trim(migrationConfigVO.getTargetUserName()))
+            .pwd(trim(migrationConfigVO.getTargetPassword()))
+            .build());
 
         // mappingRuleList
         List<MappingRule> mappingRuleList = new ArrayList<>();
@@ -335,20 +560,20 @@ public class MigrationCheckController extends BaseController {
             JSONObject mappingRuleJO = new JSONObject((LinkedHashMap) mappingRuleO);
 
             MappingRule mappingRule = MappingRule.builder()
-                    .sourceMappingItem(SourceMappingItem.builder()
-                            .tableName(trim(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_TABLE_NAME)))
-                            .fieldNames(trim(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_FIELD_NAME)))
-                            .isPrimaryKey(mappingRuleJO.getBooleanValue(MappingRule.EXCEL_IS_PRIMARY_KEY))
-                            .build())
-                    .targetMappingItem(TargetMappingItem.builder()
-                            .tableName(trim(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_TABLE_NAME)))
-                            .fieldName(trim(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_FIELD_NAME)))
-                            .build())
-                    .fieldCheckMethod(CustomizedMethod.builder()
-                            .beanName(trim(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_NAME)))
-                            .args(parseArgFromVO(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_ARGS)))
-                            .build())
-                    .build();
+                .sourceMappingItem(SourceMappingItem.builder()
+                    .tableName(trim(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_TABLE_NAME)))
+                    .fieldNames(trim(mappingRuleJO.getString(MappingRule.EXCEL_SOURCE_FIELD_NAME)))
+                    .isPrimaryKey(mappingRuleJO.getBooleanValue(MappingRule.EXCEL_IS_PRIMARY_KEY))
+                    .build())
+                .targetMappingItem(TargetMappingItem.builder()
+                    .tableName(trim(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_TABLE_NAME)))
+                    .fieldName(trim(mappingRuleJO.getString(MappingRule.EXCEL_TARGET_FIELD_NAME)))
+                    .build())
+                .fieldCheckMethod(CustomizedMethod.builder()
+                    .beanName(trim(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_NAME)))
+                    .args(parseArgFromVO(mappingRuleJO.getString(MappingRule.EXCEL_FIELD_CHECK_METHOD_ARGS)))
+                    .build())
+                .build();
 
             mappingRuleList.add(mappingRule);
         }
@@ -379,12 +604,12 @@ public class MigrationCheckController extends BaseController {
         for (Object locatorComboO : locatorComboJA) {
             JSONObject locatorComboJO = new JSONObject((LinkedHashMap) locatorComboO);
             SourceLocator sourceLocator = SourceLocator.builder()
-                    .locateField(trim(locatorComboJO.getString("targetLocateField")))
-                    .locateMethod(CustomizedMethod.builder()
-                            .beanName(trim(locatorComboJO.getString("targetLocateMethod")))
-                            .args(parseArgFromVO(locatorComboJO.getString("targetLocateMethodArgs")))
-                            .build())
-                    .build();
+                .locateField(trim(locatorComboJO.getString("targetLocateField")))
+                .locateMethod(CustomizedMethod.builder()
+                    .beanName(trim(locatorComboJO.getString("targetLocateMethod")))
+                    .args(parseArgFromVO(locatorComboJO.getString("targetLocateMethodArgs")))
+                    .build())
+                .build();
 
             tableAndLocatorMap.put(trim(locatorComboJO.getString("targetTableName")), sourceLocator);
         }
@@ -399,8 +624,8 @@ public class MigrationCheckController extends BaseController {
         }
 
         return Arrays.stream(argsStr.split(","))
-                .map(s -> trim(s))
-                .collect(Collectors.toList());
+            .map(s -> trim(s))
+            .collect(Collectors.toList());
     }
 
     /**********************************************************************************
@@ -408,7 +633,7 @@ public class MigrationCheckController extends BaseController {
      *********************************************************************************/
 
     public MigrationCheckConfig parseConfig(String config) {
-        MigrationCheckConfig migrationCheckConfig = new MigrationCheckConfig();
+        MigrationCheckConfig migrationCheckConfig = MigrationCheckConfig.newInstance(true);
 
         // tableAndCheckFieldsMap
         Map<String, Set<String>> map = new HashMap<>();
@@ -441,20 +666,20 @@ public class MigrationCheckController extends BaseController {
         for (Map<Integer, String> data : dataList) {
             try {
                 MappingRule mappingRule = MappingRule.builder()
-                        .sourceMappingItem(SourceMappingItem.builder()
-                                .tableName(trim(data.get(0)))
-                                .fieldNames(trim(data.get(1)))
-                                .isPrimaryKey(Boolean.parseBoolean(trim(data.get(2))))
-                                .build())
-                        .targetMappingItem(TargetMappingItem.builder()
-                                .tableName(trim(data.get(3)))
-                                .fieldName(trim(data.get(4)))
-                                .build())
-                        .fieldCheckMethod(CustomizedMethod.builder()
-                                .beanName(trim(data.get(5)))
-                                .args(parse(data.get(6)))
-                                .build())
-                        .build();
+                    .sourceMappingItem(SourceMappingItem.builder()
+                        .tableName(trim(data.get(0)))
+                        .fieldNames(trim(data.get(1)))
+                        .isPrimaryKey(Boolean.parseBoolean(trim(data.get(2))))
+                        .build())
+                    .targetMappingItem(TargetMappingItem.builder()
+                        .tableName(trim(data.get(3)))
+                        .fieldName(trim(data.get(4)))
+                        .build())
+                    .fieldCheckMethod(CustomizedMethod.builder()
+                        .beanName(trim(data.get(5)))
+                        .args(parse(data.get(6)))
+                        .build())
+                    .build();
 
                 mappingRuleList.add(mappingRule);
             } catch (Exception e) {

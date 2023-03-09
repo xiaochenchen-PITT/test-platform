@@ -1,0 +1,68 @@
+[
+  {
+    "label": "首页",
+    "to": "/index",
+    "icon": "/svg/home.svg"
+  },
+  {
+    "label": "工具中心",
+    "icon": "/svg/tool_center.svg",
+    "unfolded": false,
+    "children": [
+      {
+        "label": "工具管理",
+        "to": "/toolcenter/list",
+        "icon": "/svg/list.svg"
+      },
+      {
+        "label": "工具调用",
+        "to": "/toolcenter/run",
+        "icon": "/svg/run.svg"
+      }
+    ]
+  },
+  {
+    "label": "数据迁移",
+    "icon": "/svg/migration_check.svg",
+    "unfolded": false,
+    "children": [
+      {
+        "label": "配置录入",
+        "to": "/migrationcheck/config_set",
+        "icon": "/svg/add.svg"
+      },
+      {
+        "label": "配置管理",
+        "to": "/migrationcheck/config_manage",
+        "icon": "/svg/list.svg"
+      }
+    ]
+  },
+  {
+    "label": "仪表盘",
+    "icon": "/svg/dashboard.svg",
+    "unfolded": false,
+    "children": [
+      {
+        "label": "自动化大盘",
+        "to": "/dashboard/automation",
+        "icon": "/svg/automation.svg"
+      },
+      {
+        "label": "测试效能大盘",
+        "to": "/dashboard/test",
+        "icon": "/svg/test_efficiency.svg"
+      },
+      {
+        "label": "预算管理大盘",
+        "to": "/dashboard/budget",
+        "icon": "/svg/money.svg"
+      },
+      {
+        "label": "IT资产大盘",
+        "to": "/dashboard/it",
+        "icon": "/svg/it.svg"
+      }
+    ]
+  }
+]

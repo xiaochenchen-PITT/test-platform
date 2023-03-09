@@ -1,7 +1,7 @@
 spring:
   # 数据源配置
   datasource:
-    xytest: # 数据源1
+    master: # 数据源1
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.cj.jdbc.Driver
       jdbcUrl: jdbc:mysql://127.0.0.1:3306/cxc?characterEncoding=UTF-8&useLocalSessionState=true&serverTimezone=GMT%2b8

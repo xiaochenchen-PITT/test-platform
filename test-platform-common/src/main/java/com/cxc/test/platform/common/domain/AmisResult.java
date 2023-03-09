@@ -42,6 +42,12 @@ public class AmisResult implements Serializable {
         this.msgTimeout = msgTimeout;
     }
 
+    public static AmisResult emptySuccess() {
+        JSONObject data = new JSONObject();
+        data.put("rows", new ArrayList<>());
+        return new AmisResult(0, data, null, null);
+    }
+
     public static AmisResult success(JSONObject data, String msg) {
         return new AmisResult(0, data, msg, null);
     }

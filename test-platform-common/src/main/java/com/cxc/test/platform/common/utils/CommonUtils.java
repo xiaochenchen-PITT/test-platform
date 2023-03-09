@@ -3,9 +3,10 @@ package com.cxc.test.platform.common.utils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class CommonUtils {
 
@@ -67,5 +68,37 @@ public class CommonUtils {
         }
 
         return false;
+    }
+
+    /**
+     * 二者相除，返回格式化的百分比
+     * 四舍五入，2位小数
+     * 例如3/17=17.65%
+     * @param a
+     * @param b
+     * @return
+     */
+    public static String getPrettyPercentage(Long a, Long b) {
+        return String.format("%.2f", ((a.doubleValue() / b.doubleValue()) * 100)) + "%";
+    }
+
+    public static String getPrettyDate(Date date) {
+        DateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        return sdf.format(date);
+    }
+
+    public static Map<String, String> convterToMap(String mapStr) {
+        Map<String, String> ret = new HashMap<>();
+
+        if (StringUtils.isNotEmpty(mapStr) || StringUtils.isEmpty(mapStr.substring(1, mapStr.length() - 1))) {
+            return ret;
+        }
+
+        String[] mapStrArr = mapStr.substring(1, mapStr.length() - 1).split(",");
+        for (String s : mapStrArr) {
+            ret.put(s.split("=")[0].trim(), s.split("=")[1].trim());
+        }
+
+        return ret;
     }
 }

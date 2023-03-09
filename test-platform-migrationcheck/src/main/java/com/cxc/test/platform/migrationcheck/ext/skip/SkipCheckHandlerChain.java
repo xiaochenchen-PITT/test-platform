@@ -1,7 +1,7 @@
 package com.cxc.test.platform.migrationcheck.ext.skip;
 
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationCheckConfig;
-import com.cxc.test.platform.migrationcheck.domain.data.MigrationData;
+import com.cxc.test.platform.migrationcheck.domain.MigrationData;
 import com.cxc.test.platform.migrationcheck.ext.skip.impl.CommonSkipHandler;
 import com.cxc.test.platform.migrationcheck.ext.skip.impl.MigrationCheckConfigSkipHandler;
 import com.cxc.test.platform.migrationcheck.ext.skip.impl.business.oneid.FsupplierTypeSkipHandler;

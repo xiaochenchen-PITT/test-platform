@@ -22,7 +22,7 @@ public class ToolCenterController extends BaseController {
     @Resource
     ToolCenterService toolCenterService;
 
-    @GetMapping("/test_list")
+    @GetMapping("/list")
     public String testList(){
         return "toolcenter/list";
     }

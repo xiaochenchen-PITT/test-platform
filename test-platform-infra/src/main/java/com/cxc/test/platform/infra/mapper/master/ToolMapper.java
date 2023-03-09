@@ -1,4 +1,4 @@
-package com.cxc.test.platform.infra.mapper.xytest;
+package com.cxc.test.platform.infra.mapper.master;
 
 import com.cxc.test.platform.infra.domain.toolcenter.ToolPO;
 import org.apache.ibatis.annotations.Mapper;

@@ -23,17 +23,17 @@ import java.util.stream.Collectors;
 public class MigrationConfigConverter {
 
     public MigrationConfigPO convertMigrationConfigPO(MigrationConfig migrationConfig) {
-        MigrationConfigPO migrationConfigPO = MigrationConfigPO.builder()
-                .configId(migrationConfig.getConfigId())
-                .sourceDriverClassName(migrationConfig.getSourceDbConfig().getDriverClassName())
-                .sourceDbUrl(migrationConfig.getSourceDbConfig().getUrl())
-                .sourceUserName(migrationConfig.getSourceDbConfig().getName())
-                .sourcePassword(migrationConfig.getSourceDbConfig().getPwd())
-                .targetDriverClassName(migrationConfig.getTargetDbConfig().getDriverClassName())
-                .targetDbUrl(migrationConfig.getTargetDbConfig().getUrl())
-                .targetUserName(migrationConfig.getTargetDbConfig().getName())
-                .targetPassword(migrationConfig.getTargetDbConfig().getPwd())
-                .build();
+        MigrationConfigPO migrationConfigPO = new MigrationConfigPO();
+
+        migrationConfigPO.setConfigId(migrationConfig.getConfigId());
+        migrationConfigPO.setSourceDriverClassName(migrationConfig.getSourceDbConfig().getDriverClassName());
+        migrationConfigPO.setSourceDbUrl(migrationConfig.getSourceDbConfig().getUrl());
+        migrationConfigPO.setSourceUserName(migrationConfig.getSourceDbConfig().getName());
+        migrationConfigPO.setSourcePassword(migrationConfig.getSourceDbConfig().getPwd());
+        migrationConfigPO.setTargetDriverClassName(migrationConfig.getTargetDbConfig().getDriverClassName());
+        migrationConfigPO.setTargetDbUrl(migrationConfig.getTargetDbConfig().getUrl());
+        migrationConfigPO.setTargetUserName(migrationConfig.getTargetDbConfig().getName());
+        migrationConfigPO.setTargetPassword(migrationConfig.getTargetDbConfig().getPwd());
 
         return migrationConfigPO;
     }
@@ -43,16 +43,15 @@ public class MigrationConfigConverter {
 
         if (CollectionUtils.isNotEmpty(migrationConfig.getMappingRuleList())) {
             for (MappingRule mappingRule : migrationConfig.getMappingRuleList()) {
-                MappingRulePO mappingRulePO = MappingRulePO.builder()
-                        .configId(migrationConfig.getConfigId())
-                        .sourceTableName(mappingRule.getSourceMappingItem().getTableName())
-                        .sourceFieldNames(String.join(",", mappingRule.getSourceMappingItem().getFieldNameList()))
-                        .isPrimaryKey(mappingRule.getSourceMappingItem().isPrimaryKey() ? 1 : 0)
-                        .targetTableName(mappingRule.getTargetMappingItem().getTableName())
-                        .targetFieldName(mappingRule.getTargetMappingItem().getFieldName())
-                        .fieldCheckMethodName(mappingRule.getFieldCheckMethod().getBeanName())
-                        .fieldCheckMethodArgs(String.valueOf(mappingRule.getFieldCheckMethod().getArgs()))
-                        .build();
+                MappingRulePO mappingRulePO = new MappingRulePO();
+                mappingRulePO.setConfigId(migrationConfig.getConfigId());
+                mappingRulePO.setSourceTableName(mappingRule.getSourceMappingItem().getTableName());
+                mappingRulePO.setSourceFieldNames(String.join(",", mappingRule.getSourceMappingItem().getFieldNameList()));
+                mappingRulePO.setIsPrimaryKey(mappingRule.getSourceMappingItem().isPrimaryKey() ? 1 : 0);
+                mappingRulePO.setTargetTableName(mappingRule.getTargetMappingItem().getTableName());
+                mappingRulePO.setTargetFieldName(mappingRule.getTargetMappingItem().getFieldName());
+                mappingRulePO.setFieldCheckMethodName(mappingRule.getFieldCheckMethod().getBeanName());
+                mappingRulePO.setFieldCheckMethodArgs(String.valueOf(mappingRule.getFieldCheckMethod().getArgs()));
 
                 mappingRulePOList.add(mappingRulePO);
             }
@@ -66,11 +65,10 @@ public class MigrationConfigConverter {
 
         if (MapUtils.isNotEmpty(migrationConfig.getTableAndInitSqlMap())) {
             for (Map.Entry<String, String> entry : migrationConfig.getTableAndInitSqlMap().entrySet()) {
-                SourceInitSqlPO sourceInitSqlPO = SourceInitSqlPO.builder()
-                        .configId(migrationConfig.getConfigId())
-                        .sourceTableName(entry.getKey())
-                        .initSql(entry.getValue())
-                        .build();
+                SourceInitSqlPO sourceInitSqlPO = new SourceInitSqlPO();
+                sourceInitSqlPO.setConfigId(migrationConfig.getConfigId());
+                sourceInitSqlPO.setSourceTableName(entry.getKey());
+                sourceInitSqlPO.setInitSql(entry.getValue());
 
                 sourceInitSqlPOList.add(sourceInitSqlPO);
             }
@@ -84,13 +82,12 @@ public class MigrationConfigConverter {
 
         if (MapUtils.isNotEmpty(migrationConfig.getTableAndLocatorMap())) {
             for (Map.Entry<String, SourceLocator> entry : migrationConfig.getTableAndLocatorMap().entrySet()) {
-                SourceLocatorPO sourceLocatorPO = SourceLocatorPO.builder()
-                        .configId(migrationConfig.getConfigId())
-                        .targetTableName(entry.getKey())
-                        .locateField(entry.getValue().getLocateField())
-                        .locateMethodName(entry.getValue().getLocateMethod().getBeanName())
-                        .locateMethodArgs(String.valueOf(entry.getValue().getLocateMethod().getArgs()))
-                        .build();
+                SourceLocatorPO sourceLocatorPO = new SourceLocatorPO();
+                sourceLocatorPO.setConfigId(migrationConfig.getConfigId());
+                sourceLocatorPO.setTargetTableName(entry.getKey());
+                sourceLocatorPO.setLocateField(entry.getValue().getLocateField());
+                sourceLocatorPO.setLocateMethodName(entry.getValue().getLocateMethod().getBeanName());
+                sourceLocatorPO.setLocateMethodArgs(String.valueOf(entry.getValue().getLocateMethod().getArgs()));
 
                 sourceLocatorPOList.add(sourceLocatorPO);
             }
@@ -106,18 +103,18 @@ public class MigrationConfigConverter {
 
         // db链接
         migrationConfig.setSourceDbConfig(DatabaseConfig.builder()
-                .driverClassName(migrationConfigPO.getSourceDriverClassName())
-                .url(migrationConfigPO.getSourceDbUrl())
-                .name(migrationConfigPO.getSourceUserName())
-                .pwd(migrationConfigPO.getSourcePassword())
-                .build());
+            .driverClassName(migrationConfigPO.getSourceDriverClassName())
+            .url(migrationConfigPO.getSourceDbUrl())
+            .name(migrationConfigPO.getSourceUserName())
+            .pwd(migrationConfigPO.getSourcePassword())
+            .build());
 
         migrationConfig.setTargetDbConfig(DatabaseConfig.builder()
-                .driverClassName(migrationConfigPO.getTargetDriverClassName())
-                .url(migrationConfigPO.getTargetDbUrl())
-                .name(migrationConfigPO.getTargetUserName())
-                .pwd(migrationConfigPO.getTargetPassword())
-                .build());
+            .driverClassName(migrationConfigPO.getTargetDriverClassName())
+            .url(migrationConfigPO.getTargetDbUrl())
+            .name(migrationConfigPO.getTargetUserName())
+            .pwd(migrationConfigPO.getTargetPassword())
+            .build());
 
         // 全量字段映射关系
         migrationConfig.setMappingRuleList(convertPO2DO(mappingRulePOList));
@@ -133,12 +130,12 @@ public class MigrationConfigConverter {
         Map<String, SourceLocator> tableAndLocatorMap = new HashMap<>();
         for (SourceLocatorPO sourceLocatorPO : sourceLocatorPOList) {
             SourceLocator sourceLocator = SourceLocator.builder()
-                    .locateField(sourceLocatorPO.getLocateField())
-                    .locateMethod(CustomizedMethod.builder()
-                            .beanName(sourceLocatorPO.getLocateMethodName())
-                            .args(convertArg(sourceLocatorPO.getLocateMethodArgs()))
-                            .build())
-                    .build();
+                .locateField(sourceLocatorPO.getLocateField())
+                .locateMethod(CustomizedMethod.builder()
+                    .beanName(sourceLocatorPO.getLocateMethodName())
+                    .args(convertArg(sourceLocatorPO.getLocateMethodArgs()))
+                    .build())
+                .build();
 
             tableAndLocatorMap.put(sourceLocatorPO.getTargetTableName(), sourceLocator);
         }
@@ -149,20 +146,20 @@ public class MigrationConfigConverter {
 
     public MappingRule convertPO2DO(MappingRulePO mappingRulePO) {
         MappingRule mappingRule = MappingRule.builder()
-                .sourceMappingItem(SourceMappingItem.builder()
-                        .tableName(mappingRulePO.getSourceTableName())
-                        .fieldNames(mappingRulePO.getSourceFieldNames())
-                        .isPrimaryKey(mappingRulePO.getIsPrimaryKey() == 1)
-                        .build())
-                .targetMappingItem(TargetMappingItem.builder()
-                        .tableName(mappingRulePO.getTargetTableName())
-                        .fieldName(mappingRulePO.getTargetFieldName())
-                        .build())
-                .fieldCheckMethod(CustomizedMethod.builder()
-                        .beanName(mappingRulePO.getFieldCheckMethodName())
-                        .args(convertArg(mappingRulePO.getFieldCheckMethodArgs()))
-                        .build())
-                .build();
+            .sourceMappingItem(SourceMappingItem.builder()
+                .tableName(mappingRulePO.getSourceTableName())
+                .fieldNames(mappingRulePO.getSourceFieldNames())
+                .isPrimaryKey(mappingRulePO.getIsPrimaryKey() == 1)
+                .build())
+            .targetMappingItem(TargetMappingItem.builder()
+                .tableName(mappingRulePO.getTargetTableName())
+                .fieldName(mappingRulePO.getTargetFieldName())
+                .build())
+            .fieldCheckMethod(CustomizedMethod.builder()
+                .beanName(mappingRulePO.getFieldCheckMethodName())
+                .args(convertArg(mappingRulePO.getFieldCheckMethodArgs()))
+                .build())
+            .build();
 
         return mappingRule;
     }
@@ -192,8 +189,8 @@ public class MigrationConfigConverter {
         }
 
         return Arrays.stream(argsStr.split(","))
-                .filter(StringUtils::isNotEmpty)
-                .map(String::trim)
-                .collect(Collectors.toList());
+            .filter(StringUtils::isNotEmpty)
+            .map(String::trim)
+            .collect(Collectors.toList());
     }
 }

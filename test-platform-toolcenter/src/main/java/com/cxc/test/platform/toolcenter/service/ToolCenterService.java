@@ -6,8 +6,8 @@ import com.cxc.test.platform.common.utils.HttpClient;
 import com.cxc.test.platform.common.utils.SpringUtils;
 import com.cxc.test.platform.infra.domain.toolcenter.ToolPO;
 import com.cxc.test.platform.infra.domain.toolcenter.ToolParamPO;
-import com.cxc.test.platform.infra.mapper.xytest.ToolMapper;
-import com.cxc.test.platform.infra.mapper.xytest.ToolParamMapper;
+import com.cxc.test.platform.infra.mapper.master.ToolMapper;
+import com.cxc.test.platform.infra.mapper.master.ToolParamMapper;
 import com.cxc.test.platform.toolcenter.converter.ToolConverter;
 import com.cxc.test.platform.toolcenter.domain.*;
 import lombok.extern.slf4j.Slf4j;
@@ -161,9 +161,8 @@ public class ToolCenterService {
 
     public ResultDO<List<Tool>> queryTools(ToolQuery toolQuery) {
         try {
-            ToolPO toolPOToQuery = ToolPO.builder()
-                .status(ToolStatusConstant.ACTIVE) // 默认查生效的工具
-                .build();
+            ToolPO toolPOToQuery = new ToolPO();
+            toolPOToQuery.setStatus(ToolStatusConstant.ACTIVE);// 默认查生效的工具
 
             if (toolQuery.getId() != null && toolQuery.getId() > 0) {
                 toolPOToQuery.setId(toolQuery.getId());
@@ -185,7 +184,7 @@ public class ToolCenterService {
             List<Tool> toolList = new ArrayList<>();
             if (CollectionUtils.isNotEmpty(toolPOList)) {
                 for (ToolPO toolPO : toolPOList) {
-                    ToolParamPO toolParamPOToQuery = ToolParamPO.builder().build();
+                    ToolParamPO toolParamPOToQuery = new ToolParamPO();
                     toolParamPOToQuery.setToolId(toolPO.getToolId());
 
                     List<ToolParamPO> toolParamPOList = toolParamMapper.selectByCondition(toolParamPOToQuery);
@@ -202,14 +201,16 @@ public class ToolCenterService {
 
     public ResultDO<List<ToolParam>> queryToolParams(ToolParamQuery toolParamQuery) {
         try {
-            ToolParamPO toolParamPOToQuery = ToolParamPO.builder()
-                .status(ToolStatusConstant.ACTIVE) // 默认查生效的工具参数
-                .build();
+            ToolParamPO toolParamPOToQuery = new ToolParamPO();
+            toolParamPOToQuery.setStatus(ToolStatusConstant.ACTIVE); // 默认查生效的工具参数
 
             Assert.isTrue(toolParamQuery.getToolId() != null && toolParamQuery.getToolId() > 0,
                 "invalid toolParamQuery, toolId should be greater than 0");
             Long toolId = toolParamQuery.getToolId();
-            ToolPO toolPO = toolMapper.selectByCondition(ToolPO.builder().toolId(toolId).build()).get(0);
+
+            ToolPO toolPOQuery = new ToolPO();
+            toolPOQuery.setToolId(toolId);
+            ToolPO toolPO = toolMapper.selectByCondition(toolPOQuery).get(0);
             Tool tool = toolConverter.convertPO2DO(toolPO, null);
 
             // 查询

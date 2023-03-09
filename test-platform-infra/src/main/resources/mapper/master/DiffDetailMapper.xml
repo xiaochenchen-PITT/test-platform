@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.cxc.test.platform.infra.mapper.xytest.DiffDetailMapper">
+<mapper namespace="com.cxc.test.platform.infra.mapper.master.DiffDetailMapper">
 
   <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.diff.DiffDetailPO">
     <id column="batch_id" property="batchId" />
+    <id column="config_id" property="configId" />
     <id column="diff_type" property="diffType" />
-    <id column="source_query_sql" property="sourceQuerySql" />
+    <id column="source_query" property="sourceQuery" />
     <id column="source_table_name" property="sourceTableName" />
     <id column="source_field_name" property="sourceFieldName" />
     <id column="source_value" property="sourceValue" />
     <id column="computed_source_value" property="computedSourceValue" />
-    <id column="target_query_sql" property="targetQuerySql" />
+    <id column="target_query" property="targetQuery" />
     <id column="target_table_name" property="targetTableName" />
     <id column="target_field_name" property="targetFieldName" />
     <id column="target_value" property="targetValue" />
@@ -20,10 +21,14 @@
   </resultMap>
 
   <insert id="insert" parameterType="com.cxc.test.platform.infra.domain.diff.DiffDetailPO">
-    insert into t_migration_check_diff_detail
-    (batch_id, diff_type, source_query_sql, source_table_name, source_field_name, source_value, computed_source_value, target_query_sql, target_table_name, target_field_name, target_value, error_message, created_time, modified_time)
+    insert into t_compare_diff_detail
+    (batch_id, config_id, diff_type, source_query, source_table_name, source_field_name, source_value, computed_source_value, target_query, target_table_name, target_field_name, target_value, error_message, created_time, modified_time)
     values
-    (#{batchId}, #{diffType}, #{sourceQuerySql}, #{sourceTableName}, #{sourceFieldName}, #{sourceValue}, #{computedSourceValue}, #{targetQuerySql}, #{targetTableName}, #{targetFieldName}, #{targetValue}, #{errorMessage}, now(), now())
+    (#{batchId}, #{configId}, #{diffType}, #{sourceQuery}, #{sourceTableName}, #{sourceFieldName}, #{sourceValue}, #{computedSourceValue}, #{targetQuery}, #{targetTableName}, #{targetFieldName}, #{targetValue}, #{errorMessage}, now(), now())
   </insert>
+
+  <select id="getByBatchId" resultMap="resultMap">
+    select * from t_compare_diff_detail where batch_id = #{batchId}
+  </select>
 
 </mapper>

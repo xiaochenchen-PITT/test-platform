@@ -1,8 +1,10 @@
-package com.cxc.test.platform.infra.mapper.xytest;
+package com.cxc.test.platform.infra.mapper.master;
 
 import com.cxc.test.platform.infra.domain.migrationcheck.MigrationConfigPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Mapper
 @Component
@@ -12,4 +14,6 @@ public interface MigrationConfigMapper {
     int insert(MigrationConfigPO migrationConfigPO);
 
     MigrationConfigPO getByConfigId(Long configId);
+
+    List<MigrationConfigPO> getAll();
 }

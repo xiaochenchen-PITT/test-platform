@@ -1,6 +1,6 @@
 package com.cxc.test.platform.migrationcheck.ext.sourceLocate.impl;
 
-import com.cxc.test.platform.migrationcheck.domain.data.MigrationData;
+import com.cxc.test.platform.migrationcheck.domain.MigrationData;
 import com.cxc.test.platform.migrationcheck.ext.sourceLocate.SourceLocateExt;
 import org.springframework.stereotype.Component;
 

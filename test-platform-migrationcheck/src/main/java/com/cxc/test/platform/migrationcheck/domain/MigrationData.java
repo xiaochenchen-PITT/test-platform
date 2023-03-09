@@ -1,4 +1,4 @@
-package com.cxc.test.platform.migrationcheck.domain.data;
+package com.cxc.test.platform.migrationcheck.domain;
 
 import lombok.Data;
 

@@ -1,12 +1,18 @@
 package com.cxc.test.platform.web;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.cxc.test.platform.common.domain.AmisResult;
+import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -21,6 +27,24 @@ public class BaseController {
     @GetMapping("/index")
     public String index(){
         return "index";
+    }
+
+    @RequestMapping(value = "/get_menu", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult getMenu() {
+        try {
+            File file = ResourceUtils.getFile("classpath:menu.json");
+            String menuJson = FileUtils.readFileToString(file, "UTF-8");
+
+            JSONArray menuJA = JSONArray.parseArray(menuJson);
+            JSONObject dataJO = new JSONObject();
+            dataJO.put("nav", menuJA);
+
+            return AmisResult.success(dataJO, "ok");
+        } catch (Exception e){
+            log.error("failed to get/parse menu json file, please check.", e);
+            return AmisResult.fail(ErrorMessageUtils.getMessage(e), null);
+        }
     }
 
     public String buildTriggerUrl() {

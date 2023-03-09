@@ -3,7 +3,7 @@ package com.cxc.test.platform.common.domain.diff;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Date;
+import java.util.Date;
 
 @Data
 @Builder
@@ -11,12 +11,14 @@ public class DiffDetail {
 
     private Long batchId;
 
+    private Long configId;
+
     /**
      * @see DiffTypeConstant
      */
     private String diffType;
 
-    private String sourceQuerySql;
+    private String sourceQuery;
 
     private String sourceTableName;
 
@@ -26,7 +28,7 @@ public class DiffDetail {
 
     private String computedSourceValue;
 
-    private String targetQuerySql;
+    private String targetQuery;
 
     private String targetTableName;
 

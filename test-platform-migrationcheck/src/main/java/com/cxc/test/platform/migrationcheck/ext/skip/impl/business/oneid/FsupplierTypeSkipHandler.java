@@ -3,7 +3,7 @@ package com.cxc.test.platform.migrationcheck.ext.skip.impl.business.oneid;
 import com.cxc.test.platform.infra.config.DbConfig;
 import com.cxc.test.platform.infra.utils.JdbcUtils;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationCheckConfig;
-import com.cxc.test.platform.migrationcheck.domain.data.MigrationData;
+import com.cxc.test.platform.migrationcheck.domain.MigrationData;
 import com.cxc.test.platform.migrationcheck.ext.skip.SkipCheckHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;

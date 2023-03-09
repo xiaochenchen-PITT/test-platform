@@ -18,4 +18,12 @@ public class ThreadPoolFactory {
 
         return executorService;
     }
+
+    public static ExecutorService getTimerExecutorService() {
+        if (executorService == null) {
+            executorService = Executors.newSingleThreadScheduledExecutor();
+        }
+
+        return executorService;
+    }
 }

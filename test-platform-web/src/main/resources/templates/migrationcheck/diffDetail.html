@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>测试效能平台</title>
+  <!-- 引入sdk的css文件 -->
+  <link rel="stylesheet" href="/sdk/sdk.css">
+  <link rel="stylesheet" href="/sdk/helper.css">
+  <link rel="stylesheet" href="/sdk/iconfont.css">
+  <!-- antd主题 -->
+  <link rel="stylesheet" href="/sdk/antd.css">
+  <!-- 引入sdk.js -->
+  <script src="/sdk/sdk.js"></script>
+  <!-- 页面的样式 -->
+  <style>
+        html,
+        body,
+        .app-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+
+
+  </style>
+</head>
+
+<body background="/index/img/img-edu-hero-1.jpg">
+<!-- 渲染的容器 -->
+<div id="root" class="app-wrapper"></div>
+<!-- 页面的内容 -->
+<script type="text/javascript">
+        (function () {
+            // 初始化
+            let amis = amisRequire('amis/embed');
+            // 通过替换下面这个配置来生成不同页面
+            let amisJSON = {
+                  "type": "page",
+                  "id": "u:a1e73a65b8c5",
+                  "initApi": "/get_menu",
+                  "body": [
+                    {
+                      "type": "flex",
+                      "className": "p-1",
+                      "items": [
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "flex",
+                              "id": "u:5448a684939",
+                              "items": [
+                                {
+                                  "type": "image",
+                                  "id": "u:54892a625bc4",
+                                  "src": "/svg/qa.svg",
+                                  "width": 50,
+                                  "height": 50,
+                                  "thumbMode": "contain",
+                                  "showDimensions": false,
+                                  "innerClassName": "no-border no-bg",
+                                  "className": "no-border no-bg",
+                                  "imageClassName": "no-border no-bg",
+                                  "thumbClassName": "no-border no-bg"
+                                }
+                              ],
+                              "style": {
+                                "position": "static",
+                                "flexWrap": "nowrap",
+                                "overflowY": "auto"
+                              },
+                              "direction": "row",
+                              "isFixedHeight": false,
+                              "isFixedWidth": false,
+                              "justify": "center",
+                              "alignItems": "flex-start"
+                            },
+                            {
+                              "type": "nav",
+                              "stacked": true,
+                              "source": "${nav}",
+                              "id": "u:b057407f2664",
+                              "className": ""
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "0 0 200px",
+                            "flexBasis": "200px",
+                            "overflowX": "auto",
+                            "fontFamily": "",
+                            "fontSize": 16,
+                            "textAlign": "left"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:04792b608d52",
+                          "wrapperComponent": "aside",
+                          "bodyClassName": "bg-light text-muted b-light"
+                        },
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "tpl",
+                              "id": "u:0113ac9a5359",
+                              "tpl": "数据迁移执行详情",
+                              "inline": true,
+                              "wrapperComponent": "",
+                              "style": {
+                                "fontFamily": "",
+                                "fontSize": 25
+                              }
+                            },
+                            {
+                              "type": "divider",
+                              "id": "u:9e26253a40dd"
+                            },
+                            {
+                              "type": "service",
+                              "api": "/migrationcheck/get_result?batchId=${batchId}",
+                              "body": [
+                                {
+                                  "type": "property",
+                                  "labelStyle": {
+                                    "textAlign": "left",
+                                    "verticalAlign": "top"
+                                  },
+                                  "contentStyle": {
+                                    "verticalAlign": "top"
+                                  },
+                                  "items": [
+                                    {
+                                      "label": "批次ID",
+                                      "content": "${batchId}",
+                                      "span": 1
+                                    },
+                                    {
+                                      "label": "配置ID",
+                                      "content": "${configId}",
+                                      "span": 1
+                                    },
+                                    {
+                                      "label": "是否成功",
+                                      "content": "${isSuccess}",
+                                      "span": 1
+                                    },
+                                    {
+                                      "label": "是否一致",
+                                      "content": "${isEqual}",
+                                      "span": 1
+                                    },
+                                    {
+                                      "label": "执行状态",
+                                      "content": "${status}",
+                                      "span": 1
+                                    },
+                                    {
+                                      "label": "执行者",
+                                      "content": "${runner}",
+                                      "span": 1
+                                    },
+                                    {
+                                      "label": "任务总数",
+                                      "content": "${totalCount}",
+                                      "span": 1
+                                    },
+                                    {
+                                      "label": "失败总数",
+                                      "content": "${failedCount}",
+                                      "span": 1
+                                    },
+                                    {
+                                      "label": "执行进度",
+                                      "content": {
+                                        "type": "static-progress",
+                                        "id": "u:5405e228d1c6",
+                                        "name": "${progress}"
+                                      },
+                                      "span": 4
+                                    },
+                                    {
+                                      "label": "触发url",
+                                      "content": "${triggerUrl}",
+                                      "span": 4
+                                    }
+                                  ],
+                                  "id": "u:550550c2f6db",
+                                  "column": 4,
+                                  "mode": "table"
+                                }
+                              ],
+                              "id": "u:0a0fc3fab4a1"
+                            },
+                            {
+                              "type": "divider",
+                              "id": "u:58eb65c1916a"
+                            },
+                            {
+                              "type": "crud",
+                              "id": "u:28024f3e550b",
+                              "name": "diffDetailCrud",
+                              "api": {
+                                "method": "get",
+                                "url": "/migrationcheck/get_detail_list?batchId=${batchId}",
+                                "data": {
+                                  "diffTypeSearch": "${diffTypeSearch | default:undefined}",
+                                  "sourceSearch": "${sourceSearch | default:undefined}",
+                                  "targetSearch": "${targetSearch | default:undefined}"
+                                }
+                              },
+                              "loadDataOnce": true,
+                              "syncLocation": false,
+                              "filter": {
+                                "debug": false,
+                                "title": "错误详情",
+                                "body": [
+                                  {
+                                    "type": "group",
+                                    "id": "u:edbf77d9c5d8",
+                                    "body": [
+                                      {
+                                        "type": "select",
+                                        "name": "diffTypeSearch",
+                                        "label": "错误类型",
+                                        "clearable": true,
+                                        "id": "u:5f43212ae5d8",
+                                        "options": [
+                                          {
+                                            "label": "仅源",
+                                            "value": "only_in_source"
+                                          },
+                                          {
+                                            "label": "仅目标",
+                                            "value": "only_in_target"
+                                          },
+                                          {
+                                            "label": "不一致",
+                                            "value": "value_check_fail"
+                                          },
+                                          {
+                                            "label": "有报错",
+                                            "value": "encounter_error"
+                                          }
+                                        ],
+                                        "multiple": false
+                                      },
+                                      {
+                                        "type": "input-text",
+                                        "name": "sourceSearch",
+                                        "label": "源查询条件",
+                                        "clearable": true,
+                                        "size": "md",
+                                        "id": "u:bdbc1cbbcb6c"
+                                      },
+                                      {
+                                        "type": "input-text",
+                                        "name": "targetSearch",
+                                        "label": "目标查询条件",
+                                        "clearable": true,
+                                        "size": "md",
+                                        "id": "u:bdbc1cbbcb6c"
+                                      }
+                                    ]
+                                  }
+                                ],
+                                "actions": [
+                                  {
+                                    "type": "reset",
+                                    "label": "重置",
+                                    "id": "u:67e8ccf7a7f0"
+                                  },
+                                  {
+                                    "type": "submit",
+                                    "level": "primary",
+                                    "label": "查询",
+                                    "id": "u:ef895ce62e1d"
+                                  }
+                                ],
+                                "id": "u:a00bd4fb9858"
+                              },
+                              "columns": [
+                                {
+                                  "name": "batchId",
+                                  "label": "批次id",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "configId",
+                                  "label": "配置id",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "status",
+                                  "label": "运行状态",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "diffType",
+                                  "label": "错误类型",
+                                  "id": "u:92fdad445603"
+                                },
+                                {
+                                  "label": "源查询条件",
+                                  "id": "u:92fdad445603",
+                                  "name": "sourceQuery"
+                                },
+                                {
+                                  "label": "源数据值",
+                                  "id": "u:92fdad445603",
+                                  "name": "sourceValue"
+                                },
+                                {
+                                  "name": "computedSourceValue",
+                                  "label": "转换源数据值",
+                                  "id": "u:92fdad445603"
+                                },
+                                {
+                                  "label": "目标查询条件",
+                                  "id": "u:92fdad445603",
+                                  "name": "targetQuery"
+                                },
+                                {
+                                  "label": "目标数据值",
+                                  "id": "u:92fdad445603",
+                                  "name": "targetValue"
+                                },
+                                {
+                                  "label": "错误信息",
+                                  "id": "u:92fdad445603",
+                                  "name": "errorMessage"
+                                },
+                                {
+                                  "label": "操作",
+                                  "id": "u:0bdd3201ab9f",
+                                  "type": "button-toolbar",
+                                  "buttons": [
+                                    {
+                                      "label": "对比",
+                                      "type": "button",
+                                      "level": "primary",
+                                      "actionType": "dialog",
+                                      "dialog": {
+                                        "title": "对比详情",
+                                        "body": {
+                                          "type": "diff-editor",
+                                          "label": "左边为转换源数据值，右边为目标数据值",
+                                          "name": "diff",
+                                          "diffValue": "${computedSourceValue}",
+                                          "value": "${targetValue}",
+                                          "disabled": true
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "1 1 auto",
+                            "flexGrow": 1,
+                            "flexBasis": "auto"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:4a30e3ab29f8"
+                        }
+                      ],
+                      "style": {
+                        "position": "static"
+                      },
+                      "direction": "row",
+                      "justify": "flex-start",
+                      "alignItems": "stretch",
+                      "id": "u:5e67faedfd35"
+                    }
+                  ],
+                  "pullRefresh": {
+                    "disabled": true
+                  },
+                  "regions": [
+                    "body"
+                  ],
+                  "style": {
+                    "backgroundImage": "/image/bg.jpg",
+                    "backgroundSize": "100%"
+                  }
+                };
+
+
+            // 开始渲染，放入渲染容器#root，渲染的页面内容是amisJSON
+            let amisScoped = amis.embed(
+                '#root',
+                amisJSON,
+                {
+                    // 这里是初始 props
+                },
+                {
+                    theme: 'antd'
+                }
+            );
+        })();
+
+
+
+</script>
+</body>
+
+</html>

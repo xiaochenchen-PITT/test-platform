@@ -16,38 +16,42 @@ import java.util.List;
 public class ToolConverter {
 
     public ToolPO convertDO2PO(Tool tool) {
-        return ToolPO.builder()
-            .id(tool.getId())
-            .toolId(tool.getToolId())
-            .name(tool.getName())
-            .desc(tool.getDesc())
-            .type(tool.getType())
-            .beanName(tool.getBeanName())
-            .beanClass(tool.getBeanClass())
-            .method(tool.getMethod())
-            .url(tool.getUrl())
-            .status(tool.getStatus())
-            .createdTime(tool.getCreatedTime())
-            .modifiedTime(tool.getModifiedTime())
-            .build();
+        ToolPO toolPO = new ToolPO();
+
+        toolPO.setId(tool.getId());
+        toolPO.setToolId(tool.getToolId());
+        toolPO.setName(tool.getName());
+        toolPO.setDesc(tool.getDesc());
+        toolPO.setType(tool.getType());
+        toolPO.setBeanName(tool.getBeanName());
+        toolPO.setBeanClass(tool.getBeanClass());
+        toolPO.setMethod(tool.getMethod());
+        toolPO.setUrl(tool.getUrl());
+        toolPO.setStatus(tool.getStatus());
+        toolPO.setCreatedTime(tool.getCreatedTime());
+        toolPO.setModifiedTime(tool.getModifiedTime());
+
+        return toolPO;
     }
 
     public ToolParamPO convertDO2PO(ToolParam toolParam) {
-        return ToolParamPO.builder()
-            .id(toolParam.getId())
-            .toolId(toolParam.getToolId())
-            .name(toolParam.getName())
-            .desc(toolParam.getDesc())
-            .paramClass(toolParam.getParamClass())
-            .isRequired(toolParam.isRequired() ? 1 : 0)
-            .hasDefault(toolParam.isHasDefault() ? 1 : 0)
-            .defaultValue(toolParam.getDefaultValue())
-            .inputType(toolParam.getInputType())
-            .optionValues(String.join(",", toolParam.getOptionValueList()))
-            .status(toolParam.getStatus())
-            .createdTime(toolParam.getCreatedTime())
-            .modifiedTime(toolParam.getModifiedTime())
-            .build();
+        ToolParamPO toolParamPO = new ToolParamPO();
+
+        toolParamPO.setId(toolParam.getId());
+        toolParamPO.setToolId(toolParam.getToolId());
+        toolParamPO.setName(toolParam.getName());
+        toolParamPO.setDesc(toolParam.getDesc());
+        toolParamPO.setParamClass(toolParam.getParamClass());
+        toolParamPO.setIsRequired(toolParam.isRequired() ? 1 : 0);
+        toolParamPO.setHasDefault(toolParam.isHasDefault() ? 1 : 0);
+        toolParamPO.setDefaultValue(toolParam.getDefaultValue());
+        toolParamPO.setInputType(toolParam.getInputType());
+        toolParamPO.setOptionValues(String.join(",", toolParam.getOptionValueList()));
+        toolParamPO.setStatus(toolParam.getStatus());
+        toolParamPO.setCreatedTime(toolParam.getCreatedTime());
+        toolParamPO.setModifiedTime(toolParam.getModifiedTime());
+
+        return toolParamPO;
     }
 
     public List<ToolParamPO> convertDO2PO(List<ToolParam> toolParamList) {

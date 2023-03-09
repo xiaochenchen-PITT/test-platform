@@ -1,17 +1,20 @@
 package com.cxc.test.platform.migrationcheck.service;
 
+import com.cxc.test.platform.common.domain.FeatureKeyConstant;
 import com.cxc.test.platform.common.domain.diff.DiffDetail;
 import com.cxc.test.platform.common.domain.diff.DiffResult;
 import com.cxc.test.platform.infra.converter.DiffConverter;
-import com.cxc.test.platform.infra.mapper.xytest.DiffDetailMapper;
-import com.cxc.test.platform.infra.mapper.xytest.DiffResultMapper;
+import com.cxc.test.platform.infra.domain.diff.DiffDetailPO;
+import com.cxc.test.platform.infra.domain.diff.DiffResultPO;
+import com.cxc.test.platform.infra.mapper.master.DiffDetailMapper;
+import com.cxc.test.platform.infra.mapper.master.DiffResultMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -47,7 +50,32 @@ public class DiffService {
         }
     }
 
-    public boolean saveDiffResult(DiffResult diffResult) {
+    public DiffResult getDiffResult(Long batchId) {
+        DiffResultPO diffResultPO = diffResultMapper.getByBatchId(batchId);
+
+        if (diffResultPO == null) {
+            return null;
+        }
+
+        List<DiffDetailPO> diffDetailPOList = diffDetailMapper.getByBatchId(batchId);
+
+        DiffResult diffResult = diffConverter.convertPO2DO(diffResultPO, diffDetailPOList);
+        return diffResult;
+    }
+
+    public boolean initDiffResult(DiffResult diffResult, int mappingRuleSize) {
+        diffResult.addOrUpdateFeature(FeatureKeyConstant.MAPPING_RULE_COUNT, String.valueOf(mappingRuleSize));
+
+        int ret = diffResultMapper.insert(diffConverter.convertDO2PO(diffResult));
+        return ret == 1;
+    }
+
+    public boolean updateDiffResultOnTime(DiffResult diffResult) {
+        int ret = diffResultMapper.update(diffConverter.convertDO2PO(diffResult));
+        return ret == 1;
+    }
+
+    public boolean saveFinalDiffResult(DiffResult diffResult) {
         boolean saveRet = true;
 
         // 默认值
@@ -64,7 +92,7 @@ public class DiffService {
             diffResult.setModifiedTime(new Date(System.currentTimeMillis()));
         }
 
-        int ret = diffResultMapper.insert(diffConverter.convertDO2PO(diffResult));
+        int ret = diffResultMapper.update(diffConverter.convertDO2PO(diffResult));
         if (ret != 1) {
             saveRet = false;
         }

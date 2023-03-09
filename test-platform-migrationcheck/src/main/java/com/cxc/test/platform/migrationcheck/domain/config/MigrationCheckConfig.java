@@ -9,13 +9,13 @@ import java.util.*;
 
 public class MigrationCheckConfig {
 
-    // 部分特殊的字段需要提前校验，和提前结束
-    private List<String> CHECK_ADVANCE_FIELDS = Arrays.asList("fcooperation_type");
-
     // 是否异步执行（线程池）
     @Getter
     @Setter
     private Boolean runAsync = true;
+
+    // 部分特殊的字段需要提前校验，和提前结束
+    private List<String> CHECK_ADVANCE_FIELDS = new ArrayList<>();
 
     /**
      * 要对比的字段列表配置
@@ -24,6 +24,14 @@ public class MigrationCheckConfig {
      */
     @Setter
     private Map<String, Set<String>> tableAndCheckFieldsMap;
+
+    public static MigrationCheckConfig newInstance(Boolean runAsync) {
+        MigrationCheckConfig migrationCheckConfig = new MigrationCheckConfig();
+        migrationCheckConfig.CHECK_ADVANCE_FIELDS = new ArrayList<>();
+        migrationCheckConfig.tableAndCheckFieldsMap = new HashMap<>();
+        migrationCheckConfig.setRunAsync(runAsync);
+        return migrationCheckConfig;
+    }
 
     public Map<String, Set<String>> getTableAndCheckFieldsMap() {
         if (tableAndCheckFieldsMap == null) {

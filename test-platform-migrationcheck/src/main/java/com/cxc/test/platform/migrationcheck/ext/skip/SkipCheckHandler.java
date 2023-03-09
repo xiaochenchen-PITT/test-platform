@@ -2,7 +2,7 @@ package com.cxc.test.platform.migrationcheck.ext.skip;
 
 
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationCheckConfig;
-import com.cxc.test.platform.migrationcheck.domain.data.MigrationData;
+import com.cxc.test.platform.migrationcheck.domain.MigrationData;
 
 public interface SkipCheckHandler {
 

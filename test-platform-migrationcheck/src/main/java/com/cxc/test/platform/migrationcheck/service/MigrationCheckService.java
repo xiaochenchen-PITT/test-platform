@@ -1,26 +1,26 @@
 package com.cxc.test.platform.migrationcheck.service;
 
-import com.cxc.test.platform.common.domain.diff.DiffDetail;
-import com.cxc.test.platform.common.domain.diff.DiffResult;
-import com.cxc.test.platform.common.domain.diff.DiffTypeConstant;
-import com.cxc.test.platform.common.domain.diff.FieldCheckResult;
+import com.cxc.test.platform.common.domain.ResultDO;
+import com.cxc.test.platform.common.domain.diff.*;
 import com.cxc.test.platform.common.utils.CommonUtils;
 import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import com.cxc.test.platform.infra.utils.JdbcUtils;
 import com.cxc.test.platform.migrationcheck.domain.CustomizedMethod;
+import com.cxc.test.platform.migrationcheck.domain.MigrationData;
+import com.cxc.test.platform.migrationcheck.domain.SourceLocator;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationCheckConfig;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
-import com.cxc.test.platform.migrationcheck.domain.data.MigrationData;
-import com.cxc.test.platform.migrationcheck.domain.SourceLocator;
 import com.cxc.test.platform.migrationcheck.domain.mapping.MappingRule;
 import com.cxc.test.platform.migrationcheck.domain.mapping.SourceMappingItem;
 import com.cxc.test.platform.migrationcheck.ext.fieldCheck.FieldCheckExt;
 import com.cxc.test.platform.migrationcheck.ext.skip.SkipCheckHandlerChain;
 import com.cxc.test.platform.migrationcheck.ext.sourceLocate.SourceLocateExt;
 import com.cxc.test.platform.migrationcheck.utils.MigrationSpringUtils;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -30,7 +30,11 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * 对比核心处理类
+ */
 @Slf4j
 @Component
 public class MigrationCheckService {
@@ -46,18 +50,27 @@ public class MigrationCheckService {
 
     private final ExecutorService executorService = ThreadPoolFactory.getExecutorService();
 
+    private DiffResult diffResult;
+
+    @Getter
+    private boolean isRunning = false;
+    private AtomicLong count = new AtomicLong(0);
+    private AtomicLong failedCount = new AtomicLong(0);
+
     class DiffTask implements Callable<DiffDetail> {
 
         private final Long batchId;
+        private final Long configId;
         private final MigrationCheckConfig migrationCheckConfig;
         private final MigrationConfig migrationConfig;
         private final MappingRule mappingRule;
         private final String primaryKey;
         private final MigrationData sourceData;
 
-        public DiffTask(Long batchId, MigrationConfig migrationConfig, MigrationCheckConfig migrationCheckConfig,
+        public DiffTask(Long batchId, Long configId, MigrationConfig migrationConfig, MigrationCheckConfig migrationCheckConfig,
                         MappingRule mappingRule, String primaryKey, MigrationData sourceData) {
             this.batchId = batchId;
+            this.configId = configId;
             this.migrationConfig = migrationConfig;
             this.migrationCheckConfig = migrationCheckConfig;
             this.mappingRule = mappingRule;
@@ -67,6 +80,10 @@ public class MigrationCheckService {
 
         @Override
         public DiffDetail call() throws Exception {
+            if (!isRunning) {
+                return null;
+            }
+
             String sourceTableName = mappingRule.getSourceMappingItem().getTableName();
             List<String> sourceFieldNameList = mappingRule.getSourceMappingItem().getFieldNameList();
 
@@ -108,14 +125,20 @@ public class MigrationCheckService {
 
                 // 对比
                 boolean checkInAdvance = migrationCheckConfig.checkInAdvance(mappingRule.getSourceMappingItem());
-                DiffDetail diffDetail = diff(batchId, mappingRule, checkInAdvance, sourceSqlAndValueMap, targetValue, targetSql);
+                DiffDetail diffDetail = diff(batchId, configId, mappingRule, checkInAdvance, sourceSqlAndValueMap, targetValue, targetSql);
+
+                count.incrementAndGet();
+                if (diffDetail != null) {
+                    failedCount.incrementAndGet();
+                }
+
                 return diffDetail;
             } catch (Exception e) {
                 String errMsg = String.format("Failed to execute compare for sourceData: %s, sourceTableName: %s, sourceSqlAndValueMap: %s",
                         sourceData, sourceTableName, sourceSqlAndValueMap);
                 log.error(errMsg, e);
 
-                DiffDetail diffDetail = buildDiffDetail(batchId, mappingRule, new ArrayList<>(sourceSqlAndValueMap.values()),
+                DiffDetail diffDetail = buildDiffDetail(batchId, configId, mappingRule, new ArrayList<>(sourceSqlAndValueMap.values()),
                         null, new ArrayList<>(sourceSqlAndValueMap.keySet()), targetValue, targetSql,
                         DiffTypeConstant.ERROR, ErrorMessageUtils.getMessage(e));
                 return diffDetail;
@@ -123,23 +146,46 @@ public class MigrationCheckService {
         }
     }
 
+    // todo 如果是分布式的，需要配合实现分布式锁。或者让定时调度任务只在一台机器上执行
+    @Scheduled(initialDelay = 10000, fixedRate = 10000)
+    public void updateDiffResultOnTime() {
+        try {
+            if (isRunning) {
+                diffResult.setStatus(TaskStatusConstant.RUNNING);
+                diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
+                diffResult.setFailedCount(failedCount.get());
+
+                diffService.updateDiffResultOnTime(diffResult);
+            }
+        } catch (Exception e) {
+            log.error("failed to update DiffResult at regular time", e);
+        }
+    }
+
+    public boolean stop() {
+        isRunning = false;
+        return true;
+    }
+
     /**
      * 对比服务入口
-     * @param batchId  批次id
-     * @param migrationConfig  字段对应关系
-     * @param migrationCheckConfig  迁移校验的配置
      *
+     * @param batchId              批次id，每次不同
+     * @param configId             配置id
+     * @param migrationConfig      字段对应关系
+     * @param migrationCheckConfig 迁移校验的配置
      * @return
      */
-    public DiffResult compare(Long batchId, MigrationConfig migrationConfig, MigrationCheckConfig migrationCheckConfig, String triggerUrl) {
+    public ResultDO<DiffResult> compare(Long batchId, Long configId, MigrationConfig migrationConfig,
+                                        MigrationCheckConfig migrationCheckConfig, String triggerUrl) {
+        if (isRunning) {
+            return ResultDO.fail("当前机器已有任务在运行，请等待其结束之后再触发");
+        }
+
         // 修改java parallelStream的并发量
         System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "50");
 
-        DiffResult diffResult = DiffResult.builder().build();
-        diffResult.setBatchId(batchId);
-        diffResult.setTriggerUrl(triggerUrl);
-        diffResult.setIsSuccess(true);
-
+        diffResult = init(batchId, configId, triggerUrl);
         try {
             sourceDataSource = JdbcUtils.intiDataSource(migrationConfig.getSourceDbConfig());
             targetDataSource = JdbcUtils.intiDataSource(migrationConfig.getTargetDbConfig());
@@ -168,7 +214,7 @@ public class MigrationCheckService {
 
                 List<MappingRule> validMappingRuleList = migrationConfig.getValidMappingRuleList(sourceTableName, isCovered);
                 validMappingRuleList.forEach(mappingRule -> {
-                    DiffTask diffTask = new DiffTask(batchId, migrationConfig, migrationCheckConfig, mappingRule, primaryKey, sourceData);
+                    DiffTask diffTask = new DiffTask(batchId, configId, migrationConfig, migrationCheckConfig, mappingRule, primaryKey, sourceData);
                     diffTaskList.add(diffTask);
 //                    log.info("adding one....");
                 });
@@ -178,6 +224,10 @@ public class MigrationCheckService {
             boolean removeIf = diffTaskList.removeIf(diffTask -> Objects.isNull(diffTask));
             diffResult.setTotalCount((long) diffTaskList.size());
 
+            // 先初始化t_compare_diff_result
+            isRunning = diffService.initDiffResult(diffResult, migrationConfig.getValidMappingRuleList().size());
+
+            // 执行对比
             if (migrationCheckConfig.getRunAsync()) {
                 List<Future<DiffDetail>> futures = executorService.invokeAll(diffTaskList);
                 for (Future<DiffDetail> future : futures) {
@@ -197,17 +247,49 @@ public class MigrationCheckService {
                 }
             }
             diffResult.setFailedCount((long) diffResult.getDiffDetailList().size());
+            diffResult.setStatus(TaskStatusConstant.FINISHED);
         } catch (Exception e) {
             log.error("Failed to execute compare because " + ErrorMessageUtils.getMessage(e), e);
             diffResult.setIsSuccess(false);
+            diffResult.setStatus(TaskStatusConstant.FAILED);
             diffResult.setErrorMessage(ErrorMessageUtils.getMessage(e));
         } finally {
-            System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism",
-                    String.valueOf(Runtime.getRuntime().availableProcessors()));
+            end(diffResult);
 
-            boolean saveRet = diffService.saveDiffResult(diffResult);
+            System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism",
+                String.valueOf(Runtime.getRuntime().availableProcessors()));
+
+            boolean saveRet = diffService.saveFinalDiffResult(diffResult);
             log.info("Migration check finished, save result: {}, batch id: {}", saveRet, batchId);
         }
+
+        return ResultDO.success(diffResult);
+    }
+
+    private DiffResult init(Long batchId, Long configId, String triggerUrl) {
+        isRunning = false;
+        count.set(0);
+        failedCount.set(0);
+
+        DiffResult diffResult = DiffResult.builder().build();
+        diffResult.setBatchId(batchId);
+        diffResult.setConfigId(configId);
+        diffResult.setIsSuccess(true);
+        diffResult.setStatus(TaskStatusConstant.RUNNING);
+        diffResult.setProgress("1%");
+        diffResult.setTriggerUrl(triggerUrl);
+
+        return diffResult;
+    }
+
+    private DiffResult end(DiffResult diffResult) {
+        isRunning = false;
+
+        diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
+        diffResult.setFailedCount(failedCount.get());
+
+        count.set(0);
+        failedCount.set(0);
 
         return diffResult;
     }
@@ -242,13 +324,13 @@ public class MigrationCheckService {
         return sourceDataList;
     }
 
-    private DiffDetail diff(Long batchId, MappingRule mappingRule, boolean checkInAdvance, LinkedHashMap<String, Object> sourceSqlAndValueMap,
+    private DiffDetail diff(Long batchId, Long configId, MappingRule mappingRule, boolean checkInAdvance, LinkedHashMap<String, Object> sourceSqlAndValueMap,
                             Object targetValue, String targetSql) {
         List<String> sourceSqlList = new ArrayList<>();
         List<Object> sourceValueList = new ArrayList<>();
         for (Map.Entry<String, Object> entry : sourceSqlAndValueMap.entrySet()) {
             log.info(String.format("source sql: %s, source value: %s; target sql: %s, target value: %s",
-                    entry.getKey(), entry.getValue(), targetSql, targetValue));
+                entry.getKey(), entry.getValue(), targetSql, targetValue));
 
             sourceSqlList.add(entry.getKey());
             sourceValueList.add(entry.getValue());
@@ -263,8 +345,8 @@ public class MigrationCheckService {
                 FieldCheckResult fieldCheckResult = executeFieldCheck(sourceValueList, targetValue, mappingRule);
                 if (!fieldCheckResult.isPass()) {
                     String diffType = DiffTypeConstant.VALUE_CHECK_FAIL;
-                    DiffDetail detail = buildDiffDetail(batchId, mappingRule, sourceValueList, fieldCheckResult.getComputedValue(),
-                            sourceSqlList, targetValue, targetSql, diffType, null);
+                    DiffDetail detail = buildDiffDetail(batchId, configId, mappingRule, sourceValueList, fieldCheckResult.getComputedValue(),
+                        sourceSqlList, targetValue, targetSql, diffType, null);
                     return detail;
                 }
 
@@ -285,8 +367,8 @@ public class MigrationCheckService {
             }
 
             if (diffType != null) {
-                DiffDetail detail = buildDiffDetail(batchId, mappingRule, sourceValueList, sourceValue, sourceSqlList,
-                        targetValue, targetSql, diffType, null);
+                DiffDetail detail = buildDiffDetail(batchId, configId, mappingRule, sourceValueList, sourceValue, sourceSqlList,
+                    targetValue, targetSql, diffType, null);
                 return detail;
             }
         }
@@ -295,32 +377,33 @@ public class MigrationCheckService {
         FieldCheckResult fieldCheckResult = executeFieldCheck(sourceValueList, targetValue, mappingRule);
         if (!fieldCheckResult.isPass()) {
             String diffType = DiffTypeConstant.VALUE_CHECK_FAIL;
-            DiffDetail detail = buildDiffDetail(batchId, mappingRule, sourceValueList, fieldCheckResult.getComputedValue(),
-                    sourceSqlList, targetValue, targetSql, diffType, null);
+            DiffDetail detail = buildDiffDetail(batchId, configId, mappingRule, sourceValueList, fieldCheckResult.getComputedValue(),
+                sourceSqlList, targetValue, targetSql, diffType, null);
             return detail;
         }
 
         return null;
     }
 
-    private DiffDetail buildDiffDetail(Long batchId, MappingRule mappingRule, List<Object> sourceValueList, Object computedSourceValue,
+    private DiffDetail buildDiffDetail(Long batchId, Long configId, MappingRule mappingRule, List<Object> sourceValueList, Object computedSourceValue,
                                        List<String> sourceSqlList, Object targetValue, String targetSql, String diffType, String errorMessage) {
         DiffDetail diffDetail = DiffDetail.builder()
-                .batchId(batchId)
-                .diffType(diffType)
-                .sourceQuerySql(CollectionUtils.isNotEmpty(sourceSqlList) ? String.valueOf(sourceSqlList) : null)
-                .sourceTableName(mappingRule.getSourceMappingItem() != null && StringUtils.isNotEmpty(mappingRule.getSourceMappingItem().getTableName()) ?
-                        mappingRule.getSourceMappingItem().getTableName() : null)
-                .sourceFieldName(mappingRule.getSourceMappingItem() != null && CollectionUtils.isNotEmpty(mappingRule.getSourceMappingItem().getFieldNameList()) ?
-                        String.valueOf(mappingRule.getSourceMappingItem().getFieldNameList()) : null)
-                .sourceValue(CollectionUtils.isNotEmpty(sourceValueList) ? String.valueOf(sourceValueList) : null)
-                .computedSourceValue(computedSourceValue != null ? String.valueOf(computedSourceValue) : null)
-                .targetQuerySql(targetSql)
-                .targetTableName(mappingRule.getTargetMappingItem().getTableName())
-                .targetFieldName(mappingRule.getTargetMappingItem().getFieldName())
-                .targetValue(targetValue != null ? String.valueOf(targetValue) : null)
-                .errorMessage(errorMessage)
-                .build();
+            .batchId(batchId)
+            .configId(configId)
+            .diffType(diffType)
+            .sourceQuery(CollectionUtils.isNotEmpty(sourceSqlList) ? String.valueOf(sourceSqlList) : null)
+            .sourceTableName(mappingRule.getSourceMappingItem() != null && StringUtils.isNotEmpty(mappingRule.getSourceMappingItem().getTableName()) ?
+                mappingRule.getSourceMappingItem().getTableName() : null)
+            .sourceFieldName(mappingRule.getSourceMappingItem() != null && CollectionUtils.isNotEmpty(mappingRule.getSourceMappingItem().getFieldNameList()) ?
+                String.valueOf(mappingRule.getSourceMappingItem().getFieldNameList()) : null)
+            .sourceValue(CollectionUtils.isNotEmpty(sourceValueList) ? String.valueOf(sourceValueList) : null)
+            .computedSourceValue(computedSourceValue != null ? String.valueOf(computedSourceValue) : null)
+            .targetQuery(targetSql)
+            .targetTableName(mappingRule.getTargetMappingItem().getTableName())
+            .targetFieldName(mappingRule.getTargetMappingItem().getFieldName())
+            .targetValue(targetValue != null ? String.valueOf(targetValue) : null)
+            .errorMessage(errorMessage)
+            .build();
 
         return diffDetail;
     }
@@ -353,26 +436,26 @@ public class MigrationCheckService {
         // 没有自定义转换逻辑，平迁对比
         if (mappingRule.getFieldCheckMethod() == null || StringUtils.isEmpty(mappingRule.getFieldCheckMethod().getBeanName())) {
             Assert.isTrue(CollectionUtils.isNotEmpty(sourceValueList) && sourceValueList.size() == 1,
-                    "source fields have more than 1 field when fieldCheckMethod is empty");
+                "source fields have more than 1 field when fieldCheckMethod is empty");
 
             Object sourceValue = sourceValueList.get(0);
             return FieldCheckResult.builder()
-                    .isPass(CommonUtils.generalEquals(sourceValue, targetValue))
-                    .computedValue(sourceValue)
-                    .build();
+                .isPass(CommonUtils.generalEquals(sourceValue, targetValue))
+                .computedValue(sourceValue)
+                .build();
         }
 
         String fcBeanName = mappingRule.getFieldCheckMethod().getBeanName();
         FieldCheckExt fcBean = MigrationSpringUtils.getFcBean(fcBeanName);
         if (fcBean == null) {
             Assert.isTrue(CollectionUtils.isNotEmpty(sourceValueList) && sourceValueList.size() == 1,
-                    "source fields have more than 1 field when fieldCheckMethod is empty");
+                "source fields have more than 1 field when fieldCheckMethod is empty");
 
             Object sourceValue = sourceValueList.get(0);
             return FieldCheckResult.builder()
-                    .isPass(CommonUtils.generalEquals(sourceValue, targetValue))
-                    .computedValue(sourceValue)
-                    .build();
+                .isPass(CommonUtils.generalEquals(sourceValue, targetValue))
+                .computedValue(sourceValue)
+                .build();
         }
 
         // 有自定义转换逻辑
@@ -387,7 +470,7 @@ public class MigrationCheckService {
             SourceMappingItem sourceMappingItem = mappingRule.getSourceMappingItem();
 
             if (sourceMappingItem == null || StringUtils.isEmpty(sourceMappingItem.getTableName()) ||
-                    CollectionUtils.isEmpty(sourceMappingItem.getFieldNameList()) || sourceMappingItem.getFieldNameList().size() != 1) {
+                CollectionUtils.isEmpty(sourceMappingItem.getFieldNameList()) || sourceMappingItem.getFieldNameList().size() != 1) {
                 continue;
             }
 
@@ -397,7 +480,7 @@ public class MigrationCheckService {
         }
 
         Assert.isTrue(sourceTableAndPrimaryKeyMap.size() == migrationConfig.getRelatedSourceTables().size(),
-                "部分源表没有配置主键(primary key)，请检查配置");
+            "部分源表没有配置主键(primary key)，请检查配置");
 
         return sourceTableAndPrimaryKeyMap;
     }
