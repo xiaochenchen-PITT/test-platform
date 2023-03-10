@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="数据迁移校验模块 bugfix">
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/dashboard/DashboardController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/budget.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/it.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/test.html" afterDir="false" />
+    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="仪表盘 final">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/automation.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/automation.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/budget.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/budget.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/it.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/it.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -217,7 +216,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678415452999</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="仪表盘 final">
+      <created>1678417175230</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1678417175230</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -232,7 +238,8 @@
     <MESSAGE value="迁移配置管理 final" />
     <MESSAGE value="数据迁移校验模块 final" />
     <MESSAGE value="数据迁移校验模块 bugfix" />
-    <option name="LAST_COMMIT_MESSAGE" value="数据迁移校验模块 bugfix" />
+    <MESSAGE value="仪表盘 final" />
+    <option name="LAST_COMMIT_MESSAGE" value="仪表盘 final" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
