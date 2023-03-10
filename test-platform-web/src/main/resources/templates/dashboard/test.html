@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试效能平台</title>
+    <!-- 引入sdk的css文件 -->
+    <link rel="stylesheet" href="/sdk/sdk.css">
+    <link rel="stylesheet" href="/sdk/helper.css">
+    <link rel="stylesheet" href="/sdk/iconfont.css">
+    <!-- antd主题 -->
+    <link rel="stylesheet" href="/sdk/antd.css">
+    <!-- 引入sdk.js -->
+    <script src="/sdk/sdk.js"></script>
+    <!-- 页面的样式 -->
+    <style>
+        html,
+        body,
+        .app-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body background="/index/img/img-edu-hero-1.jpg">
+<!-- 渲染的容器 -->
+<div id="root" class="app-wrapper"></div>
+<!-- 页面的内容 -->
+<script type="text/javascript">
+        (function () {
+            // 初始化
+            let amis = amisRequire('amis/embed');
+            // 通过替换下面这个配置来生成不同页面
+            let amisJSON = {
+                  "type": "page",
+                  "title": "测试效能大盘",
+                  "initApi": "/get_menu",
+                  "body": [
+                    {
+                      "type": "flex",
+                      "className": "p-1",
+                      "items": [
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "flex",
+                              "id": "u:5448a684939",
+                              "items": [
+                                {
+                                  "type": "image",
+                                  "id": "u:54892a625bc4",
+                                  "src": "/svg/qa.svg",
+                                  "width": 50,
+                                  "height": 50,
+                                  "thumbMode": "contain",
+                                  "showDimensions": false,
+                                  "innerClassName": "no-border no-bg",
+                                  "className": "no-border no-bg",
+                                  "imageClassName": "no-border no-bg",
+                                  "thumbClassName": "no-border no-bg"
+                                }
+                              ],
+                              "style": {
+                                "position": "static",
+                                "flexWrap": "nowrap",
+                                "overflowY": "auto"
+                              },
+                              "direction": "row",
+                              "isFixedHeight": false,
+                              "isFixedWidth": false,
+                              "justify": "center",
+                              "alignItems": "flex-start"
+                            },
+                            {
+                              "type": "nav",
+                              "stacked": true,
+                              "source": "${nav}",
+                              "id": "u:b057407f2664",
+                              "className": ""
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "0 0 200px",
+                            "flexBasis": "200px",
+                            "overflowX": "auto",
+                            "fontFamily": "",
+                            "fontSize": 16,
+                            "textAlign": "left"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:04792b608d52",
+                          "wrapperComponent": "aside",
+                          "bodyClassName": "bg-light text-muted b-light"
+                        },
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "tpl",
+                              "id": "u:0113ac9a5359",
+                              "tpl": "测试效能大盘",
+                              "inline": true,
+                              "wrapperComponent": "",
+                              "style": {
+                                "fontFamily": "",
+                                "fontSize": 25
+                              }
+                            },
+                            {
+                              "type": "divider",
+                              "id": "u:9e26253a40dd"
+                            },
+                            {
+                              "type": "iframe",
+                              "src": "https://xingyun.feishu.cn/share/base/dashboard/shrcnMv2q7YZb7wRwSihDeBVSfh",
+                              "height": 3000,
+                              "id": "u:dcfd71677b7d"
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "1 1 auto",
+                            "flexGrow": 1,
+                            "flexBasis": "auto"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:4a30e3ab29f8"
+                        }
+                      ],
+                      "style": {
+                        "position": "static"
+                      },
+                      "direction": "row",
+                      "justify": "flex-start",
+                      "alignItems": "stretch",
+                      "id": "u:d0d772b1af52"
+                    }
+                  ],
+                  "id": "u:e11c3a49882e",
+                  "pullRefresh": {
+                    "disabled": true
+                  },
+                  "regions": [
+                    "body"
+                  ],
+                  "style": {
+                    "backgroundImage": "/image/bg.jpg",
+                    "backgroundSize": "100%"
+                  }
+                };
+
+
+            // 开始渲染，放入渲染容器#root，渲染的页面内容是amisJSON
+            let amisScoped = amis.embed(
+                '#root',
+                amisJSON,
+                {
+                    // 这里是初始 props
+                },
+                {
+                    theme: 'antd'
+                }
+            );
+        })();
+    </script>
+</body>
+
+</html>
