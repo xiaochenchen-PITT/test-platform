@@ -16,4 +16,6 @@ public interface MigrationConfigMapper {
     MigrationConfigPO getByConfigId(Long configId);
 
     List<MigrationConfigPO> getAll();
+
+    int update(MigrationConfigPO migrationConfigPO);
 }

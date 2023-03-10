@@ -34,4 +34,34 @@
         select * from t_migration_config
     </select>
 
+    <update id="update" parameterType="com.cxc.test.platform.infra.domain.migrationcheck.MigrationConfigPO">
+        update t_migration_config set
+        <if test="sourceDriverClassName != null and sourceDriverClassName != ''">
+            `source_driver_class_name` = #{sourceDriverClassName},
+        </if>
+        <if test="sourceDbUrl != null and sourceDbUrl != ''">
+            `source_db_url` = #{sourceDbUrl},
+        </if>
+        <if test="sourceUserName != null and sourceUserName != ''">
+            `source_user_name` = #{sourceUserName},
+        </if>
+        <if test="sourcePassword != null and sourcePassword != ''">
+            `source_password` = #{sourcePassword},
+        </if>
+        <if test="targetDriverClassName != null and targetDriverClassName != ''">
+            `target_driver_class_name` = #{targetDriverClassName},
+        </if>
+        <if test="targetDbUrl != null and targetDbUrl != ''">
+            `target_db_url` = #{targetDbUrl},
+        </if>
+        <if test="targetUserName != null and targetUserName != ''">
+            `target_user_name` = #{targetUserName},
+        </if>
+        <if test="targetPassword != null and targetPassword != ''">
+            `target_password` = #{targetPassword},
+        </if>
+        `modified_time` = now()
+        where config_id = #{configId}
+    </update>
+
 </mapper>

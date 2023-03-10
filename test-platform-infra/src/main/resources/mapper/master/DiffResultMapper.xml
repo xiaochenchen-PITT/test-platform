@@ -3,6 +3,7 @@
 <mapper namespace="com.cxc.test.platform.infra.mapper.master.DiffResultMapper">
 
     <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.diff.DiffResultPO">
+        <id column="id" property="id"/>
         <id column="batch_id" property="batchId"/>
         <id column="config_id" property="configId"/>
         <id column="is_success" property="isSuccess"/>

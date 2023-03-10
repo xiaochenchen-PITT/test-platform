@@ -184,20 +184,21 @@ public class MigrationCheckController extends BaseController {
         return 0L;
     }
 
-    private boolean filterNotStarted(String statusSearch, DiffResultPO diffResultPO) {
+    private boolean filterStatusSearch(String statusSearch, DiffResultPO diffResultPO) {
         if (StringUtils.isEmpty(statusSearch)) {
             return true;
         }
 
-        if (TaskStatusConstant.NOT_STARTED.equalsIgnoreCase(statusSearch) && diffResultPO != null) {
-            return false;
+        // 需要单独处理一下not_started，因为这是个默认值，不在diffResultPOList中
+        if (diffResultPO == null && TaskStatusConstant.NOT_STARTED.equalsIgnoreCase(statusSearch)) {
+            return true;
         }
 
-        if (diffResultPO == null && !TaskStatusConstant.NOT_STARTED.equalsIgnoreCase(statusSearch)) {
-            return false;
+        if (diffResultPO != null && statusSearch.equalsIgnoreCase(diffResultPO.getStatus())) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     @RequestMapping(value = "/get_config_list", method = RequestMethod.GET)
@@ -205,7 +206,7 @@ public class MigrationCheckController extends BaseController {
     public AmisResult getConfigList(@RequestParam(required = false) Long configIdSearch, @RequestParam(required = false) String statusSearch) {
         String triggerUrl = buildTriggerUrl();
 
-        ResultDO<Map<Long, List<DiffResultPO>>> queryRet = migrationConfigService.getConfigList(configIdSearch, statusSearch);
+        ResultDO<Map<Long, List<DiffResultPO>>> queryRet = migrationConfigService.getConfigList(configIdSearch);
         if (!queryRet.getIsSuccess()) {
             return AmisResult.emptySuccess();
         }
@@ -215,8 +216,7 @@ public class MigrationCheckController extends BaseController {
             Long configId = entry.getKey();
             DiffResultPO lastDiffResultPO = getLastDiffResult(entry.getValue());
 
-            // 需要单独处理一下not_started，因为这是个默认值，不在diffResultPOList中
-            if (filterNotStarted(statusSearch, lastDiffResultPO)) {
+            if (filterStatusSearch(statusSearch, lastDiffResultPO)) {
                 MigrationRunningItemVO migrationRunningItemVO = MigrationRunningItemVO.builder()
                     .batchId(lastDiffResultPO == null ? null : lastDiffResultPO.getBatchId())
                     .configId(configId)
@@ -261,6 +261,53 @@ public class MigrationCheckController extends BaseController {
         } else {
             return AmisResult.fail(ret.getErrorMessage(), null);
         }
+    }
+
+    @RequestMapping(value = "/get_migration_db_config", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult getMigrationDbConfig(@RequestParam Long configId) {
+        String triggerUrl = buildTriggerUrl();
+
+        MigrationConfigPO migrationConfigPO = migrationConfigMapper.getByConfigId(configId);
+        if (migrationConfigPO == null) {
+            log.info("Did not find config for config id: " + configId);
+            return AmisResult.emptySuccess();
+        }
+
+        MigrationDbConfigVO migrationDbConfigVO = MigrationDbConfigVO.builder()
+            .sourceDriverClassName(migrationConfigPO.getSourceDriverClassName())
+            .sourceDbUrl(migrationConfigPO.getSourceDbUrl())
+            .sourceUserName(migrationConfigPO.getSourceUserName())
+            .sourcePassword(migrationConfigPO.getSourcePassword())
+            .targetDriverClassName(migrationConfigPO.getTargetDriverClassName())
+            .targetDbUrl(migrationConfigPO.getTargetDbUrl())
+            .targetUserName(migrationConfigPO.getTargetUserName())
+            .targetPassword(migrationConfigPO.getTargetPassword())
+            .build();
+
+        return AmisResult.success((JSONObject) JSONObject.toJSON(migrationDbConfigVO), "ok");
+    }
+
+    @RequestMapping(value = "/update_migration_db_config", method = RequestMethod.POST)
+    @ResponseBody
+    public AmisResult updateMappingRuleConfig(@RequestParam Long configId, @RequestBody MigrationDbConfigVO migrationDbConfigVO) {
+        String triggerUrl = buildTriggerUrl();
+
+        MigrationConfigPO migrationConfigPO = new MigrationConfigPO();
+        migrationConfigPO.setConfigId(configId);
+        migrationConfigPO.setSourceDriverClassName(migrationDbConfigVO.getSourceDriverClassName());
+        migrationConfigPO.setSourceDbUrl(migrationDbConfigVO.getSourceDbUrl());
+        migrationConfigPO.setSourceUserName(migrationDbConfigVO.getSourceUserName());
+        migrationConfigPO.setSourcePassword(migrationDbConfigVO.getSourcePassword());
+        migrationConfigPO.setTargetDriverClassName(migrationDbConfigVO.getTargetDriverClassName());
+        migrationConfigPO.setTargetDbUrl(migrationDbConfigVO.getTargetDbUrl());
+        migrationConfigPO.setTargetUserName(migrationDbConfigVO.getTargetUserName());
+        migrationConfigPO.setTargetPassword(migrationDbConfigVO.getTargetPassword());
+
+        int ret = migrationConfigMapper.update(migrationConfigPO);
+        Assert.isTrue(ret == 1, "update migration config failed");
+
+        return AmisResult.simpleSuccess("success", "编辑成功");
     }
 
     @RequestMapping(value = "/get_mapping_rule_config", method = RequestMethod.GET)
@@ -343,31 +390,6 @@ public class MigrationCheckController extends BaseController {
         Assert.isTrue(ret == 1, "delete mapping rule failed");
 
         return AmisResult.simpleSuccess("success", "删除成功");
-    }
-
-    @RequestMapping(value = "/get_migration_db_config", method = RequestMethod.GET)
-    @ResponseBody
-    public AmisResult getMigrationDbConfig(@RequestParam Long configId) {
-        String triggerUrl = buildTriggerUrl();
-
-        MigrationConfigPO migrationConfigPO = migrationConfigMapper.getByConfigId(configId);
-        if (migrationConfigPO == null) {
-            log.info("Did not find config for config id: " + configId);
-            return AmisResult.emptySuccess();
-        }
-
-        MigrationDbConfigVO migrationDbConfigVO = MigrationDbConfigVO.builder()
-            .sourceDriverClassName(migrationConfigPO.getSourceDriverClassName())
-            .sourceDbUrl(migrationConfigPO.getSourceDbUrl())
-            .sourceUserName(migrationConfigPO.getSourceUserName())
-            .sourcePassword(migrationConfigPO.getSourcePassword())
-            .targetDriverClassName(migrationConfigPO.getTargetDriverClassName())
-            .targetDbUrl(migrationConfigPO.getTargetDbUrl())
-            .targetUserName(migrationConfigPO.getTargetUserName())
-            .targetPassword(migrationConfigPO.getTargetPassword())
-            .build();
-
-        return AmisResult.success((JSONObject) JSONObject.toJSON(migrationDbConfigVO), "ok");
     }
 
     @RequestMapping(value = "/get_locator_config", method = RequestMethod.GET)
@@ -540,6 +562,7 @@ public class MigrationCheckController extends BaseController {
             }
 
             DiffDetailVO diffDetailVO = DiffDetailVO.builder()
+                .id(diffDetailPO.getId())
                 .batchId(diffDetailPO.getBatchId())
                 .configId(diffDetailPO.getConfigId())
                 .diffType(diffDetailPO.getDiffType())

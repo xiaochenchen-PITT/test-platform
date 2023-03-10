@@ -222,6 +222,7 @@
                               "syncLocation": false,
                               "filter": {
                                 "debug": false,
+                                "submitText": "查询",
                                 "title": "错误详情",
                                 "body": [
                                   {
@@ -274,71 +275,91 @@
                                     ]
                                   }
                                 ],
-                                "actions": [
-                                  {
-                                    "type": "reset",
-                                    "label": "重置",
-                                    "id": "u:67e8ccf7a7f0"
-                                  },
-                                  {
-                                    "type": "submit",
-                                    "level": "primary",
-                                    "label": "查询",
-                                    "id": "u:ef895ce62e1d"
-                                  }
-                                ],
                                 "id": "u:a00bd4fb9858"
                               },
                               "columns": [
                                 {
-                                  "name": "batchId",
-                                  "label": "批次id",
+                                  "name": "id",
+                                  "label": "ID",
                                   "id": "u:97e6ae8cc007"
                                 },
                                 {
-                                  "name": "configId",
-                                  "label": "配置id",
-                                  "id": "u:97e6ae8cc007"
-                                },
-                                {
+                                  "type": "mapping",
                                   "name": "status",
                                   "label": "运行状态",
-                                  "id": "u:97e6ae8cc007"
+                                  "map": {
+                                    "not_started": "<span class='label label-warning'>未开始</span>",
+                                    "running": "<span class='label label-success'>运行中</span>",
+                                    "finished": "<span class='label label-primary'>已结束</span>",
+                                    "failed": "<span class='label label-danger'>失败</span>"
+                                  },
+                                  "id": "u:4f09127c1920"
                                 },
                                 {
+                                  "type": "mapping",
                                   "name": "diffType",
                                   "label": "错误类型",
-                                  "id": "u:92fdad445603"
+                                  "map": {
+                                    "only_in_target": "<span class='label label-primary'>仅在目标中存在</span>",
+                                    "value_check_fail": "<span class='label label-default'>对比不一致</span>",
+                                    "only_in_source": "<span class='label label-warning'>仅在源中存在</span>",
+                                    "encounter_error": "<span class='label label-danger'>对比时报错</span>"
+                                  },
+                                  "id": "u:4f09127c1920"
                                 },
                                 {
+                                  "type": "tpl",
+                                  "popOver": "${sourceQuery}",
                                   "label": "源查询条件",
-                                  "id": "u:92fdad445603",
-                                  "name": "sourceQuery"
+                                  "name": "sourceQuery",
+                                  "tpl": "${sourceQuery|truncate:15}",
+                                  "popOverEnableOn": "${sourceQuery !== null}",
+                                  "id": "u:b3722d037ced"
                                 },
                                 {
+                                  "type": "tpl",
+                                  "popOver": "${sourceValue}",
                                   "label": "源数据值",
-                                  "id": "u:92fdad445603",
-                                  "name": "sourceValue"
+                                  "name": "sourceValue",
+                                  "tpl": "${sourceValue|truncate:15}",
+                                  "popOverEnableOn": "${sourceValue !== null}",
+                                  "id": "u:b3722d037ced"
                                 },
                                 {
-                                  "name": "computedSourceValue",
+                                  "type": "tpl",
+                                  "popOver": "${computedSourceValue}",
                                   "label": "转换源数据值",
-                                  "id": "u:92fdad445603"
+                                  "name": "computedSourceValue",
+                                  "tpl": "${computedSourceValue|truncate:15}",
+                                  "popOverEnableOn": "${computedSourceValue !== null}",
+                                  "id": "u:b3722d037ced"
                                 },
                                 {
+                                  "type": "tpl",
+                                  "popOver": "${targetQuery}",
                                   "label": "目标查询条件",
-                                  "id": "u:92fdad445603",
-                                  "name": "targetQuery"
+                                  "name": "targetQuery",
+                                  "tpl": "${targetQuery|truncate:15}",
+                                  "popOverEnableOn": "${targetQuery !== null}",
+                                  "id": "u:b3722d037ced"
                                 },
                                 {
+                                  "type": "tpl",
+                                  "popOver": "${targetValue}",
                                   "label": "目标数据值",
-                                  "id": "u:92fdad445603",
-                                  "name": "targetValue"
+                                  "name": "targetValue",
+                                  "tpl": "${targetValue|truncate:15}",
+                                  "popOverEnableOn": "${targetValue !== null}",
+                                  "id": "u:b3722d037ced"
                                 },
                                 {
+                                  "type": "tpl",
+                                  "popOver": "${errorMessage}",
                                   "label": "错误信息",
-                                  "id": "u:92fdad445603",
-                                  "name": "errorMessage"
+                                  "name": "errorMessage",
+                                  "tpl": "${errorMessage|truncate:15}",
+                                  "popOverEnableOn": "${errorMessage !== null}",
+                                  "id": "u:b3722d037ced"
                                 },
                                 {
                                   "label": "操作",
@@ -352,6 +373,7 @@
                                       "actionType": "dialog",
                                       "dialog": {
                                         "title": "对比详情",
+                                        "size": "lg",
                                         "body": {
                                           "type": "diff-editor",
                                           "label": "左边为转换源数据值，右边为目标数据值",

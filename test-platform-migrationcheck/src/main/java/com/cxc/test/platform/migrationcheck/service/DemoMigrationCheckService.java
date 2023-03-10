@@ -67,15 +67,16 @@ public class DemoMigrationCheckService {
                 .batchId(batchId)
                 .configId(configId)
                 .diffType(RandomUtils.nextBoolean() ? DiffTypeConstant.VALUE_CHECK_FAIL : DiffTypeConstant.ERROR)
-                .sourceQuery(RandomStringUtils.randomAlphabetic(200))
+                .sourceQuery(RandomStringUtils.random(200, "qwertyuiopasd fghjklzxcvbnm,;'/@$*"))
                 .sourceTableName("2")
                 .sourceFieldName("3")
-                .sourceValue("abc")
-                .computedSourceValue("ABC")
-                .targetQuery(RandomStringUtils.randomAlphabetic(100))
+                .sourceValue(RandomStringUtils.random(200, "qwertyuiopasd fghjklzxcvbnm,;'/@$*"))
+                .computedSourceValue(RandomStringUtils.random(200, "qwertyuiopasd fghjklzxcvbnm,;'/@$*"))
+                .targetQuery(RandomStringUtils.random(200, "qwertyuiopasd fghjklzxcvbnm,;'/@$*"))
                 .targetTableName("5")
                 .targetFieldName("6")
-                .targetValue("ABCD")
+                .targetValue(RandomStringUtils.random(200, "qwertyuiopasd fghjklzxcvbnm,;'/@$*"))
+                .errorMessage(RandomStringUtils.random(200, "qwertyuiopasd fghjklzxcvbnm,;'/@$*"))
                 .build();
 
             DiffDetail ret = RandomUtils.nextBoolean() ? diffDetail : null;

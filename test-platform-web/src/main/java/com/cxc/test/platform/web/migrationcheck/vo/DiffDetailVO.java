@@ -7,6 +7,8 @@ import lombok.Data;
 @Builder
 public class DiffDetailVO {
 
+    private Long id;
+
     private Long batchId;
 
     private Long configId;

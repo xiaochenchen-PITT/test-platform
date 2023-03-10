@@ -34,10 +34,10 @@
         <if test="locateField != null and locateField != ''">
             `locate_field` = #{locateField},
         </if>
-        <if test="locateMethodName != null and locateMethodName != ''">
+        <if test="locateMethodName != null">
             `locate_method_name` = #{locateMethodName},
         </if>
-        <if test="locateMethodArgs != null and locateMethodArgs != ''">
+        <if test="locateMethodArgs != null">
             `locate_method_args` = #{locateMethodArgs},
         </if>
         `modified_time` = now()

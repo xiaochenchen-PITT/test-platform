@@ -7,6 +7,11 @@ import java.util.Date;
 @Data
 public class DiffDetailPO {
 
+    /**
+     * 主键id，无实际业务意义
+     */
+    private Long id;
+
     private Long batchId;
 
     private Long configId;

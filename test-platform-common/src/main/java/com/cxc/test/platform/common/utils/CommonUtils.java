@@ -90,7 +90,7 @@ public class CommonUtils {
     public static Map<String, String> convterToMap(String mapStr) {
         Map<String, String> ret = new HashMap<>();
 
-        if (StringUtils.isNotEmpty(mapStr) || StringUtils.isEmpty(mapStr.substring(1, mapStr.length() - 1))) {
+        if (StringUtils.isEmpty(mapStr) || StringUtils.isEmpty(mapStr.substring(1, mapStr.length() - 1))) {
             return ret;
         }
 

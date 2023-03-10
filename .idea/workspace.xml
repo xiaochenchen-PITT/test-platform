@@ -4,11 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="数据迁移校验模块 final">
+    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="数据迁移校验模块 bugfix">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/utils/CommonUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/utils/CommonUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/diff/DiffDetailPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/diff/DiffDetailPO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/diff/DiffResultPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/diff/DiffResultPO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/MigrationConfigMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/MigrationConfigMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/DiffDetailMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/DiffDetailMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/DiffResultMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/DiffResultMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/MappingRuleMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/MappingRuleMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/MigrationConfigMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/MigrationConfigMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DemoMigrationCheckService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DemoMigrationCheckService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/MigrationConfigService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/MigrationConfigService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/controller/MigrationCheckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/controller/MigrationCheckController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/vo/DiffDetailVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/vo/DiffDetailVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configDetail.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configDetail.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configManage.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/configManage.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/diffDetail.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck/diffDetail.html" afterDir="false" />
     </list>
@@ -91,7 +101,7 @@
       <recent name="com.cxc.test.platform.infra.mapper.xytest" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Application">
     <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.cxc.test.platform.web.Application" />
       <module name="test-platform-web" />
@@ -105,9 +115,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="DemoMigrationCheckService" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.cxc.test.platform.migrationcheck.service.DemoMigrationCheckService" />
+      <module name="test-platform-migrationcheck" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cxc.test.platform.migrationcheck.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Application" />
+        <item itemvalue="Application.DemoMigrationCheckService" />
       </list>
     </recent_temporary>
   </component>
@@ -190,7 +214,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678344937318</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="数据迁移校验模块 bugfix">
+      <created>1678353846836</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1678353846836</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -204,7 +235,19 @@
     <MESSAGE value="迁移配置管理" />
     <MESSAGE value="迁移配置管理 final" />
     <MESSAGE value="数据迁移校验模块 final" />
-    <option name="LAST_COMMIT_MESSAGE" value="数据迁移校验模块 final" />
+    <MESSAGE value="数据迁移校验模块 bugfix" />
+    <option name="LAST_COMMIT_MESSAGE" value="数据迁移校验模块 bugfix" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DiffService.java</url>
+          <line>66</line>
+          <option name="timeStamp" value="126" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

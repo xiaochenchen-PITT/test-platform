@@ -53,10 +53,10 @@
         <if test="targetFieldName != null and targetFieldName != ''">
             `target_field_name` = #{targetFieldName},
         </if>
-        <if test="fieldCheckMethodName != null and fieldCheckMethodName != ''">
+        <if test="fieldCheckMethodName != null">
             `field_check_method_name` = #{fieldCheckMethodName},
         </if>
-        <if test="fieldCheckMethodArgs != null and fieldCheckMethodArgs != ''">
+        <if test="fieldCheckMethodArgs != null">
             `field_check_method_args` = #{fieldCheckMethodArgs},
         </if>
         `modified_time` = now()

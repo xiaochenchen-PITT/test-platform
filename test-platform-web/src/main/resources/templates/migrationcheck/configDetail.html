@@ -126,7 +126,7 @@
                               "tabsMode": "strong",
                               "tabs": [
                                 {
-                                  "title": "源数据库链接信息",
+                                  "title": "数据库链接信息",
                                   "body": [
                                     {
                                       "type": "service",
@@ -181,6 +181,66 @@
                                           "id": "u:550550c2f6db",
                                           "column": 4,
                                           "mode": "table"
+                                        },
+                                        {
+                                          "type": "divider",
+                                          "id": "u:7961d74d4689"
+                                        },
+                                        {
+                                          "label": "修改",
+                                          "type": "button",
+                                          "actionType": "drawer",
+                                          "drawer": {
+                                            "title": "编辑数据库链接信息",
+                                            "size": "lg",
+                                            "body": {
+                                              "type": "form",
+                                              "api": "post:/migrationcheck/update_migration_db_config?configId=${configId}",
+                                              "body": [
+                                                {
+                                                  "name": "sourceDbUrl",
+                                                  "label": "源数据库Url",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "sourceUserName",
+                                                  "label": "源数据库用户名",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "sourcePassword",
+                                                  "label": "源数据库密码",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "sourceDriverClassName",
+                                                  "label": "源数据库DriverClassName",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "targetDbUrl",
+                                                  "label": "目标数据库Url",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "targetUserName",
+                                                  "label": "目标数据库用户名",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "targetPassword",
+                                                  "label": "目标数据库密码",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "targetDriverClassName",
+                                                  "label": "目标数据库DriverClassName",
+                                                  "type": "input-text"
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          "id": "u:46e308e46b4c"
                                         }
                                       ],
                                       "id": "u:c070942f001f"
@@ -207,6 +267,7 @@
                                       "filter": {
                                         "debug": false,
                                         "title": "条件搜索",
+                                        "submitText": "查询",
                                         "body": [
                                           {
                                             "type": "group",
@@ -229,19 +290,6 @@
                                               }
                                             ],
                                             "id": "u:edbf77d9c5d8"
-                                          }
-                                        ],
-                                        "actions": [
-                                          {
-                                            "type": "reset",
-                                            "label": "重置",
-                                            "id": "u:67e8ccf7a7f0"
-                                          },
-                                          {
-                                            "type": "submit",
-                                            "level": "primary",
-                                            "label": "查询",
-                                            "id": "u:ef895ce62e1d"
                                           }
                                         ],
                                         "id": "u:a00bd4fb9858"
@@ -391,6 +439,7 @@
                                       "syncLocation": false,
                                       "filter": {
                                         "debug": false,
+                                        "submitText": "查询",
                                         "title": "条件搜索",
                                         "body": [
                                           {
@@ -406,19 +455,6 @@
                                               }
                                             ],
                                             "id": "u:edbf77d9c5d8"
-                                          }
-                                        ],
-                                        "actions": [
-                                          {
-                                            "type": "reset",
-                                            "label": "重置",
-                                            "id": "u:67e8ccf7a7f0"
-                                          },
-                                          {
-                                            "type": "submit",
-                                            "level": "primary",
-                                            "label": "查询",
-                                            "id": "u:ef895ce62e1d"
                                           }
                                         ],
                                         "id": "u:a00bd4fb9858"
@@ -522,6 +558,7 @@
                                       "filter": {
                                         "debug": false,
                                         "title": "条件搜索",
+                                        "submitText": "查询",
                                         "body": [
                                           {
                                             "type": "group",
@@ -536,19 +573,6 @@
                                               }
                                             ],
                                             "id": "u:edbf77d9c5d8"
-                                          }
-                                        ],
-                                        "actions": [
-                                          {
-                                            "type": "reset",
-                                            "label": "重置",
-                                            "id": "u:67e8ccf7a7f0"
-                                          },
-                                          {
-                                            "type": "submit",
-                                            "level": "primary",
-                                            "label": "查询",
-                                            "id": "u:ef895ce62e1d"
                                           }
                                         ],
                                         "id": "u:a00bd4fb9858"
