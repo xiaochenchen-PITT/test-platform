@@ -11,6 +11,11 @@
     "children": [
       {
         "label": "工具管理",
+        "to": "/toolcenter/add",
+        "icon": "/svg/add.svg"
+      },
+      {
+        "label": "工具管理",
         "to": "/toolcenter/list",
         "icon": "/svg/list.svg"
       },

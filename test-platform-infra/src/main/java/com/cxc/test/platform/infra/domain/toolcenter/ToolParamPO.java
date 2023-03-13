@@ -7,10 +7,17 @@ import java.util.Date;
 @Data
 public class ToolParamPO {
 
+    public static final String VALUE_SPLITER = ",";
+
     /**
-     * 主键id，即工具参数id
+     * 主键id，无实际业务意义
      */
     private Long id;
+
+    /**
+     * 入参id
+     */
+    private Long paramId;
 
     /**
      * 关联的工具id
@@ -54,14 +61,10 @@ public class ToolParamPO {
     private String inputType;
 
     /**
-     * 若输入类型为select（单选），可选值的列表，逗号分割
+     * 若输入类型为select（单选），可选值的列表
+     * json形式，例如{"a":"AA","bb":"BBB"}
      */
     private String optionValues;
-
-    /**
-     * 工具参数状态
-     */
-    private String status;
 
     private Date createdTime;
 

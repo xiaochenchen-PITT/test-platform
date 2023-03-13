@@ -7,7 +7,7 @@ import lombok.Data;
 @Builder
 public class ToolParamQuery {
 
-    private Long id;
+    private Long paramId;
 
     private Long toolId;
 

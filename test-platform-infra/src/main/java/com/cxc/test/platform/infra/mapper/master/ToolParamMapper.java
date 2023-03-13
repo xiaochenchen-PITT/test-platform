@@ -14,5 +14,7 @@ public interface ToolParamMapper {
 
     int insert(ToolParamPO toolParamPO);
 
-    ToolParamPO update(ToolParamPO toolParamPO);
+    int update(ToolParamPO toolParamPO);
+
+    int delete(Long id);
 }

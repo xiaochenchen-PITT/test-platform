@@ -1,19 +1,30 @@
 package com.cxc.test.platform.toolcenter.domain;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Builder;
 import lombok.Data;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
 public class ToolParam {
 
     /**
-     * 主键id，即参数id
+     * 主键id，无实际业务意义
      */
     private Long id;
+
+    /**
+     * 入参id
+     */
+    private Long paramId;
 
     /**
      * 关联的工具id
@@ -59,14 +70,36 @@ public class ToolParam {
     /**
      * 若输入类型为select（单选），可选值的列表
      */
-    private List<String> optionValueList;
-
-    /**
-     * 工具参数状态
-     */
-    private String status;
+    private List<Pair<String, String>> optionValueList;
 
     private Date createdTime;
 
     private Date modifiedTime;
+
+    public static List<Pair<String, String>> getOptionValueListFromStr(String str) {
+        if (StringUtils.isBlank(str)) {
+            return new ArrayList<>();
+        }
+
+        JSONObject strJO = JSONObject.parseObject(str);
+        List<Pair<String, String>> pairList = new ArrayList<>();
+        for (Map.Entry<String, Object> entry : strJO.entrySet()) {
+            pairList.add(Pair.of(entry.getKey(), String.valueOf(entry.getValue())));
+        }
+
+        return pairList;
+    }
+
+    public String getOptionValueListAsStr() {
+        if (CollectionUtils.isEmpty(optionValueList)) {
+            return null;
+        }
+
+        JSONObject jo = new JSONObject(true);
+        for (Pair<String, String> pair : optionValueList) {
+            jo.put(pair.getKey(), pair.getValue());
+        }
+
+        return jo.toJSONString();
+    }
 }

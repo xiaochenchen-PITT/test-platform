@@ -11,6 +11,9 @@ import java.util.List;
 @Builder
 public class Tool {
 
+    public static final String BEAN_SPLITER = "#";
+    public static final String URL_SPLITER = ":";
+
     /**
      * 主键id，无实际业务意义
      */
@@ -44,16 +47,10 @@ public class Tool {
     private String beanName;
 
     /**
-     * java类型工具bean的全类名
+     * java类型工具bean方法
      * 需要注册成为一个bean
      */
-    private String beanClass;
-
-    /**
-     * java类型工具的方法名，例如pushOrder
-     * http类型工具的方法，例如get/post
-     */
-    private String method;
+    private String bean;
 
     /**
      * http类型工具的url

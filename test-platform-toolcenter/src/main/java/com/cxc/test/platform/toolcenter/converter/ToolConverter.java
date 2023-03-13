@@ -5,11 +5,9 @@ import com.cxc.test.platform.infra.domain.toolcenter.ToolParamPO;
 import com.cxc.test.platform.toolcenter.domain.Tool;
 import com.cxc.test.platform.toolcenter.domain.ToolParam;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -24,10 +22,11 @@ public class ToolConverter {
         toolPO.setDesc(tool.getDesc());
         toolPO.setType(tool.getType());
         toolPO.setBeanName(tool.getBeanName());
-        toolPO.setBeanClass(tool.getBeanClass());
-        toolPO.setMethod(tool.getMethod());
+        toolPO.setBean(tool.getBean());
         toolPO.setUrl(tool.getUrl());
         toolPO.setStatus(tool.getStatus());
+        toolPO.setCreator(tool.getCreator());
+        toolPO.setDomain(tool.getDomain());
         toolPO.setCreatedTime(tool.getCreatedTime());
         toolPO.setModifiedTime(tool.getModifiedTime());
 
@@ -38,6 +37,7 @@ public class ToolConverter {
         ToolParamPO toolParamPO = new ToolParamPO();
 
         toolParamPO.setId(toolParam.getId());
+        toolParamPO.setParamId(toolParam.getParamId());
         toolParamPO.setToolId(toolParam.getToolId());
         toolParamPO.setName(toolParam.getName());
         toolParamPO.setDesc(toolParam.getDesc());
@@ -46,8 +46,7 @@ public class ToolConverter {
         toolParamPO.setHasDefault(toolParam.isHasDefault() ? 1 : 0);
         toolParamPO.setDefaultValue(toolParam.getDefaultValue());
         toolParamPO.setInputType(toolParam.getInputType());
-        toolParamPO.setOptionValues(String.join(",", toolParam.getOptionValueList()));
-        toolParamPO.setStatus(toolParam.getStatus());
+        toolParamPO.setOptionValues(toolParam.getOptionValueListAsStr());
         toolParamPO.setCreatedTime(toolParam.getCreatedTime());
         toolParamPO.setModifiedTime(toolParam.getModifiedTime());
 
@@ -73,10 +72,11 @@ public class ToolConverter {
             .desc(toolPO.getDesc())
             .type(toolPO.getType())
             .beanName(toolPO.getBeanName())
-            .beanClass(toolPO.getBeanClass())
-            .method(toolPO.getMethod())
+            .bean(toolPO.getBean())
             .url(toolPO.getUrl())
             .status(toolPO.getStatus())
+            .creator(toolPO.getCreator())
+            .domain(toolPO.getDomain())
             .toolParamList(convertPO2DO(toolParamPOList))
             .createdTime(toolPO.getCreatedTime())
             .modifiedTime(toolPO.getModifiedTime())
@@ -86,6 +86,7 @@ public class ToolConverter {
     public ToolParam convertPO2DO(ToolParamPO toolParamPO) {
         return ToolParam.builder()
             .id(toolParamPO.getId())
+            .paramId(toolParamPO.getParamId())
             .toolId(toolParamPO.getToolId())
             .name(toolParamPO.getName())
             .desc(toolParamPO.getDesc())
@@ -94,9 +95,7 @@ public class ToolConverter {
             .hasDefault(toolParamPO.getHasDefault() == 1)
             .defaultValue(toolParamPO.getDefaultValue())
             .inputType(toolParamPO.getInputType())
-            .optionValueList(StringUtils.isNotEmpty(toolParamPO.getOptionValues()) ?
-                    Arrays.asList(toolParamPO.getOptionValues().split(",")) : null)
-            .status(toolParamPO.getStatus())
+            .optionValueList(ToolParam.getOptionValueListFromStr(toolParamPO.getOptionValues()))
             .createdTime(toolParamPO.getCreatedTime())
             .modifiedTime(toolParamPO.getModifiedTime())
             .build();

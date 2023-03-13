@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxc.test.platform.infra.mapper.master.ToolParamMapper">
+
+  <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.toolcenter.ToolParamPO">
+    <id column="id" property="id"/>
+    <id column="param_id" property="paramId" />
+    <id column="tool_id" property="toolId" />
+    <id column="name" property="name" />
+    <id column="param_desc" property="desc" />
+    <id column="param_class" property="paramClass" />
+    <id column="is_required" property="isRequired" />
+    <id column="has_default" property="hasDefault" />
+    <id column="default_value" property="defaultValue" />
+    <id column="input_type" property="inputType" />
+    <id column="option_values" property="optionValues" />
+    <id column="created_time" property="createdTime" />
+    <id column="modified_time" property="modifiedTime" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.cxc.test.platform.infra.domain.toolcenter.ToolParamPO">
+    insert into t_tool_param
+      (param_id, tool_id, name, param_desc, param_class, is_required, has_default, default_value, input_type, option_values, created_time, modified_time)
+    values
+    (#{paramId}, #{toolId}, #{name}, #{desc}, #{paramClass}, #{isRequired}, #{hasDefault}, #{defaultValue}, #{inputType}, #{optionValues}, now(), now())
+  </insert>
+
+  <select id="selectByCondition" resultMap="resultMap">
+    select * from t_tool_param where 1 = 1
+    <if test="id != null and id != ''">
+      and `id` = #{id}
+    </if>
+    <if test="paramId != null and paramId != ''">
+      and `param_id` = #{paramId}
+    </if>
+    <if test="toolId != null and toolId != ''">
+      and `tool_id` = #{toolId}
+    </if>
+    <if test="name != null and name != ''">
+      and `name` = #{name}
+    </if>
+  </select>
+
+  <update id="update" parameterType="com.cxc.test.platform.infra.domain.toolcenter.ToolParamPO">
+    update t_tool_param set
+    <if test="name != null and name != ''">
+      `name` = #{name},
+    </if>
+    <if test="desc != null and desc != ''">
+      `param_desc` = #{desc},
+    </if>
+    <if test="paramClass != null and paramClass != ''">
+      `param_class` = #{paramClass},
+    </if>
+    <if test="isRequired != null and isRequired != ''">
+      `is_required` = #{isRequired},
+    </if>
+    <if test="hasDefault != null and hasDefault != ''">
+      `has_default` = #{hasDefault},
+    </if>
+    <if test="defaultValue != null and defaultValue != ''">
+      `default_value` = #{defaultValue},
+    </if>
+    <if test="inputType != null and inputType != ''">
+      `input_type` = #{inputType},
+    </if>
+    <if test="optionValues != null and optionValues != ''">
+      `option_values` = #{optionValues},
+    </if>
+    `modified_time` = now()
+    where param_id = #{paramId} and tool_id = #{toolId};
+  </update>
+
+  <delete id="delete">
+    delete from t_tool_param where param_id = #{paramId}
+  </delete>
+
+</mapper>

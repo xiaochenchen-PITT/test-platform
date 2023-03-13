@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
@@ -39,35 +40,41 @@ public class ToolCenterService {
     @Resource
     ToolConverter toolConverter;
 
+    @Transactional
     public ResultDO<Long> addTool(Tool tool) {
         try {
+            Long toolId = tool.getToolId();
             int ret = toolMapper.insert(toolConverter.convertDO2PO(tool));
             Assert.isTrue(ret == 1, "failed to add tool");
-            return ResultDO.success(tool.getToolId());
+
+            if (CollectionUtils.isEmpty(tool.getToolParamList())) {
+                return ResultDO.success(toolId);
+            }
+
+            for (ToolParam toolParam : tool.getToolParamList()) {
+                toolParam.setToolId(toolId);
+                toolParam.setParamId(System.currentTimeMillis());
+                int paramRet = toolParamMapper.insert(toolConverter.convertDO2PO(toolParam));
+                Assert.isTrue(paramRet == 1, "failed to add tool param");
+                Thread.sleep(1);
+            }
+
+            return ResultDO.success(toolId);
         } catch (Exception e) {
             log.error("addTool failed. ", e);
-            return ResultDO.fail(ErrorMessageUtils.getMessage(e));
+//            return ResultDO.fail(ErrorMessageUtils.getMessage(e)); // 回滚必须要抛异常，这里不return了
+            throw new RuntimeException("addTool failed, please check log"); // 回滚默认需要抛RuntimeException或者Error类
         }
     }
 
-    public ResultDO<Tool> editTool(Tool tool) {
+    public ResultDO<Boolean> updateTool(Tool tool) {
         try {
-            ToolPO newToolPO = toolMapper.update(toolConverter.convertDO2PO(tool));
+            int ret = toolMapper.update(toolConverter.convertDO2PO(tool));
 
-            ToolParamQuery toolParamQuery = ToolParamQuery.builder()
-                .toolId(newToolPO.getToolId())
-                .build();
-            ResultDO<List<ToolParam>> paramQueryResult = queryToolParams(toolParamQuery);
-
-            Tool newTool = null;
-            if (paramQueryResult.getIsSuccess()) {
-                newTool = toolConverter.convertPO2DO(newToolPO, toolConverter.convertDO2PO(paramQueryResult.getData()));
-            } else {
-                newTool = toolConverter.convertPO2DO(newToolPO, null);
-            }
-            return ResultDO.success(newTool);
+            Assert.isTrue(ret == 1, "failed to update tool");
+            return ResultDO.success(Boolean.TRUE);
         } catch (Exception e) {
-            log.error("addTool failed. ", e);
+            log.error("updateTool failed. ", e);
             return ResultDO.fail(ErrorMessageUtils.getMessage(e));
         }
     }
@@ -82,8 +89,8 @@ public class ToolCenterService {
             Tool tool = queryResult.getData().get(0);
             tool.setStatus(ToolStatusConstant.DELETED);
 
-            ToolPO newToolPO = toolMapper.update(toolConverter.convertDO2PO(tool));
-            Assert.notNull(newToolPO, "failed to delete tool");
+            int ret = toolMapper.update(toolConverter.convertDO2PO(tool));
+            Assert.isTrue(ret == 1, "failed to delete tool");
             return ResultDO.success(Boolean.TRUE);
         } catch (Exception e) {
             log.error("deleteTool failed. ", e);
@@ -91,67 +98,45 @@ public class ToolCenterService {
         }
     }
 
-    public ResultDO<Boolean> addParamsForTool(Long toolId, List<ToolParam> toolParamList) {
+    public ResultDO<Boolean> updateToolParam(ToolParam toolParam) {
+        try {
+            int ret = toolParamMapper.update(toolConverter.convertDO2PO(toolParam));
+            Assert.isTrue(ret == 1, "failed to update tool param");
+
+            return ResultDO.success(Boolean.TRUE);
+        } catch (Exception e) {
+            log.error("updateToolParam failed. ", e);
+            return ResultDO.fail(ErrorMessageUtils.getMessage(e));
+        }
+    }
+
+    public ResultDO<Boolean> updateToolParams(List<ToolParam> toolParamList) {
         try {
             if (CollectionUtils.isEmpty(toolParamList)) {
                 return ResultDO.success(Boolean.TRUE);
             }
 
             for (ToolParam toolParam : toolParamList) {
-                toolParam.setToolId(toolId);
-                int ret = toolParamMapper.insert(toolConverter.convertDO2PO(toolParam));
-                Assert.isTrue(ret == 1, "failed to add tool param");
+                int ret = toolParamMapper.update(toolConverter.convertDO2PO(toolParam));
+                Assert.isTrue(ret == 1, "failed to update tool param");
             }
 
             return ResultDO.success(Boolean.TRUE);
         } catch (Exception e) {
-            log.error("addParamsForTool failed. ", e);
-            return ResultDO.fail(ErrorMessageUtils.getMessage(e));
-        }
-    }
-
-    public ResultDO<Boolean> editToolParam(ToolParam toolParam) {
-        try {
-            ToolParamPO newToolParamPO = toolParamMapper.update(toolConverter.convertDO2PO(toolParam));
-            Assert.notNull(newToolParamPO, "failed to add tool param");
-
-            return ResultDO.success(Boolean.TRUE);
-        } catch (Exception e) {
-            log.error("editToolParam failed. ", e);
-            return ResultDO.fail(ErrorMessageUtils.getMessage(e));
-        }
-    }
-
-    public ResultDO<Boolean> editToolParams(List<ToolParam> toolParamList) {
-        try {
-            if (CollectionUtils.isEmpty(toolParamList)) {
-                return ResultDO.success(Boolean.TRUE);
-            }
-
-            for (ToolParam toolParam : toolParamList) {
-                ToolParamPO newToolParamPO = toolParamMapper.update(toolConverter.convertDO2PO(toolParam));
-                Assert.notNull(newToolParamPO, "failed to add tool param");
-            }
-
-            return ResultDO.success(Boolean.TRUE);
-        } catch (Exception e) {
-            log.error("editToolParams failed. ", e);
+            log.error("updateToolParams failed. ", e);
             return ResultDO.fail(ErrorMessageUtils.getMessage(e));
         }
     }
 
     public ResultDO<Boolean> deleteToolParam(Long paramId) {
         try {
-            ResultDO<List<ToolParam>> queryResult = queryToolParams(ToolParamQuery.builder().id(paramId).build());
+            ResultDO<List<ToolParam>> queryResult = queryToolParams(ToolParamQuery.builder().paramId(paramId).build());
             if (!queryResult.getIsSuccess()) {
                 return ResultDO.success(Boolean.TRUE);
             }
 
-            ToolParam toolParam = queryResult.getData().get(0);
-            toolParam.setStatus(ToolStatusConstant.DELETED);
-
-            ToolParamPO newToolParamPO = toolParamMapper.update(toolConverter.convertDO2PO(toolParam));
-            Assert.notNull(newToolParamPO, "failed to delete tool param");
+            int ret = toolParamMapper.delete(paramId);
+            Assert.isTrue(ret == 1, "failed to delete tool param");
             return ResultDO.success(Boolean.TRUE);
         } catch (Exception e) {
             log.error("deleteToolParam failed. ", e);
@@ -164,19 +149,16 @@ public class ToolCenterService {
             ToolPO toolPOToQuery = new ToolPO();
             toolPOToQuery.setStatus(ToolStatusConstant.ACTIVE);// 默认查生效的工具
 
-            if (toolQuery.getId() != null && toolQuery.getId() > 0) {
-                toolPOToQuery.setId(toolQuery.getId());
-            }
             if (toolQuery.getToolId() != null && toolQuery.getToolId() > 0) {
                 toolPOToQuery.setToolId(toolQuery.getToolId());
             }
-            if (StringUtils.isNotEmpty(toolQuery.getToolName())) {
-                toolPOToQuery.setName(toolQuery.getToolName());
+            if (StringUtils.isNotEmpty(toolQuery.getName())) {
+                toolPOToQuery.setName(toolQuery.getName());
             }
-            if (StringUtils.isNotEmpty(toolQuery.getToolType())) {
-                toolPOToQuery.setType(toolQuery.getToolType());
+            if (StringUtils.isNotEmpty(toolQuery.getType())) {
+                toolPOToQuery.setType(toolQuery.getType());
             }
-            if (toolQuery.isQueryDeleted()) {
+            if (StringUtils.isEmpty(toolQuery.getStatus())) {
                 toolPOToQuery.setStatus(null);
             }
 
@@ -202,7 +184,6 @@ public class ToolCenterService {
     public ResultDO<List<ToolParam>> queryToolParams(ToolParamQuery toolParamQuery) {
         try {
             ToolParamPO toolParamPOToQuery = new ToolParamPO();
-            toolParamPOToQuery.setStatus(ToolStatusConstant.ACTIVE); // 默认查生效的工具参数
 
             Assert.isTrue(toolParamQuery.getToolId() != null && toolParamQuery.getToolId() > 0,
                 "invalid toolParamQuery, toolId should be greater than 0");
@@ -215,8 +196,8 @@ public class ToolCenterService {
 
             // 查询
             toolParamPOToQuery.setToolId(toolId);
-            if (toolParamQuery.getId() != null && toolParamQuery.getId() > 0) {
-                toolParamPOToQuery.setId(toolParamQuery.getId());
+            if (toolParamQuery.getParamId() != null && toolParamQuery.getParamId() > 0) {
+                toolParamPOToQuery.setId(toolParamQuery.getParamId());
             }
             if (StringUtils.isNotEmpty(toolParamQuery.getToolParamName())) {
                 toolParamPOToQuery.setName(toolParamQuery.getToolParamName());
@@ -226,7 +207,9 @@ public class ToolCenterService {
 
             // java接口类工具特殊逻辑，需要提前把入参带出来
             if (CollectionUtils.isEmpty(toolParamPOList) && tool.isJavaTool()) {
-                Map<String, String> paramMap = getJavaMethodDetail(tool.getBeanClass(), tool.getMethod());
+                String beanClass = tool.getBean().split(Tool.BEAN_SPLITER)[0];
+                String method = tool.getBean().split(Tool.BEAN_SPLITER)[1];
+                Map<String, String> paramMap = getJavaMethodDetail(beanClass, method);
 
                 List<ToolParam> toolParamList = new ArrayList<>();
                 for (Map.Entry<String, String> entry : paramMap.entrySet()) {
@@ -314,7 +297,8 @@ public class ToolCenterService {
 
     public ResultDO<String> triggerJava(Tool tool, LinkedHashMap<String, String> paramAndValueMap) {
         try {
-            Class<?> toolClass = Class.forName(tool.getBeanClass());
+            String beanClass = tool.getBean().split(Tool.BEAN_SPLITER)[0];
+            Class<?> toolClass = Class.forName(beanClass);
             Object toolBean = SpringUtils.getBean(tool.getBeanName(), toolClass);
 
             Class<?>[] parameterTypes = new Class<?>[paramAndValueMap.size()];
@@ -327,7 +311,8 @@ public class ToolCenterService {
                 paramValues[i] = paramAndValueMap.get(tool.getToolParamList().get(i).getName());
             }
 
-            Method method = toolClass.getMethod(tool.getMethod(), parameterTypes);
+            String methodStr = tool.getBean().split(Tool.BEAN_SPLITER)[1];
+            Method method = toolClass.getMethod(methodStr, parameterTypes);
             Object ret = method.invoke(toolBean, paramValues);
 
             return ResultDO.success(String.valueOf(ret));
@@ -342,14 +327,15 @@ public class ToolCenterService {
             List<BasicNameValuePair> basicNameValuePairs = new ArrayList<>();
             paramAndValueMap.forEach((k, v) -> basicNameValuePairs.add(new BasicNameValuePair(k, v)));
 
-            String httpMethod = tool.getMethod();
+            String httpMethod = tool.getUrl().split(Tool.URL_SPLITER)[0];
+            String httpUrl = tool.getUrl().split(Tool.URL_SPLITER)[1];
             String ret = null;
             if ("get".equalsIgnoreCase(httpMethod)) {
-                ret = HttpClient.get(tool.getUrl(), basicNameValuePairs);
+                ret = HttpClient.get(httpUrl, basicNameValuePairs);
             } else if ("post".equalsIgnoreCase(httpMethod)) {
-                ret = HttpClient.post(tool.getUrl(), basicNameValuePairs);
+                ret = HttpClient.post(httpUrl, basicNameValuePairs);
             } else {
-                String errorMessage = "ToolCenterService.triggerHttp invalid http method: " + tool.getMethod();
+                String errorMessage = "ToolCenterService.triggerHttp invalid http url: " + tool.getUrl();
                 log.error(errorMessage);
                 return ResultDO.fail(errorMessage);
             }

@@ -5,10 +5,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="仪表盘 final">
+      <change afterPath="$PROJECT_DIR$/log/SERVICE_NAME-info-20230312.log.0" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/ToolMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master/ToolParamMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/controller/ToolCenterController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/vo/FullToolVO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/vo/ToolParamVO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/vo/ToolVO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter/addTool.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter/runTool.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter/toolList.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/automation.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/automation.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/budget.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/budget.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/it.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard/it.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/toolcenter/ToolPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/toolcenter/ToolPO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/toolcenter/ToolParamPO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/domain/toolcenter/ToolParamPO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/ToolMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/ToolMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/ToolParamMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/mapper/master/ToolParamMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/converter/ToolConverter.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/converter/ToolConverter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/Tool.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/Tool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/ToolParam.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/ToolParam.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/ToolParamQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/ToolParamQuery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/ToolQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/domain/ToolQuery.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/service/ToolCenterService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/service/ToolCenterService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/controller/MigrationCheckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/migrationcheck/controller/MigrationCheckController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/toolcenter/ToolCenterController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/menu.json" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/menu.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter/list.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +43,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -59,7 +81,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "jdk.selected.JAVA_MODULE": "1.8",
-    "last_opened_file_path": "/Users/cxc/IdeaProjects/personal/test-platform/test-platform-web/src/main/resources/templates/dashboard",
+    "last_opened_file_path": "/Users/cxc/IdeaProjects/personal/test-platform/test-platform-web/src/main/resources/templates/toolcenter",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.31866953",
@@ -68,11 +90,11 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter" />
+      <recent name="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates" />
-      <recent name="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/xytest" />
-      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index/img" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg" />
@@ -82,11 +104,11 @@
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index_new" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.cxc.test.platform.web.toolcenter.vo" />
       <recent name="com.cxc.test.platform.migrationcheck.service" />
       <recent name="com.cxc.test.platform.migrationcheck.domain.config" />
       <recent name="com.cxc.test.platform.migrationcheck.domain" />
       <recent name="com.cxc.test.platform.web.migrationcheck.vo" />
-      <recent name="com.cxc.test.platform.infra.mapper.xytest" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Application">
@@ -223,7 +245,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678417175230</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="仪表盘 final">
+      <created>1678419441211</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1678419441211</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -245,9 +274,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/test-platform-migrationcheck/src/main/java/com/cxc/test/platform/migrationcheck/service/DiffService.java</url>
-          <line>66</line>
-          <option name="timeStamp" value="126" />
+          <url>file://$PROJECT_DIR$/test-platform-toolcenter/src/main/java/com/cxc/test/platform/toolcenter/converter/ToolConverter.java</url>
+          <line>97</line>
+          <option name="timeStamp" value="129" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxc.test.platform.infra.mapper.master.ToolMapper">
+
+  <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.toolcenter.ToolPO">
+    <id column="id" property="id"/>
+    <id column="tool_id" property="toolId" />
+    <id column="name" property="name" />
+    <id column="tool_desc" property="desc" />
+    <id column="tool_type" property="type" />
+    <id column="bean_name" property="beanName" />
+    <id column="bean" property="bean" />
+    <id column="url" property="url" />
+    <id column="status" property="status" />
+    <id column="creator" property="creator" />
+    <id column="domain" property="domain" />
+    <id column="created_time" property="createdTime" />
+    <id column="modified_time" property="modifiedTime" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.cxc.test.platform.infra.domain.toolcenter.ToolPO">
+    insert into t_tool
+    (tool_id, name, tool_desc, tool_type, bean_name, bean, url, status, creator, domain, created_time, modified_time)
+    values
+    (#{toolId}, #{name}, #{desc}, #{type}, #{beanName}, #{bean}, #{url}, #{status}, #{creator}, #{domain}, now(), now())
+  </insert>
+
+  <select id="selectByCondition" resultMap="resultMap">
+    select * from t_tool where 1 = 1
+    <if test="toolId != null and toolId != ''">
+      and `tool_id` = #{toolId}
+    </if>
+    <if test="name != null and name != ''">
+      and `name` = #{name}
+    </if>
+    <if test="type != null and type != ''">
+      and `tool_type` = #{type}
+    </if>
+    <if test="status != null and status != ''">
+      and `status` = #{status}
+    </if>
+    <if test="creator != null and creator != ''">
+      and `creator` = #{creator}
+    </if>
+    <if test="domain != null and domain != ''">
+      and `domain` = #{domain}
+    </if>
+  </select>
+
+  <update id="update" parameterType="com.cxc.test.platform.infra.domain.toolcenter.ToolPO">
+    update t_tool set
+    <if test="name != null and name != ''">
+      `name` = #{name},
+    </if>
+    <if test="desc != null and desc != ''">
+      `tool_desc` = #{desc},
+    </if>
+    <if test="type != null and type != ''">
+      `tool_type` = #{type},
+    </if>
+    <if test="beanName != null and beanName != ''">
+      `bean_name` = #{beanName},
+    </if>
+    <if test="bean != null and bean != ''">
+      `bean` = #{bean},
+    </if>
+    <if test="url != null and url != ''">
+      `url` = #{url},
+    </if>
+    <if test="status != null and status != ''">
+      `status` = #{status},
+    </if>
+    <if test="creator != null and creator != ''">
+      `creator` = #{creator},
+    </if>
+    <if test="domain != null and domain != ''">
+      `domain` = #{domain},
+    </if>
+    `modified_time` = now()
+    where tool_id = #{toolId};
+  </update>
+
+</mapper>

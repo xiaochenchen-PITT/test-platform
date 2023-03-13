@@ -25,7 +25,7 @@ import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
 import com.cxc.test.platform.migrationcheck.domain.mapping.MappingRule;
 import com.cxc.test.platform.migrationcheck.domain.mapping.SourceMappingItem;
 import com.cxc.test.platform.migrationcheck.domain.mapping.TargetMappingItem;
-import com.cxc.test.platform.migrationcheck.service.DemoMigrationCheckService;
+import com.cxc.test.platform.migrationcheck.service.MigrationCheckService;
 import com.cxc.test.platform.migrationcheck.service.MigrationConfigService;
 import com.cxc.test.platform.web.BaseController;
 import com.cxc.test.platform.web.migrationcheck.vo.*;
@@ -53,9 +53,9 @@ import java.util.stream.Collectors;
 public class MigrationCheckController extends BaseController {
 
     @Autowired
-    @Qualifier("demoMigrationCheckService")
-//    MigrationCheckService migrationCheckService;
-    DemoMigrationCheckService migrationCheckService;
+    @Qualifier("migrationCheckService")
+    MigrationCheckService migrationCheckService;
+//    DemoMigrationCheckService migrationCheckService;
 
     @Resource
     MigrationConfigService migrationConfigService;

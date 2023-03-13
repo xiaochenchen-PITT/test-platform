@@ -14,5 +14,5 @@ public interface ToolMapper {
 
     int insert(ToolPO toolPO);
 
-    ToolPO update(ToolPO toolPO);
+    int update(ToolPO toolPO);
 }

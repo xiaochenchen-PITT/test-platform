@@ -43,13 +43,7 @@ public class ToolPO {
      * java类型工具bean的全类名
      * 需要注册成为一个bean
      */
-    private String beanClass;
-
-    /**
-     * java类型工具的方法名，例如pushOrder
-     * http类型工具的方法，例如get/post
-     */
-    private String method;
+    private String bean;
 
     /**
      * http类型工具的url
@@ -60,6 +54,16 @@ public class ToolPO {
      * 工具状态
      */
     private String status;
+
+    /**
+     * 创建人
+     */
+    private String creator;
+
+    /**
+     * 所属领域
+     */
+    private String domain;
 
     private Date createdTime;
 

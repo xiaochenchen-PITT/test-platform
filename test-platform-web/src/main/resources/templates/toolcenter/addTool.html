@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试效能平台</title>
+    <!-- 引入sdk的css文件 -->
+    <link rel="stylesheet" href="/sdk/sdk.css">
+    <link rel="stylesheet" href="/sdk/helper.css">
+    <link rel="stylesheet" href="/sdk/iconfont.css">
+    <!-- antd主题 -->
+    <link rel="stylesheet" href="/sdk/antd.css">
+    <!-- 引入sdk.js -->
+    <script src="/sdk/sdk.js"></script>
+    <!-- 页面的样式 -->
+    <style>
+        html,
+        body,
+        .app-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+<!-- 渲染的容器 -->
+<div id="root" class="app-wrapper"></div>
+<!-- 页面的内容 -->
+<script type="text/javascript">
+        (function () {
+            // 初始化
+            let amis = amisRequire('amis/embed');
+            // 通过替换下面这个配置来生成不同页面
+            let amisJSON = {
+                  "type": "page",
+                  "title": "新增工具",
+                  "body": [
+                    {
+                      "type": "flex",
+                      "className": "p-1",
+                      "items": [
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "flex",
+                              "id": "u:5448a684939",
+                              "items": [
+                                {
+                                  "type": "image",
+                                  "id": "u:54892a625bc4",
+                                  "src": "/svg/qa.svg",
+                                  "width": 50,
+                                  "height": 50,
+                                  "thumbMode": "contain",
+                                  "showDimensions": false,
+                                  "innerClassName": "no-border no-bg",
+                                  "className": "no-border no-bg",
+                                  "imageClassName": "no-border no-bg",
+                                  "thumbClassName": "no-border no-bg"
+                                }
+                              ],
+                              "style": {
+                                "position": "static",
+                                "flexWrap": "nowrap",
+                                "overflowY": "auto"
+                              },
+                              "direction": "row",
+                              "isFixedHeight": false,
+                              "isFixedWidth": false,
+                              "justify": "center",
+                              "alignItems": "flex-start"
+                            },
+                            {
+                              "type": "nav",
+                              "stacked": true,
+                              "source": "${nav}",
+                              "id": "u:b057407f2664",
+                              "className": ""
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "0 0 200px",
+                            "overflowX": "auto",
+                            "fontFamily": "",
+                            "fontSize": 16,
+                            "textAlign": "left",
+                            "flexBasis": "200px"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:04792b608d52",
+                          "wrapperComponent": "aside",
+                          "bodyClassName": "bg-light text-muted b-light"
+                        },
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "tpl",
+                              "tpl": "工具新增",
+                              "inline": true,
+                              "wrapperComponent": "",
+                              "id": "u:0113ac9a5359",
+                              "style": {
+                                "fontFamily": "",
+                                "fontSize": 25
+                              }
+                            },
+                            {
+                              "type": "divider",
+                              "id": "u:9e26253a40dd"
+                            },
+                            {
+                              "type": "wizard",
+                              "api": "/toolcenter/add_tool",
+                              "steps": [
+                                {
+                                  "title": "Step 1",
+                                  "body": [
+                                    {
+                                      "type": "panel",
+                                      "id": "u:6e4c52b492b9",
+                                      "title": "工具基础信息",
+                                      "body": [
+                                        {
+                                          "name": "name",
+                                          "label": "工具名称",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:f84bea7b88cc"
+                                        },
+                                        {
+                                          "name": "desc",
+                                          "label": "工具补充描述",
+                                          "type": "textarea",
+                                          "clearable": true,
+                                          "id": "u:f84bea7b88cc"
+                                        },
+                                        {
+                                          "label": "工具类型",
+                                          "type": "select",
+                                          "name": "type",
+                                          "options": [
+                                            {
+                                              "label": "Java",
+                                              "value": "java"
+                                            },
+                                            {
+                                              "label": "Http",
+                                              "value": "http"
+                                            }
+                                          ],
+                                          "id": "u:bc26d555381b",
+                                          "multiple": false,
+                                          "required": true
+                                        },
+                                        {
+                                          "name": "beanName",
+                                          "label": "java类型工具bean的名称",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:f84bea7b88cc",
+                                          "hiddenOn": "this.type !== 'java'"
+                                        },
+                                        {
+                                          "name": "bean",
+                                          "label": "java类型工具bean方法",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "description": "例如com.cxc.test.platform.toolcenter.service.ToolCenterService#getOrder",
+                                          "id": "u:f84bea7b88cc",
+                                          "hiddenOn": "this.type !== 'java'"
+                                        },
+                                        {
+                                          "name": "url",
+                                          "label": "http类型工具的url",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "description": "例如get:127.0.0.1:8080/toolcenter/get_order",
+                                          "id": "u:f84bea7b88cc",
+                                          "hiddenOn": "this.type !== 'http'"
+                                        },
+                                        {
+                                          "name": "domain",
+                                          "label": "领域",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:f84bea7b88cc"
+                                        }
+                                      ],
+                                      "affixFooter": false
+                                    }
+                                  ],
+                                  "id": "u:4a943559b2f2",
+                                  "mode": "normal"
+                                },
+                                {
+                                  "title": "Step 2",
+                                  "body": [
+                                    {
+                                      "type": "panel",
+                                      "title": "工具入参信息",
+                                      "body": [
+                                        {
+                                          "type": "combo",
+                                          "name": "paramCombo",
+                                          "multiple": true,
+                                          "items": [
+                                            {
+                                              "type": "tpl",
+                                              "tpl": "<%= this.index + 1%>",
+                                              "className": "p-t-xs",
+                                              "mode": "inline"
+                                            },
+                                            {
+                                              "name": "name",
+                                              "label": "入参名称",
+                                              "type": "input-text",
+                                              "required": true,
+                                              "unique": true
+                                            },
+                                            {
+                                              "name": "desc",
+                                              "label": "入参补充描述",
+                                              "type": "textarea",
+                                              "clearable": true,
+                                              "id": "u:f84bea7b88cc"
+                                            },
+                                            {
+                                              "name": "paramClass",
+                                              "label": "入参的class类型",
+                                              "type": "input-text",
+                                              "required": true
+                                            },
+                                            {
+                                              "label": "是否必填",
+                                              "type": "select",
+                                              "required": true,
+                                              "name": "isRequired",
+                                              "options": [
+                                                {
+                                                  "label": "是",
+                                                  "value": true
+                                                },
+                                                {
+                                                  "label": "否",
+                                                  "value": false
+                                                }
+                                              ],
+                                              "id": "u:bc26d555381b"
+                                            },
+                                            {
+                                              "label": "是否有默认值",
+                                              "type": "select",
+                                              "name": "hasDefault",
+                                              "required": true,
+                                              "options": [
+                                                {
+                                                  "label": "是",
+                                                  "value": true
+                                                },
+                                                {
+                                                  "label": "否",
+                                                  "value": false
+                                                }
+                                              ],
+                                              "id": "u:bc26d555381b"
+                                            },
+                                            {
+                                              "type": "input-text",
+                                              "name": "defaultValue",
+                                              "label": "默认值",
+                                              "hiddenOn": "this.hasDefault !== true"
+                                            },
+                                            {
+                                              "type": "select",
+                                              "name": "inputType",
+                                              "label": "入参输入类型",
+                                              "required": true,
+                                              "clearable": true,
+                                              "size": "sm",
+                                              "id": "u:5f43212ae5d8",
+                                              "options": [
+                                                {
+                                                  "label": "输入",
+                                                  "value": "input"
+                                                },
+                                                {
+                                                  "label": "单选",
+                                                  "value": "select"
+                                                }
+                                              ],
+                                              "multiple": false
+                                            },
+                                            {
+                                              "type": "input-text",
+                                              "name": "optionValues",
+                                              "label": "可选值列表",
+                                              "hiddenOn": "this.inputType !== 'select'",
+                                              "description": "json格式，例如{\"a\":\"AA\",\"bb\":\"BBB\"}",
+                                              "validations": {
+                                                "isJson": true
+                                              }
+                                            }
+                                          ],
+                                          "id": "u:836572dbde62",
+                                          "multiLine": true
+                                        }
+                                      ],
+                                      "id": "u:5758819d0edd",
+                                      "affixFooter": false
+                                    }
+                                  ],
+                                  "mode": "normal",
+                                  "id": "u:1a36b75a1cda"
+                                }
+                              ],
+                              "id": "u:add7e767eede",
+                              "mode": "horizontal"
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "1 1 auto",
+                            "flexGrow": 1,
+                            "flexBasis": "auto"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:4a30e3ab29f8"
+                        }
+                      ],
+                      "style": {
+                        "position": "static"
+                      },
+                      "direction": "row",
+                      "justify": "flex-start",
+                      "alignItems": "stretch",
+                      "id": "u:a50732ebf772"
+                    }
+                  ],
+                  "id": "u:219061da7c34",
+                  "pullRefresh": {
+                    "disabled": true
+                  },
+                  "regions": [
+                    "body"
+                  ],
+                  "asideResizor": false,
+                  "asideClassName": "b-primary text-lg",
+                  "asideSticky": true,
+                  "initApi": "/get_menu",
+                  "style": {
+                    "fontFamily": "",
+                    "fontSize": 30,
+                    "textAlign": "left",
+                    "backgroundImage": "/image/bg.jpg",
+                    "backgroundSize": "cover"
+                  }
+                };
+
+
+            // 开始渲染，放入渲染容器#root，渲染的页面内容是amisJSON
+            let amisScoped = amis.embed(
+                '#root',
+                amisJSON,
+                {
+                    // 这里是初始 props
+                },
+                {
+                    theme: 'antd'
+                }
+            );
+        })();
+    </script>
+</body>
+
+</html>
