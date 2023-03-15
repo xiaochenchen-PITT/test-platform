@@ -77,9 +77,35 @@ public class Tool {
      */
     private String domain;
 
+    /**
+     * 总调用数
+     */
+    private Long totalCount;
+
+    /**
+     * 成功调用数
+     */
+    private Long successCount;
+
     private Date createdTime;
 
     private Date modifiedTime;
+
+    public Long getSuccessCount() {
+        if (successCount == null) {
+            return 0L;
+        }
+
+        return successCount;
+    }
+
+    public Long getTotalCount() {
+        if (totalCount == null) {
+            return 0L;
+        }
+
+        return totalCount;
+    }
 
     public List<ToolParam> getToolParamList() {
         if (toolParamList == null) {

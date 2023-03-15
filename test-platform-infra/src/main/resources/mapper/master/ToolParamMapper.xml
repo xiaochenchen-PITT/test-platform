@@ -7,6 +7,7 @@
     <id column="param_id" property="paramId" />
     <id column="tool_id" property="toolId" />
     <id column="name" property="name" />
+    <id column="label" property="label" />
     <id column="param_desc" property="desc" />
     <id column="param_class" property="paramClass" />
     <id column="is_required" property="isRequired" />
@@ -20,9 +21,9 @@
 
   <insert id="insert" parameterType="com.cxc.test.platform.infra.domain.toolcenter.ToolParamPO">
     insert into t_tool_param
-      (param_id, tool_id, name, param_desc, param_class, is_required, has_default, default_value, input_type, option_values, created_time, modified_time)
+      (param_id, tool_id, name, label, param_desc, param_class, is_required, has_default, default_value, input_type, option_values, created_time, modified_time)
     values
-    (#{paramId}, #{toolId}, #{name}, #{desc}, #{paramClass}, #{isRequired}, #{hasDefault}, #{defaultValue}, #{inputType}, #{optionValues}, now(), now())
+    (#{paramId}, #{toolId}, #{name}, #{label}, #{desc}, #{paramClass}, #{isRequired}, #{hasDefault}, #{defaultValue}, #{inputType}, #{optionValues}, now(), now())
   </insert>
 
   <select id="selectByCondition" resultMap="resultMap">
@@ -39,12 +40,18 @@
     <if test="name != null and name != ''">
       and `name` = #{name}
     </if>
+    <if test="label != null and label != ''">
+      and `label` = #{label}
+    </if>
   </select>
 
   <update id="update" parameterType="com.cxc.test.platform.infra.domain.toolcenter.ToolParamPO">
     update t_tool_param set
     <if test="name != null and name != ''">
       `name` = #{name},
+    </if>
+    <if test="label != null and label != ''">
+      `label` = #{label},
     </if>
     <if test="desc != null and desc != ''">
       `param_desc` = #{desc},

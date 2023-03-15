@@ -14,15 +14,17 @@
     <id column="status" property="status" />
     <id column="creator" property="creator" />
     <id column="domain" property="domain" />
+    <id column="total_count" property="totalCount" />
+    <id column="success_count" property="successCount" />
     <id column="created_time" property="createdTime" />
     <id column="modified_time" property="modifiedTime" />
   </resultMap>
 
   <insert id="insert" parameterType="com.cxc.test.platform.infra.domain.toolcenter.ToolPO">
     insert into t_tool
-    (tool_id, name, tool_desc, tool_type, bean_name, bean, url, status, creator, domain, created_time, modified_time)
+    (tool_id, name, tool_desc, tool_type, bean_name, bean, url, status, creator, domain, total_count, success_count, created_time, modified_time)
     values
-    (#{toolId}, #{name}, #{desc}, #{type}, #{beanName}, #{bean}, #{url}, #{status}, #{creator}, #{domain}, now(), now())
+    (#{toolId}, #{name}, #{desc}, #{type}, #{beanName}, #{bean}, #{url}, #{status}, #{creator}, #{domain}, #{totalCount}, #{successCount}, now(), now())
   </insert>
 
   <select id="selectByCondition" resultMap="resultMap">
@@ -75,6 +77,12 @@
     </if>
     <if test="domain != null and domain != ''">
       `domain` = #{domain},
+    </if>
+    <if test="totalCount != null and totalCount != ''">
+      `total_count` = #{totalCount},
+    </if>
+    <if test="successCount != null and successCount != ''">
+      `success_count` = #{successCount},
     </if>
     `modified_time` = now()
     where tool_id = #{toolId};

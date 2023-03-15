@@ -273,13 +273,14 @@
                                     {
                                       "label": "修改",
                                       "type": "button",
+                                      "level": "primary",
                                       "actionType": "drawer",
                                       "drawer": {
                                         "title": "编辑工具",
                                         "size": "lg",
                                         "body": {
                                           "type": "form",
-                                          "api": "post:/toolcenter/update_tool?id=${id}",
+                                          "api": "post:/toolcenter/update_tool?toolId=${toolId}",
                                           "body": [
                                             {
                                               "type": "input-text",
@@ -309,29 +310,19 @@
                                               "type": "input-text",
                                               "name": "beanName",
                                               "label": "Bean名称",
-                                              "hiddenOn": "this.status === 'http'"
+                                              "hiddenOn": "this.type === 'http'"
                                             },
                                             {
                                               "type": "input-text",
-                                              "name": "beanClass",
-                                              "label": "Bean类名",
-                                              "hiddenOn": "this.status === 'http'"
-                                            },
-                                            {
-                                              "type": "input-text",
-                                              "name": "method",
-                                              "label": "方法名"
+                                              "name": "bean",
+                                              "label": "Bean",
+                                              "hiddenOn": "this.type === 'http'"
                                             },
                                             {
                                               "type": "input-text",
                                               "name": "url",
                                               "label": "Url",
-                                              "hiddenOn": "this.status === 'java'"
-                                            },
-                                            {
-                                              "type": "input-text",
-                                              "name": "fieldCheckMethodArgs",
-                                              "label": "自定义处理逻辑入参"
+                                              "hiddenOn": "this.type === 'java'"
                                             },
                                             {
                                               "type": "input-text",
@@ -346,10 +337,20 @@
                                     {
                                       "label": "删除",
                                       "type": "button",
+                                      "visibleOn": "this.status === 'active'",
                                       "actionType": "ajax",
                                       "level": "danger",
                                       "confirmText": "确认要删除？",
-                                      "api": "get:/toolcenter/delete_tool?id=${id}",
+                                      "api": "get:/toolcenter/delete_tool?toolId=${toolId}",
+                                      "id": "u:1fd57e4b4497"
+                                    },
+                                    {
+                                      "label": "恢复",
+                                      "type": "button",
+                                      "visibleOn": "this.status === 'deleted'",
+                                      "actionType": "ajax",
+                                      "confirmText": "确认要恢复？",
+                                      "api": "get:/toolcenter/restore_tool?toolId=${toolId}",
                                       "id": "u:1fd57e4b4497"
                                     }
                                   ],
@@ -391,8 +392,6 @@
                   ],
                   "initApi": "/get_menu",
                   "style": {
-                    "fontFamily": "",
-                    "fontSize": 30,
                     "textAlign": "left",
                     "backgroundImage": "/image/bg.jpg",
                     "backgroundSize": "cover"

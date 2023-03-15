@@ -1,6 +1,7 @@
 package com.cxc.test.platform.toolcenter.service;
 
 import com.cxc.test.platform.common.domain.ResultDO;
+import com.cxc.test.platform.common.utils.CommonUtils;
 import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import com.cxc.test.platform.common.utils.HttpClient;
 import com.cxc.test.platform.common.utils.SpringUtils;
@@ -39,6 +40,10 @@ public class ToolCenterService {
 
     @Resource
     ToolConverter toolConverter;
+
+    public String demoRun(String a, Long b) {
+        return a + "-" + b + "-" + System.currentTimeMillis();
+    }
 
     @Transactional
     public ResultDO<Long> addTool(Tool tool) {
@@ -158,8 +163,14 @@ public class ToolCenterService {
             if (StringUtils.isNotEmpty(toolQuery.getType())) {
                 toolPOToQuery.setType(toolQuery.getType());
             }
-            if (StringUtils.isEmpty(toolQuery.getStatus())) {
-                toolPOToQuery.setStatus(null);
+            if (StringUtils.isNotEmpty(toolQuery.getStatus())) {
+                toolPOToQuery.setStatus(toolQuery.getStatus());
+            }
+            if (StringUtils.isNotEmpty(toolQuery.getCreator())) {
+                toolPOToQuery.setCreator(toolQuery.getCreator());
+            }
+            if (StringUtils.isNotEmpty(toolQuery.getDomain())) {
+                toolPOToQuery.setDomain(toolQuery.getDomain());
             }
 
             List<ToolPO> toolPOList = toolMapper.selectByCondition(toolPOToQuery);
@@ -283,7 +294,7 @@ public class ToolCenterService {
         return paramMap;
     }
 
-    public ResultDO<String> triggerTool(Tool tool, LinkedHashMap<String, String> paramAndValueMap) {
+    public ResultDO<String> triggerTool(Tool tool, LinkedHashMap<String, Object> paramAndValueMap) {
         if (tool.isJavaTool()) {
             return triggerJava(tool, paramAndValueMap);
         } else if (tool.isHttpTool()) {
@@ -295,7 +306,7 @@ public class ToolCenterService {
         }
     }
 
-    public ResultDO<String> triggerJava(Tool tool, LinkedHashMap<String, String> paramAndValueMap) {
+    private ResultDO<String> triggerJava(Tool tool, LinkedHashMap<String, Object> paramAndValueMap) {
         try {
             String beanClass = tool.getBean().split(Tool.BEAN_SPLITER)[0];
             Class<?> toolClass = Class.forName(beanClass);
@@ -306,9 +317,10 @@ public class ToolCenterService {
                 parameterTypes[i] = Class.forName(tool.getToolParamList().get(i).getParamClass());
             }
 
-            Object[] paramValues = new Class<?>[paramAndValueMap.size()];
+            Object[] paramValues = new Object[paramAndValueMap.size()];
             for (int i = 0; i < paramAndValueMap.size(); i++) {
-                paramValues[i] = paramAndValueMap.get(tool.getToolParamList().get(i).getName());
+                Object sourceValue = paramAndValueMap.get(tool.getToolParamList().get(i).getName());
+                paramValues[i] = CommonUtils.generalValueOf(sourceValue, parameterTypes[i]);
             }
 
             String methodStr = tool.getBean().split(Tool.BEAN_SPLITER)[1];
@@ -322,10 +334,10 @@ public class ToolCenterService {
         }
     }
 
-    public ResultDO<String> triggerHttp(Tool tool, LinkedHashMap<String, String> paramAndValueMap) {
+    private ResultDO<String> triggerHttp(Tool tool, LinkedHashMap<String, Object> paramAndValueMap) {
         try {
             List<BasicNameValuePair> basicNameValuePairs = new ArrayList<>();
-            paramAndValueMap.forEach((k, v) -> basicNameValuePairs.add(new BasicNameValuePair(k, v)));
+            paramAndValueMap.forEach((k, v) -> basicNameValuePairs.add(new BasicNameValuePair(k, String.valueOf(v))));
 
             String httpMethod = tool.getUrl().split(Tool.URL_SPLITER)[0];
             String httpUrl = tool.getUrl().split(Tool.URL_SPLITER)[1];

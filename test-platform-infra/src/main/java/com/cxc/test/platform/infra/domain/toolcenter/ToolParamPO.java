@@ -30,6 +30,11 @@ public class ToolParamPO {
     private String name;
 
     /**
+     * 入参中文名称
+     */
+    private String label;
+
+    /**
      * 入参补充描述
      */
     private String desc;

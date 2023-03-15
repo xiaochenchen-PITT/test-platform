@@ -1,13 +1,16 @@
 package com.cxc.test.platform.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Slf4j
 public class CommonUtils {
 
     public final static List<String> NULL_SAME_STRING_POOL = Arrays.asList("", "null", "无", null);
@@ -100,5 +103,34 @@ public class CommonUtils {
         }
 
         return ret;
+    }
+
+    /**
+     * 调用valueOf(String) 方法进行cast
+     * @param source 源数据，字符串类型
+     * @param targetType java基础类型（Byte、Character、Short、Integer、Long、Float、Double、Boolean），需要有valueOf(String) 方法
+     * @return
+     */
+    public static Object generalValueOf(Object source, Class<?> targetType) {
+        if (String.class.equals(targetType)) {
+            return String.valueOf(source);
+        }
+
+        List<Class> validTypes = Arrays.asList(Byte.class, Character.class, Short.class, Integer.class,
+            Long.class, Float.class, Double.class, Boolean.class);
+        if (!validTypes.contains(targetType)) {
+            return null;
+        }
+
+        try {
+            Class<?> theClass = Class.forName("java.lang.Long");
+            Method method = targetType.getMethod("valueOf", String.class);
+            Object obj = method.invoke(theClass, String.valueOf(source));
+            return obj;
+        } catch (Exception e) {
+            log.error("failed to generalValueOf cast, ", e);
+        }
+
+        return null;
     }
 }

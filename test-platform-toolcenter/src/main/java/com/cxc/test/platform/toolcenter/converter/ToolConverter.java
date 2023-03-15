@@ -27,6 +27,8 @@ public class ToolConverter {
         toolPO.setStatus(tool.getStatus());
         toolPO.setCreator(tool.getCreator());
         toolPO.setDomain(tool.getDomain());
+        toolPO.setTotalCount(tool.getTotalCount());
+        toolPO.setSuccessCount(tool.getSuccessCount());
         toolPO.setCreatedTime(tool.getCreatedTime());
         toolPO.setModifiedTime(tool.getModifiedTime());
 
@@ -40,6 +42,7 @@ public class ToolConverter {
         toolParamPO.setParamId(toolParam.getParamId());
         toolParamPO.setToolId(toolParam.getToolId());
         toolParamPO.setName(toolParam.getName());
+        toolParamPO.setLabel(toolParam.getLabel());
         toolParamPO.setDesc(toolParam.getDesc());
         toolParamPO.setParamClass(toolParam.getParamClass());
         toolParamPO.setIsRequired(toolParam.isRequired() ? 1 : 0);
@@ -77,6 +80,8 @@ public class ToolConverter {
             .status(toolPO.getStatus())
             .creator(toolPO.getCreator())
             .domain(toolPO.getDomain())
+            .totalCount(toolPO.getTotalCount())
+            .successCount(toolPO.getSuccessCount())
             .toolParamList(convertPO2DO(toolParamPOList))
             .createdTime(toolPO.getCreatedTime())
             .modifiedTime(toolPO.getModifiedTime())
@@ -89,6 +94,7 @@ public class ToolConverter {
             .paramId(toolParamPO.getParamId())
             .toolId(toolParamPO.getToolId())
             .name(toolParamPO.getName())
+            .label(toolParamPO.getLabel())
             .desc(toolParamPO.getDesc())
             .paramClass(toolParamPO.getParamClass())
             .isRequired(toolParamPO.getIsRequired() == 1)

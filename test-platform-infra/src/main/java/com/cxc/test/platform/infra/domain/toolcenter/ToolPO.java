@@ -65,6 +65,16 @@ public class ToolPO {
      */
     private String domain;
 
+    /**
+     * 总调用数
+     */
+    private Long totalCount;
+
+    /**
+     * 成功调用数
+     */
+    private Long successCount;
+
     private Date createdTime;
 
     private Date modifiedTime;

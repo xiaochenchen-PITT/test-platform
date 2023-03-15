@@ -37,6 +37,11 @@ public class ToolParam {
     private String name;
 
     /**
+     * 入参中文名称
+     */
+    private String label;
+
+    /**
      * 入参补充描述
      */
     private String desc;
@@ -101,5 +106,13 @@ public class ToolParam {
         }
 
         return jo.toJSONString();
+    }
+
+    public boolean isInputType() {
+        return "input".equalsIgnoreCase(inputType);
+    }
+
+    public boolean isSelectType() {
+        return "select".equalsIgnoreCase(inputType);
     }
 }

@@ -2,6 +2,7 @@ package com.cxc.test.platform.common.domain;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
+@NoArgsConstructor
 public class AmisResult implements Serializable {
 
     private static final String DEFAULT_SUCCESS_MSG = "保存成功";
@@ -67,7 +69,7 @@ public class AmisResult implements Serializable {
     public static AmisResult from(ResultDO resultDO) {
         Integer status = resultDO.getIsSuccess() ? 0 : -1;
 
-        JSONObject data = null;
+        JSONObject data = new JSONObject();
         if (resultDO.getData() == null) {
             data = null;
         } else if (resultDO.getData() instanceof Map) { // map
@@ -81,7 +83,7 @@ public class AmisResult implements Serializable {
             data.put("count", list.size());
             data.put("rows", list);
         } else if (resultDO.getData() instanceof String) { // String
-            data.put("key", String.valueOf(resultDO.getData()));
+            data.put("ret", String.valueOf(resultDO.getData()));
         } else { // 对象
             data = (JSONObject) resultDO.getData();
         }

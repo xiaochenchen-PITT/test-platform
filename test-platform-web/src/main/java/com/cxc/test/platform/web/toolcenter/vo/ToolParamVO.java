@@ -13,6 +13,8 @@ public class ToolParamVO {
 
     private String name;
 
+    private String label;
+
     private String desc;
 
     private String paramClass;
