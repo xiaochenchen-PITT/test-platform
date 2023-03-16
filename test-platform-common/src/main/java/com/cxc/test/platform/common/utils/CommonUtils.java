@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -111,7 +110,7 @@ public class CommonUtils {
      * @param targetType java基础类型（Byte、Character、Short、Integer、Long、Float、Double、Boolean），需要有valueOf(String) 方法
      * @return
      */
-    public static Object generalValueOf(Object source, Class<?> targetType) {
+    public static Object generalValueOf(Object source, Class<?> targetType) throws Exception {
         if (String.class.equals(targetType)) {
             return String.valueOf(source);
         }
@@ -123,14 +122,12 @@ public class CommonUtils {
         }
 
         try {
-            Class<?> theClass = Class.forName("java.lang.Long");
             Method method = targetType.getMethod("valueOf", String.class);
-            Object obj = method.invoke(theClass, String.valueOf(source));
+            Object obj = method.invoke(targetType, String.valueOf(source));
             return obj;
         } catch (Exception e) {
             log.error("failed to generalValueOf cast, ", e);
+            throw e;
         }
-
-        return null;
     }
 }

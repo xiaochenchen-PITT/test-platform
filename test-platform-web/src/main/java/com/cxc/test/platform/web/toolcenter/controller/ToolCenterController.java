@@ -360,10 +360,7 @@ public class ToolCenterController extends BaseController {
         }
 
         List<Tool> sortedToolSubList = queryRet.getData().stream()
-            .sorted(Comparator.comparingLong(t -> {
-                // successCount有10倍权重
-                return 10 * t.getSuccessCount() + t.getTotalCount();
-            }))
+            .sorted(Comparator.comparingLong(Tool::getSuccessCount).reversed())
             .limit(n)
             .collect(Collectors.toList());
 

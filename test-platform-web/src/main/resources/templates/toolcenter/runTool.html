@@ -167,7 +167,7 @@
                                           },
                                           {
                                             "type": "tpl",
-                                            "tpl": "* 成功调用/调用总数: ${totalCount}/${successCount}"
+                                            "tpl": "* 成功调用/调用总数: ${successCount}/${totalCount}"
                                           },
                                           {
                                             "type": "tpl",
@@ -353,6 +353,7 @@
                                                   "type": "control",
                                                   "name": "ret",
                                                   "label": "返回结果:",
+                                                  "visibleOn": "this.ret",
                                                   "body": {
                                                     "type": "json",
                                                     "levelExpand": 2

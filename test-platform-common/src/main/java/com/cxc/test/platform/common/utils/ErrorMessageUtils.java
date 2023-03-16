@@ -9,6 +9,10 @@ public class ErrorMessageUtils {
             return t.getMessage();
         }
 
+        if (StringUtils.isNotEmpty(String.valueOf(t.getCause()))) {
+            return String.valueOf(t.getCause());
+        }
+
         if (StringUtils.isNotEmpty(String.valueOf(t))) {
             return String.valueOf(t);
         }

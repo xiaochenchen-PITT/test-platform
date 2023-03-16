@@ -295,15 +295,32 @@ public class ToolCenterService {
     }
 
     public ResultDO<String> triggerTool(Tool tool, LinkedHashMap<String, Object> paramAndValueMap) {
+        ResultDO<String> ret = null;
         if (tool.isJavaTool()) {
-            return triggerJava(tool, paramAndValueMap);
+            ret = triggerJava(tool, paramAndValueMap);
         } else if (tool.isHttpTool()) {
-            return triggerHttp(tool, paramAndValueMap);
+            ret = triggerHttp(tool, paramAndValueMap);
         } else {
             String errorMessage = "triggerTool invalid tool type: " + tool.getType();
             log.error(errorMessage);
             return ResultDO.fail(errorMessage);
         }
+
+        // 更新count
+        try {
+            ToolPO toolPO = new ToolPO();
+            toolPO.setToolId(tool.getToolId());
+            toolPO.setTotalCount(tool.getTotalCount() + 1);
+            if (ret.getIsSuccess()) {
+                toolPO.setSuccessCount(tool.getSuccessCount() + 1);
+            }
+
+            int dbRet = toolMapper.update(toolPO);
+        } catch (Exception e) {
+            log.error("failed to update count, ", e);
+        }
+
+        return ret;
     }
 
     private ResultDO<String> triggerJava(Tool tool, LinkedHashMap<String, Object> paramAndValueMap) {
