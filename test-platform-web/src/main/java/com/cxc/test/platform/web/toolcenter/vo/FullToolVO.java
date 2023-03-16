@@ -4,6 +4,9 @@ import com.alibaba.fastjson.JSONArray;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * 新增专用，带工具参数
+ */
 @Data
 @Builder
 public class FullToolVO {

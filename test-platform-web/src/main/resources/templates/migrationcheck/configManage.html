@@ -85,7 +85,13 @@
                               "stacked": true,
                               "source": "${nav}",
                               "id": "u:b057407f2664",
-                              "className": ""
+                              "itemBadge": {
+                                "mode": "ribbon",
+                                "text": "${customText}",
+                                "position": "top-right",
+                                "visibleOn": "this.customText",
+                                "level": "${customLevel}"
+                              }
                             }
                           ],
                           "size": "xs",
@@ -111,7 +117,7 @@
                           "body": [
                             {
                               "type": "tpl",
-                              "tpl": "数据迁移配置管理",
+                              "tpl": "配置管理",
                               "inline": true,
                               "wrapperComponent": "",
                               "id": "u:0113ac9a5359",
@@ -152,6 +158,7 @@
                                         "label": "配置id",
                                         "clearable": true,
                                         "size": "sm",
+                                        "placeholder": "精确搜索",
                                         "id": "u:bdbc1cbbcb6c"
                                       },
                                       {
@@ -275,7 +282,7 @@
                                       "type": "button",
                                       "actionType": "url",
                                       "disabledOn": "status===\"not_started\"",
-                                      "url": "/migrationcheck/diff_detail?batchId=${batchId}",
+                                      "url": "/migrationcheck/diff?batchId=${batchId}",
                                       "id": "u:c923a341faad",
                                       "blank": true
                                     },
@@ -283,7 +290,7 @@
                                       "label": "配置详情",
                                       "type": "button",
                                       "actionType": "url",
-                                      "url": "/migrationcheck/config_detail?configId=${configId}",
+                                      "url": "/migrationcheck/detail?configId=${configId}",
                                       "id": "u:c923a341faad",
                                       "blank": true
                                     }

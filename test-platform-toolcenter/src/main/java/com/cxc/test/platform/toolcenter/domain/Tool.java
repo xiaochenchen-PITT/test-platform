@@ -11,8 +11,7 @@ import java.util.List;
 @Builder
 public class Tool {
 
-    public static final String BEAN_SPLITER = "#";
-    public static final String URL_SPLITER = ":";
+    public static final String API_SPLITER = "#";
 
     /**
      * 主键id，无实际业务意义
@@ -30,13 +29,13 @@ public class Tool {
     private String name;
 
     /**
-     * 工具补充描述
+     * 工具描述
      */
     private String desc;
 
     /**
      * 工具类型，可选java/http
-     * feign类型调用需要自行封装为本地java方法
+     * feign/hsf类型调用需要自行封装为本地java方法
      */
     private String type;
 
@@ -47,13 +46,15 @@ public class Tool {
     private String beanName;
 
     /**
-     * java类型工具bean方法
-     * 需要注册成为一个bean
+     * java类型工具bean方法，需要注册成为一个bean。
+     * 包含全类名和方法名，例如：
+     * com.cxc.test.platform.toolcenter.service.ToolCenterService#demoRun
      */
     private String bean;
 
     /**
-     * http类型工具的url
+     * http类型工具的url，包含方法名和实际url，例如：
+     * get#127.0.0.1:8080/toolcenter/get_tree_select
      */
     private String url;
 

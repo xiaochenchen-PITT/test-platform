@@ -41,7 +41,8 @@
       and `name` = #{name}
     </if>
     <if test="label != null and label != ''">
-      and `label` = #{label}
+      <bind name="label" value="'%' + label + '%'"/>
+      and `label` like #{label}
     </if>
   </select>
 

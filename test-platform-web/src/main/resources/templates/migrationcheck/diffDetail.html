@@ -86,7 +86,13 @@
                               "stacked": true,
                               "source": "${nav}",
                               "id": "u:b057407f2664",
-                              "className": ""
+                              "itemBadge": {
+                                "mode": "ribbon",
+                                "text": "${customText}",
+                                "position": "top-right",
+                                "visibleOn": "this.customText",
+                                "level": "${customLevel}"
+                              }
                             }
                           ],
                           "size": "xs",
@@ -113,7 +119,7 @@
                             {
                               "type": "tpl",
                               "id": "u:0113ac9a5359",
-                              "tpl": "数据迁移执行详情",
+                              "tpl": "执行详情",
                               "inline": true,
                               "wrapperComponent": "",
                               "style": {

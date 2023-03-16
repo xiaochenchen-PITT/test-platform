@@ -81,7 +81,13 @@
                               "stacked": true,
                               "source": "${nav}",
                               "id": "u:b057407f2664",
-                              "className": ""
+                              "itemBadge": {
+                                "mode": "ribbon",
+                                "text": "${customText}",
+                                "position": "top-right",
+                                "visibleOn": "this.customText",
+                                "level": "${customLevel}"
+                              }
                             }
                           ],
                           "size": "xs",
@@ -107,7 +113,7 @@
                           "body": [
                             {
                               "type": "tpl",
-                              "tpl": "数据迁移配置详情",
+                              "tpl": "配置详情",
                               "inline": true,
                               "wrapperComponent": "",
                               "id": "u:0113ac9a5359",
@@ -278,6 +284,7 @@
                                                 "label": "原表表名",
                                                 "clearable": true,
                                                 "size": "md",
+                                                "placeholder": "模糊搜索",
                                                 "id": "u:bdbc1cbbcb6c"
                                               },
                                               {
@@ -286,6 +293,7 @@
                                                 "label": "目标表表名",
                                                 "clearable": true,
                                                 "size": "md",
+                                                "placeholder": "模糊搜索",
                                                 "id": "u:bdbc1cbbcb6c"
                                               }
                                             ],
@@ -451,6 +459,7 @@
                                                 "label": "目标表表名",
                                                 "clearable": true,
                                                 "size": "md",
+                                                "placeholder": "模糊搜索",
                                                 "id": "u:bdbc1cbbcb6c"
                                               }
                                             ],
@@ -569,6 +578,7 @@
                                                 "label": "原表表名",
                                                 "clearable": true,
                                                 "size": "md",
+                                                "placeholder": "模糊搜索",
                                                 "id": "u:bdbc1cbbcb6c"
                                               }
                                             ],

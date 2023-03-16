@@ -39,7 +39,7 @@
             // 通过替换下面这个配置来生成不同页面
             let amisJSON = {
                   "type": "page",
-                  "title": "新增工具",
+                  "title": "入参管理",
                   "body": [
                     {
                       "type": "flex",
@@ -96,11 +96,11 @@
                             "position": "static",
                             "display": "block",
                             "flex": "0 0 200px",
+                            "flexBasis": "200px",
                             "overflowX": "auto",
                             "fontFamily": "",
                             "fontSize": 16,
-                            "textAlign": "left",
-                            "flexBasis": "200px"
+                            "textAlign": "left"
                           },
                           "wrapperBody": false,
                           "isFixedHeight": false,
@@ -114,10 +114,10 @@
                           "body": [
                             {
                               "type": "tpl",
-                              "tpl": "工具新增",
+                              "id": "u:0113ac9a5359",
+                              "tpl": "入参管理",
                               "inline": true,
                               "wrapperComponent": "",
-                              "id": "u:0113ac9a5359",
                               "style": {
                                 "fontFamily": "",
                                 "fontSize": 25
@@ -128,122 +128,127 @@
                               "id": "u:9e26253a40dd"
                             },
                             {
-                              "type": "wizard",
-                              "api": "/toolcenter/add_tool",
-                              "steps": [
+                              "type": "crud",
+                              "name": "paramListCrud",
+                              "api": {
+                                "method": "get",
+                                "url": "/toolcenter/get_param_list",
+                                "data": {
+                                  "toolId": "${toolId}",
+                                  "nameSearch": "${nameSearch | default:undefined}"
+                                }
+                              },
+                              "loadDataOnce": true,
+                              "syncLocation": false,
+                              "filter": {
+                                "debug": false,
+                                "title": "条件搜索",
+                                "body":  [
+                                  {
+                                    "type": "input-text",
+                                    "name": "nameSearch",
+                                    "label": "入参名",
+                                    "clearable": true,
+                                    "size": "md",
+                                    "placeholder": "精确搜索",
+                                    "id": "u:bdbc1cbbcb6c"
+                                  }
+                                ],
+                                "id": "u:a00bd4fb9858",
+                                "submitText": "查询"
+                              },
+                              "columns": [
                                 {
-                                  "title": "Step 1",
-                                  "body": [
-                                    {
-                                      "type": "panel",
-                                      "id": "u:6e4c52b492b9",
-                                      "title": "工具基础信息",
-                                      "body": [
-                                        {
-                                          "name": "name",
-                                          "label": "工具名称",
-                                          "type": "input-text",
-                                          "required": true,
-                                          "id": "u:f84bea7b88cc"
-                                        },
-                                        {
-                                          "name": "desc",
-                                          "label": "工具描述",
-                                          "type": "textarea",
-                                          "clearable": true,
-                                          "id": "u:f84bea7b88cc",
-                                          "showCounter": true,
-                                          "maxLength": 30,
-                                          "placeholder": "限制30个字"
-                                        },
-                                        {
-                                          "label": "工具类型",
-                                          "type": "select",
-                                          "name": "type",
-                                          "options": [
-                                            {
-                                              "label": "Java",
-                                              "value": "java"
-                                            },
-                                            {
-                                              "label": "Http",
-                                              "value": "http"
-                                            }
-                                          ],
-                                          "id": "u:bc26d555381b",
-                                          "multiple": false,
-                                          "required": true
-                                        },
-                                        {
-                                          "name": "beanName",
-                                          "label": "java类型工具bean的名称",
-                                          "type": "input-text",
-                                          "required": true,
-                                          "id": "u:f84bea7b88cc",
-                                          "hiddenOn": "this.type !== 'java'"
-                                        },
-                                        {
-                                          "name": "bean",
-                                          "label": "java类型工具bean方法",
-                                          "type": "input-text",
-                                          "required": true,
-                                          "description": "例如com.cxc.test.platform.toolcenter.service.ToolCenterService#getOrder",
-                                          "id": "u:f84bea7b88cc",
-                                          "hiddenOn": "this.type !== 'java'"
-                                        },
-                                        {
-                                          "name": "url",
-                                          "label": "http类型工具的url",
-                                          "type": "input-text",
-                                          "required": true,
-                                          "description": "例如get#127.0.0.1:8080/toolcenter/get_order",
-                                          "id": "u:f84bea7b88cc",
-                                          "hiddenOn": "this.type !== 'http'"
-                                        },
-                                        {
-                                          "name": "domain",
-                                          "label": "领域",
-                                          "type": "input-text",
-                                          "required": true,
-                                          "id": "u:f84bea7b88cc"
-                                        }
-                                      ],
-                                      "affixFooter": false
-                                    }
-                                  ],
-                                  "id": "u:4a943559b2f2",
-                                  "mode": "normal"
+                                  "name": "paramId",
+                                  "label": "入参ID",
+                                  "id": "u:97e6ae8cc007"
                                 },
                                 {
-                                  "title": "Step 2",
-                                  "body": [
+                                  "name": "toolId",
+                                  "label": "工具ID",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "name",
+                                  "label": "入参名称",
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "label",
+                                  "label": "中文名称",
+                                  "id": "u:97e6ae8cc007",
+                                  "popOver": "${desc}",
+                                  "popOverEnableOn": "this.desc"
+                                },
+                                {
+                                  "name": "paramClass",
+                                  "label": "入参类型",
+                                  "id": "u:92fdad445603"
+                                },
+                                {
+                                  "type": "mapping",
+                                  "name": "isRequired",
+                                  "label": "是否必填",
+                                  "map": {
+                                    "True": "<span class='label label-primary'>是</span>",
+                                    "False": "<span class='label label-success'>否</span>"
+                                  },
+                                  "id": "u:4f09127c1920"
+                                },
+                                {
+                                  "type": "mapping",
+                                  "name": "hasDefault",
+                                  "label": "是否有默认值",
+                                  "map": {
+                                    "True": "<span class='label label-primary'>是</span>",
+                                    "False": "<span class='label label-success'>否</span>"
+                                  },
+                                  "id": "u:4f09127c1920"
+                                },
+                                {
+                                  "name": "defaultValue",
+                                  "label": "默认值",
+                                  "id": "u:92fdad445603"
+                                },
+                                {
+                                  "type": "mapping",
+                                  "name": "inputType",
+                                  "label": "入参输入类型",
+                                  "map": {
+                                    "input": "<span class='label label-primary'>输入</span>",
+                                    "select": "<span class='label label-success'>单选</span>"
+                                  },
+                                  "id": "u:4f09127c1920"
+                                },
+                                {
+                                  "name": "optionValueList",
+                                  "label": "可选值列表",
+                                  "id": "u:1dadd1276db4",
+                                },
+                                {
+                                  "type": "button-toolbar",
+                                  "label": "操作",
+                                  "buttons": [
                                     {
-                                      "type": "panel",
-                                      "title": "工具入参信息",
-                                      "body": [
-                                        {
-                                          "type": "combo",
-                                          "name": "paramCombo",
-                                          "multiple": true,
-                                          "items": [
+                                      "label": "修改",
+                                      "type": "button",
+                                      "actionType": "drawer",
+                                      "drawer": {
+                                        "title": "编辑入参",
+                                        "size": "lg",
+                                        "body": {
+                                          "type": "form",
+                                          "api": "post:/toolcenter/update_param?toolId=${toolId}&paramId=${paramId}",
+                                          "body": [
                                             {
-                                              "type": "tpl",
-                                              "tpl": "<%= this.index + 1%>",
-                                              "className": "p-t-xs",
-                                              "mode": "inline"
-                                            },
-                                            {
+                                              "type": "input-text",
                                               "name": "name",
-                                              "label": "入参名称",
-                                              "type": "input-text",
-                                              "required": true,
-                                              "unique": true
+                                              "label": "入参名称"
                                             },
                                             {
-                                              "name": "label",
-                                              "label": "中文名称",
                                               "type": "input-text",
-                                              "required": true
+                                              "name": "label",
+                                              "label": "中文名称"
                                             },
                                             {
                                               "name": "desc",
@@ -256,16 +261,17 @@
                                               "placeholder": "限制30个字"
                                             },
                                             {
-                                              "name": "paramClass",
-                                              "label": "入参的class类型",
                                               "type": "input-text",
-                                              "required": true
+                                              "name": "paramClass",
+                                              "label": "入参类型"
                                             },
                                             {
-                                              "label": "是否必填",
                                               "type": "select",
-                                              "required": true,
                                               "name": "isRequired",
+                                              "label": "是否必填",
+                                              "clearable": true,
+                                              "size": "sm",
+                                              "id": "u:5f43212ae5d8",
                                               "options": [
                                                 {
                                                   "label": "是",
@@ -276,13 +282,15 @@
                                                   "value": false
                                                 }
                                               ],
-                                              "id": "u:bc26d555381b"
+                                              "multiple": false
                                             },
                                             {
-                                              "label": "是否有默认值",
                                               "type": "select",
                                               "name": "hasDefault",
-                                              "required": true,
+                                              "label": "是否有默认值",
+                                              "clearable": true,
+                                              "size": "sm",
+                                              "id": "u:5f43212ae5d8",
                                               "options": [
                                                 {
                                                   "label": "是",
@@ -293,7 +301,7 @@
                                                   "value": false
                                                 }
                                               ],
-                                              "id": "u:bc26d555381b"
+                                              "multiple": false
                                             },
                                             {
                                               "type": "input-text",
@@ -305,7 +313,6 @@
                                               "type": "select",
                                               "name": "inputType",
                                               "label": "入参输入类型",
-                                              "required": true,
                                               "clearable": true,
                                               "size": "sm",
                                               "id": "u:5f43212ae5d8",
@@ -323,7 +330,7 @@
                                             },
                                             {
                                               "type": "input-text",
-                                              "name": "optionValues",
+                                              "name": "optionValueList",
                                               "label": "可选值列表",
                                               "hiddenOn": "this.inputType !== 'select'",
                                               "description": "json格式，例如{\"a\":\"AA\",\"bb\":\"BBB\"}",
@@ -331,21 +338,25 @@
                                                 "isJson": true
                                               }
                                             }
-                                          ],
-                                          "id": "u:836572dbde62",
-                                          "multiLine": true
+                                          ]
                                         }
-                                      ],
-                                      "id": "u:5758819d0edd",
-                                      "affixFooter": false
+                                      },
+                                      "id": "u:46e308e46b4c"
+                                    },
+                                    {
+                                      "label": "删除",
+                                      "type": "button",
+                                      "actionType": "ajax",
+                                      "level": "danger",
+                                      "confirmText": "确认要删除？",
+                                      "api": "get:/toolcenter/delete_param?toolId=${toolId}&paramId=${paramId}",
+                                      "id": "u:1fd57e4b4497"
                                     }
                                   ],
-                                  "mode": "normal",
-                                  "id": "u:1a36b75a1cda"
+                                  "id": "u:0bdd3201ab9f"
                                 }
                               ],
-                              "id": "u:add7e767eede",
-                              "mode": "horizontal"
+                              "id": "u:28024f3e550b"
                             }
                           ],
                           "size": "xs",
@@ -359,7 +370,7 @@
                           "wrapperBody": false,
                           "isFixedHeight": false,
                           "isFixedWidth": false,
-                          "id": "u:4a30e3ab29f8"
+                          "id": "u:5bc7d7d7de2f"
                         }
                       ],
                       "style": {
@@ -368,25 +379,25 @@
                       "direction": "row",
                       "justify": "flex-start",
                       "alignItems": "stretch",
-                      "id": "u:a50732ebf772"
+                      "id": "u:3d4dafdd460b"
                     }
                   ],
-                  "id": "u:219061da7c34",
+                  "id": "u:e26e044baf83",
                   "pullRefresh": {
                     "disabled": true
                   },
                   "regions": [
                     "body"
                   ],
-                  "asideResizor": false,
-                  "asideClassName": "b-primary text-lg",
-                  "asideSticky": true,
                   "initApi": "/get_menu",
                   "style": {
                     "textAlign": "left",
                     "backgroundImage": "/image/bg.jpg",
                     "backgroundSize": "cover"
-                  }
+                  },
+                  "asideResizor": false,
+                  "asideClassName": "b-primary text-lg",
+                  "asideSticky": true
                 };
 
 

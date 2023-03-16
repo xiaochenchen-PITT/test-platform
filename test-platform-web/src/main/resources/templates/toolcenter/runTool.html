@@ -39,7 +39,7 @@
             // 通过替换下面这个配置来生成不同页面
             let amisJSON = {
                   "type": "page",
-                  "title": "工具调用页",
+                  "title": "工具调用",
                   "body": [
                     {
                       "type": "flex",
@@ -82,7 +82,13 @@
                               "stacked": true,
                               "source": "${nav}",
                               "id": "u:b057407f2664",
-                              "className": ""
+                              "itemBadge": {
+                                "mode": "ribbon",
+                                "text": "${customText}",
+                                "position": "top-right",
+                                "visibleOn": "this.customText",
+                                "level": "${customLevel}"
+                              }
                             }
                           ],
                           "size": "xs",
@@ -140,49 +146,50 @@
                                         "blank": false,
                                         "header": {
                                           "title": "${name}",
-                                          "desc": "${desc}"
+                                          "subTitle": "${domain}",
+                                          "desc": "${desc}",
+                                          "avatarText": "${name|substring:0:2|upperCase}",
+                                          "avatarTextBackground": [
+                                            "#FFB900",
+                                            "#D83B01",
+                                            "#B50E0E",
+                                            "#E81123",
+                                            "#B4009E",
+                                            "#5C2D91",
+                                            "#0078D7",
+                                            "#00B4FF",
+                                            "#008272"
+                                          ]
                                         },
+                                        "body": [
+                                          {
+                                            "type": "divider"
+                                          },
+                                          {
+                                            "type": "tpl",
+                                            "tpl": "* 成功调用/调用总数: ${totalCount}/${successCount}"
+                                          },
+                                          {
+                                            "type": "tpl",
+                                            "tpl": "* 创建者: ${creator}",
+                                            "visibleOn": "this.creator"
+                                          }
+                                        ],
                                         "id": "u:36a04255866e",
                                         "size": "sm",
                                         "toolbar": [
                                           {
-                                            "type": "button",
-                                            "icon": "fa fa-eye",
-                                            "actionType": "dialog",
-                                            "dialog": {
-                                              "title": "查看",
-                                              "body": {
-                                                "type": "form",
-                                                "body": [
-                                                  {
-                                                    "type": "static",
-                                                    "name": "toolId",
-                                                    "label": "工具ID"
-                                                  },
-                                                  {
-                                                    "type": "divider"
-                                                  },
-                                                  {
-                                                    "type": "static",
-                                                    "name": "name",
-                                                    "label": "工具名称"
-                                                  },
-                                                  {
-                                                    "type": "divider"
-                                                  },
-                                                  {
-                                                    "type": "static",
-                                                    "name": "type",
-                                                    "label": "工具类型"
-                                                  }
-                                                ]
-                                              }
+                                            "type": "mapping",
+                                            "name": "type",
+                                            "map": {
+                                              "java": "<span class='label label-success'>Java</span>",
+                                              "http": "<span class='label label-primary'>Http</span>"
                                             },
-                                            "id": "u:fba1e5fa234d"
+                                            "id": "u:4f09127c1920"
                                           },
                                           {
                                             "type": "tpl",
-                                            "tpl": "#${b}",
+                                            "tpl": "#${rank}",
                                             "className": "label label-warning",
                                             "id": "u:56d60c840af4"
                                           }
@@ -195,8 +202,14 @@
                                       "masonryLayout": false,
                                       "size": "sm",
                                       "placeholder": "暂无数据",
-                                      "title": "",
-                                      "headerClassName": "text-sm"
+                                      "style": {
+                                        "position": "static",
+                                        "display": "block",
+                                        "overflowY": "auto",
+                                        "maxHeight": "230px"
+                                      },
+                                      "isFixedHeight": false,
+                                      "isFixedWidth": false
                                     }
                                   ]
                                 }
@@ -297,7 +310,7 @@
                                               "type": "form",
                                               "id": "u:c6d532278351",
                                               "title": "Step2: 填写入参",
-                                              "reload": "resultForm?ret=${ret}",
+                                              "reload": "resultForm?ret=${ret}&isSuccess=${isSuccess}&errorMessage=${errorMessage}",
                                               "body": [
                                                 {
                                                   "type": "service",
@@ -315,9 +328,35 @@
                                               ],
                                               "body": [
                                                 {
-                                                  "type": "static",
+                                                  "type": "tpl",
+                                                  "tpl": "是否成功: "
+                                                },
+                                                {
+                                                  "type": "mapping",
+                                                  "name": "isSuccess",
+                                                  "placeholder": "",
+                                                  "map": {
+                                                    "true": "<span class='label label-success'>成功</span>",
+                                                    "True": "<span class='label label-success'>成功</span>",
+                                                    "TRUE": "<span class='label label-success'>成功</span>",
+                                                    "false": "<span class='label label-danger'>失败</span>",
+                                                    "False": "<span class='label label-danger'>失败</span>",
+                                                    "FALSE": "<span class='label label-danger'>失败</span>"
+                                                  }
+                                                },
+                                                {
+                                                  "type": "tpl",
+                                                  "tpl": "报错信息: ${errorMessage}",
+                                                  "visibleOn": "this.errorMessage"
+                                                },
+                                                {
+                                                  "type": "control",
                                                   "name": "ret",
-                                                  "id": "u:0818a4687f16"
+                                                  "label": "返回结果:",
+                                                  "body": {
+                                                    "type": "json",
+                                                    "levelExpand": 2
+                                                  }
                                                 }
                                               ],
                                               "id": "u:dd521e86180f"

@@ -6,7 +6,9 @@ import com.cxc.test.platform.common.domain.AmisResult;
 import com.cxc.test.platform.common.domain.ResultDO;
 import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import com.cxc.test.platform.infra.domain.toolcenter.ToolPO;
+import com.cxc.test.platform.infra.domain.toolcenter.ToolParamPO;
 import com.cxc.test.platform.infra.mapper.master.ToolMapper;
+import com.cxc.test.platform.infra.mapper.master.ToolParamMapper;
 import com.cxc.test.platform.toolcenter.domain.Tool;
 import com.cxc.test.platform.toolcenter.domain.ToolParam;
 import com.cxc.test.platform.toolcenter.domain.ToolQuery;
@@ -14,9 +16,11 @@ import com.cxc.test.platform.toolcenter.domain.ToolStatusConstant;
 import com.cxc.test.platform.toolcenter.service.ToolCenterService;
 import com.cxc.test.platform.web.BaseController;
 import com.cxc.test.platform.web.toolcenter.vo.FullToolVO;
+import com.cxc.test.platform.web.toolcenter.vo.ToolParamVO;
 import com.cxc.test.platform.web.toolcenter.vo.ToolVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
@@ -38,9 +42,17 @@ public class ToolCenterController extends BaseController {
     @Resource
     ToolMapper toolMapper;
 
+    @Resource
+    ToolParamMapper toolParamMapper;
+
     @GetMapping("/list")
     public String list() {
         return "toolcenter/toolList";
+    }
+
+    @GetMapping("/params")
+    public String paramList() {
+        return "toolcenter/paramList";
     }
 
     @GetMapping("/add")
@@ -114,12 +126,14 @@ public class ToolCenterController extends BaseController {
 
     @RequestMapping(value = "/get_tool_list", method = RequestMethod.GET)
     @ResponseBody
-    public AmisResult getToolList(@RequestParam(required = false) String nameSearch, @RequestParam(required = false) String typeSearch,
+    public AmisResult getToolList(@RequestParam(required = false) Long toolIdSearch, @RequestParam(required = false) String nameSearch,
+                                  @RequestParam(required = false) String apiSearch, @RequestParam(required = false) String typeSearch,
                                   @RequestParam(required = false) String statusSearch, @RequestParam(required = false) String creatorSearch,
                                   @RequestParam(required = false) String domainSearch) {
         String triggerUrl = buildTriggerUrl();
 
         ToolQuery toolQuery = ToolQuery.builder()
+            .toolId(toolIdSearch)
             .name(nameSearch)
             .type(typeSearch)
             .status(statusSearch)
@@ -134,14 +148,17 @@ public class ToolCenterController extends BaseController {
 
         List<ToolVO> toolVOList = new ArrayList<>();
         for (Tool tool : queryRet.getData()) {
+            if (filterApi(apiSearch, tool)) {
+                continue;
+            }
+
             ToolVO toolVO = ToolVO.builder()
                 .toolId(tool.getToolId())
                 .name(tool.getName())
                 .desc(tool.getDesc())
                 .type(tool.getType())
                 .beanName(tool.getBeanName())
-                .bean(tool.isJavaTool() ? tool.getBean() : null)
-                .url(tool.isHttpTool() ? tool.getUrl() : null)
+                .api(tool.isJavaTool() ? tool.getBean() : tool.getUrl())
                 .status(tool.getStatus())
                 .creator(tool.getCreator())
                 .domain(tool.getDomain())
@@ -157,6 +174,65 @@ public class ToolCenterController extends BaseController {
         return AmisResult.success(retData, "ok");
     }
 
+    private boolean filterApi(String apiSearch, Tool tool) {
+        if (StringUtils.isEmpty(apiSearch)) {
+            return false;
+        }
+
+        if (tool.isJavaTool() && tool.getBean().contains(apiSearch)) {
+            return false;
+        }
+
+        if (tool.isHttpTool() && tool.getUrl().contains(apiSearch)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @RequestMapping(value = "/get_param_list", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult getParamList(@RequestParam Long toolId, @RequestParam(required = false) String nameSearch) {
+        String triggerUrl = buildTriggerUrl();
+
+        ToolQuery toolQuery = ToolQuery.builder().toolId(toolId).build();
+        ResultDO<List<Tool>> queryRet = toolCenterService.queryTools(toolQuery);
+        if (!queryRet.getIsSuccess() || CollectionUtils.isEmpty(queryRet.getData())) {
+            return AmisResult.emptySuccess();
+        }
+
+        Tool tool = queryRet.getData().get(0);
+
+        List<ToolParamVO> toolParamVOList = new ArrayList<>();
+        for (ToolParam toolParam : tool.getToolParamList()) {
+            if (StringUtils.isNotEmpty(nameSearch) && !nameSearch.equalsIgnoreCase(toolParam.getName())) {
+                continue;
+            }
+
+            ToolParamVO toolParamVO = ToolParamVO.builder()
+                .paramId(toolParam.getParamId())
+                .toolId(toolParam.getToolId())
+                .name(toolParam.getName())
+                .label(toolParam.getLabel())
+                .desc(toolParam.getDesc())
+                .paramClass(toolParam.getParamClass())
+                .isRequired(toolParam.isRequired() ? "True" : "False")
+                .hasDefault(toolParam.isHasDefault() ? "True" : "False")
+                .defaultValue(toolParam.getDefaultValue())
+                .inputType(toolParam.getInputType())
+                .optionValues(toolParam.getOptionValueListAsStr())
+                .build();
+
+            toolParamVOList.add(toolParamVO);
+        }
+
+        JSONObject retData = new JSONObject();
+        retData.put("rows", toolParamVOList);
+        retData.put("count", toolParamVOList.size());
+
+        return AmisResult.success(retData, "ok");
+    }
+
     @RequestMapping(value = "/get_domains", method = RequestMethod.GET)
     @ResponseBody
     public AmisResult getDomains() {
@@ -168,7 +244,7 @@ public class ToolCenterController extends BaseController {
             return AmisResult.emptySuccess();
         }
 
-        List<JSONObject> domains = new ArrayList<>();
+        Set<JSONObject> domains = new HashSet<>();
         queryRet.getData().stream().forEach(tool -> {
                 JSONObject jo = new JSONObject();
                 jo.put("label", tool.getDomain());
@@ -195,8 +271,8 @@ public class ToolCenterController extends BaseController {
         toolPO.setDesc(toolVO.getDesc());
         toolPO.setType(toolVO.getType());
         toolPO.setBeanName(toolVO.getBeanName());
-        toolPO.setBean(toolVO.getBean());
-        toolPO.setUrl(toolVO.getUrl());
+        toolPO.setBean("java".equalsIgnoreCase(toolVO.getType()) ? toolVO.getApi() : null);
+        toolPO.setUrl("http".equalsIgnoreCase(toolVO.getType()) ? toolVO.getApi() : null);
         toolPO.setStatus(toolVO.getStatus());
         toolPO.setCreator(toolVO.getCreator());
         toolPO.setDomain(toolVO.getDomain());
@@ -237,6 +313,41 @@ public class ToolCenterController extends BaseController {
         return AmisResult.simpleSuccess("success", "恢复成功");
     }
 
+    @RequestMapping(value = "/update_param", method = RequestMethod.POST)
+    @ResponseBody
+    public AmisResult updateParam(@RequestParam Long toolId, @RequestParam Long paramId, @RequestBody ToolParamVO toolParamVO) {
+        String triggerUrl = buildTriggerUrl();
+
+        ToolParamPO toolParamPO = new ToolParamPO();
+        toolParamPO.setParamId(paramId);
+        toolParamPO.setToolId(toolId);
+        toolParamPO.setName(toolParamVO.getName());
+        toolParamPO.setLabel(toolParamVO.getLabel());
+        toolParamPO.setDesc(toolParamVO.getDesc());
+        toolParamPO.setParamClass(toolParamVO.getParamClass());
+        toolParamPO.setIsRequired("True".equalsIgnoreCase(toolParamVO.getIsRequired()) ? 1 : 0);
+        toolParamPO.setHasDefault("True".equalsIgnoreCase(toolParamVO.getHasDefault()) ? 1 : 0);
+        toolParamPO.setDefaultValue(toolParamVO.getDefaultValue());
+        toolParamPO.setInputType(toolParamVO.getInputType());
+        toolParamPO.setOptionValues(toolParamVO.getOptionValues());
+
+        int ret = toolParamMapper.update(toolParamPO);
+        Assert.isTrue(ret == 1, "update tool param failed");
+
+        return AmisResult.simpleSuccess("success", "编辑成功");
+    }
+
+    @RequestMapping(value = "/delete_param", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult deleteParam(@RequestParam Long toolId, @RequestParam Long paramId) {
+        String triggerUrl = buildTriggerUrl();
+
+        int ret = toolParamMapper.delete(paramId);
+        Assert.isTrue(ret == 1, "delete tool param failed");
+
+        return AmisResult.simpleSuccess("success", "删除成功");
+    }
+
     @RequestMapping(value = "/get_hot_n", method = RequestMethod.GET)
     @ResponseBody
     public AmisResult getHotN(@RequestParam Long n) {
@@ -257,6 +368,7 @@ public class ToolCenterController extends BaseController {
             .collect(Collectors.toList());
 
         List<ToolVO> toolVOList = new ArrayList<>();
+        int rank = 1;
         for (Tool tool : sortedToolSubList) {
             ToolVO toolVO = ToolVO.builder()
                 .toolId(tool.getToolId())
@@ -264,14 +376,17 @@ public class ToolCenterController extends BaseController {
                 .desc(tool.getDesc())
                 .type(tool.getType())
                 .beanName(tool.getBeanName())
-                .bean(tool.isJavaTool() ? tool.getBean() : null)
-                .url(tool.isHttpTool() ? tool.getUrl() : null)
+                .api(tool.isJavaTool() ? tool.getBean() : tool.getUrl())
                 .status(tool.getStatus())
                 .creator(tool.getCreator())
                 .domain(tool.getDomain())
+                .totalCount(tool.getTotalCount())
+                .successCount(tool.getSuccessCount())
+                .rank(String.valueOf(rank))
                 .build();
 
             toolVOList.add(toolVO);
+            rank += 1;
         }
 
         JSONObject retData = new JSONObject();
@@ -378,6 +493,8 @@ public class ToolCenterController extends BaseController {
 
         // amis会自动将表单提交之后的data数据填充到数据域中，所以这里要过滤一下
         paramMap.remove("ret");
+        paramMap.remove("isSuccess");
+        paramMap.remove("errorMessage");
 
         ToolQuery toolQuery = ToolQuery.builder().toolId(toolId).build();
         ResultDO<List<Tool>> queryRet = toolCenterService.queryTools(toolQuery);
@@ -387,7 +504,13 @@ public class ToolCenterController extends BaseController {
 
         Tool tool = queryRet.getData().get(0);
         ResultDO<String> ret = toolCenterService.triggerTool(tool, paramMap);
-        return AmisResult.from(ret);
+
+        JSONObject dataJO = new JSONObject();
+        dataJO.put("isSuccess", ret.getIsSuccess());
+        dataJO.put("errorMessage", ret.getErrorMessage());
+        dataJO.put("ret", ret.getData());
+
+        return AmisResult.success(dataJO, "调用成功");
     }
 
 }

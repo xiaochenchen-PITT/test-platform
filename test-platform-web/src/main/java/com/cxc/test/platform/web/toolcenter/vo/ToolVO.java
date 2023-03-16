@@ -17,13 +17,22 @@ public class ToolVO {
 
     private String beanName;
 
-    private String bean;
-
-    private String url;
+    /**
+     * Java类型和Http类型的汇总展示，同时包含beanClass/url和method，例如：
+     * Java类型：com.cxc.test.platform.toolcenter.service.ToolCenterService#demoRun
+     * Http类型：get#127.0.0.1:8080/toolcenter/get_tree_select
+     */
+    private String api;
 
     private String status;
 
     private String creator;
 
     private String domain;
+
+    private Long totalCount;
+
+    private Long successCount;
+
+    private String rank;
 }

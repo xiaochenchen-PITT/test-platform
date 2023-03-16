@@ -83,23 +83,23 @@ public class MigrationCheckController extends BaseController {
     private final String CONFIG_TABLE_SPLIT = "@";
     private final String CONFIG_FIELD_SPLIT = ",";
 
-    @GetMapping("/config_set")
-    public String configSet() {
+    @GetMapping("/set")
+    public String set() {
         return "migrationcheck/configSet";
     }
 
-    @GetMapping("/config_manage")
-    public String configManage() {
+    @GetMapping("/manage")
+    public String manage() {
         return "migrationcheck/configManage";
     }
 
-    @GetMapping("/config_detail")
-    public String configDetail() {
+    @GetMapping("/detail")
+    public String detail() {
         return "migrationcheck/configDetail";
     }
 
-    @GetMapping("/diff_detail")
-    public String diffDetail() {
+    @GetMapping("/diff")
+    public String diff() {
         return "migrationcheck/diffDetail";
     }
 

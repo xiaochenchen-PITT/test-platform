@@ -218,8 +218,8 @@ public class ToolCenterService {
 
             // java接口类工具特殊逻辑，需要提前把入参带出来
             if (CollectionUtils.isEmpty(toolParamPOList) && tool.isJavaTool()) {
-                String beanClass = tool.getBean().split(Tool.BEAN_SPLITER)[0];
-                String method = tool.getBean().split(Tool.BEAN_SPLITER)[1];
+                String beanClass = tool.getBean().split(Tool.API_SPLITER)[0];
+                String method = tool.getBean().split(Tool.API_SPLITER)[1];
                 Map<String, String> paramMap = getJavaMethodDetail(beanClass, method);
 
                 List<ToolParam> toolParamList = new ArrayList<>();
@@ -308,7 +308,7 @@ public class ToolCenterService {
 
     private ResultDO<String> triggerJava(Tool tool, LinkedHashMap<String, Object> paramAndValueMap) {
         try {
-            String beanClass = tool.getBean().split(Tool.BEAN_SPLITER)[0];
+            String beanClass = tool.getBean().split(Tool.API_SPLITER)[0];
             Class<?> toolClass = Class.forName(beanClass);
             Object toolBean = SpringUtils.getBean(tool.getBeanName(), toolClass);
 
@@ -323,7 +323,7 @@ public class ToolCenterService {
                 paramValues[i] = CommonUtils.generalValueOf(sourceValue, parameterTypes[i]);
             }
 
-            String methodStr = tool.getBean().split(Tool.BEAN_SPLITER)[1];
+            String methodStr = tool.getBean().split(Tool.API_SPLITER)[1];
             Method method = toolClass.getMethod(methodStr, parameterTypes);
             Object ret = method.invoke(toolBean, paramValues);
 
@@ -339,8 +339,8 @@ public class ToolCenterService {
             List<BasicNameValuePair> basicNameValuePairs = new ArrayList<>();
             paramAndValueMap.forEach((k, v) -> basicNameValuePairs.add(new BasicNameValuePair(k, String.valueOf(v))));
 
-            String httpMethod = tool.getUrl().split(Tool.URL_SPLITER)[0];
-            String httpUrl = tool.getUrl().split(Tool.URL_SPLITER)[1];
+            String httpMethod = tool.getUrl().split(Tool.API_SPLITER)[0];
+            String httpUrl = tool.getUrl().split(Tool.API_SPLITER)[1];
             String ret = null;
             if ("get".equalsIgnoreCase(httpMethod)) {
                 ret = HttpClient.get(httpUrl, basicNameValuePairs);

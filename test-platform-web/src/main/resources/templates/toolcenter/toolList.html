@@ -39,7 +39,7 @@
             // 通过替换下面这个配置来生成不同页面
             let amisJSON = {
                   "type": "page",
-                  "title": "工具管理页",
+                  "title": "工具管理",
                   "body": [
                     {
                       "type": "flex",
@@ -82,7 +82,13 @@
                               "stacked": true,
                               "source": "${nav}",
                               "id": "u:b057407f2664",
-                              "className": ""
+                              "itemBadge": {
+                                "mode": "ribbon",
+                                "text": "${customText}",
+                                "position": "top-right",
+                                "visibleOn": "this.customText",
+                                "level": "${customLevel}"
+                              }
                             }
                           ],
                           "size": "xs",
@@ -109,7 +115,7 @@
                             {
                               "type": "tpl",
                               "id": "u:0113ac9a5359",
-                              "tpl": "工具管理页",
+                              "tpl": "工具管理",
                               "inline": true,
                               "wrapperComponent": "",
                               "style": {
@@ -128,7 +134,9 @@
                                 "method": "get",
                                 "url": "/toolcenter/get_tool_list",
                                 "data": {
+                                  "toolIdSearch": "${toolIdSearch | default:undefined}",
                                   "nameSearch": "${nameSearch | default:undefined}",
+                                  "apiSearch": "${apiSearch | default:undefined}",
                                   "typeSearch": "${typeSearch | default:undefined}",
                                   "statusSearch": "${statusSearch | default:undefined}",
                                   "domainSearch": "${domainSearch | default:undefined}",
@@ -146,31 +154,37 @@
                                     "body": [
                                       {
                                         "type": "input-text",
-                                        "name": "nameSearch",
-                                        "label": "名称",
+                                        "name": "toolIdSearch",
+                                        "label": "工具ID",
                                         "clearable": true,
                                         "size": "md",
+                                        "placeholder": "精确搜索",
                                         "id": "u:bdbc1cbbcb6c"
                                       },
                                       {
-                                        "type": "select",
-                                        "name": "typeSearch",
-                                        "label": "类型",
+                                        "type": "input-text",
+                                        "name": "nameSearch",
+                                        "label": "工具名称",
                                         "clearable": true,
-                                        "size": "sm",
-                                        "id": "u:5f43212ae5d8",
-                                        "options": [
-                                          {
-                                            "label": "java",
-                                            "value": "Java"
-                                          },
-                                          {
-                                            "label": "http",
-                                            "value": "Http"
-                                          }
-                                        ],
-                                        "multiple": false
+                                        "size": "md",
+                                        "placeholder": "模糊搜索",
+                                        "id": "u:bdbc1cbbcb6c"
                                       },
+                                      {
+                                        "type": "input-text",
+                                        "name": "apiSearch",
+                                        "label": "API",
+                                        "clearable": true,
+                                        "size": "md",
+                                        "placeholder": "模糊搜索",
+                                        "id": "u:bdbc1cbbcb6c"
+                                      }
+                                    ],
+                                    "id": "u:edbf77d9c5d8"
+                                  },
+                                  {
+                                    "type": "group",
+                                    "body": [
                                       {
                                         "type": "select",
                                         "name": "statusSearch",
@@ -189,20 +203,25 @@
                                           }
                                         ],
                                         "multiple": false
-                                      }
-                                    ],
-                                    "id": "u:edbf77d9c5d8"
-                                  },
-                                  {
-                                    "type": "group",
-                                    "body": [
+                                      },
                                       {
-                                        "type": "input-text",
-                                        "name": "creatorSearch",
-                                        "label": "创建人",
+                                        "type": "select",
+                                        "name": "typeSearch",
+                                        "label": "类型",
                                         "clearable": true,
-                                        "size": "md",
-                                        "id": "u:bdbc1cbbcb6c"
+                                        "size": "sm",
+                                        "id": "u:5f43212ae5d8",
+                                        "options": [
+                                          {
+                                            "label": "Java",
+                                            "value": "java"
+                                          },
+                                          {
+                                            "label": "Http",
+                                            "value": "http"
+                                          }
+                                        ],
+                                        "multiple": false
                                       },
                                       {
                                         "type": "select",
@@ -213,6 +232,15 @@
                                         "id": "u:5f43212ae5d8",
                                         "source": "/toolcenter/get_domains",
                                         "multiple": false
+                                      },
+                                      {
+                                        "type": "input-text",
+                                        "name": "creatorSearch",
+                                        "label": "创建人",
+                                        "clearable": true,
+                                        "size": "md",
+                                        "placeholder": "精确搜索",
+                                        "id": "u:bdbc1cbbcb6c"
                                       }
                                     ],
                                     "id": "u:edbf77d9c5d8"
@@ -230,31 +258,34 @@
                                 {
                                   "name": "name",
                                   "label": "工具名称",
-                                  "id": "u:97e6ae8cc007"
+                                  "id": "u:97e6ae8cc007",
+                                  "popOver": "${desc}",
+                                  "popOverEnableOn": "this.desc"
                                 },
                                 {
+                                  "type": "mapping",
                                   "name": "type",
                                   "label": "工具类型",
-                                  "id": "u:92fdad445603"
+                                  "map": {
+                                    "java": "<span class='label label-success'>Java</span>",
+                                    "http": "<span class='label label-primary'>Http</span>"
+                                  },
+                                  "id": "u:4f09127c1920"
                                 },
                                 {
+                                  "type": "mapping",
                                   "name": "status",
                                   "label": "工具状态",
-                                  "id": "u:92fdad445603"
+                                  "map": {
+                                    "active": "<span class='label label-primary'>生效中</span>",
+                                    "deleted": "<span class='label label-danger'>已失效</span>"
+                                  },
+                                  "id": "u:4f09127c1920"
                                 },
                                 {
-                                  "name": "bean",
-                                  "label": "Bean",
-                                  "id": "u:3a9c584a5cc3",
-                                  "placeholder": "-",
-                                  "remark": "Java类型工具特有"
-                                },
-                                {
-                                  "name": "url",
-                                  "label": "Url",
-                                  "id": "u:1dadd1276db4",
-                                  "placeholder": "-",
-                                  "remark": "Http类型工具特有"
+                                  "name": "api",
+                                  "label": "API",
+                                  "id": "u:3a9c584a5cc3"
                                 },
                                 {
                                   "name": "creator",
@@ -269,11 +300,29 @@
                                 {
                                   "type": "button-toolbar",
                                   "label": "操作",
+                                  "width": 150,
                                   "buttons": [
+                                    {
+                                      "label": "入参",
+                                      "type": "button",
+                                      "actionType": "url",
+                                      "url": "/toolcenter/params?toolId=${toolId}",
+                                      "id": "u:c923a341faad",
+                                      "blank": true
+                                    },
+                                    {
+                                      "label": "运行",
+                                      "type": "button",
+                                      "level": "primary",
+                                      "actionType": "url",
+                                      "disabledOn": "status===\"deleted\"",
+                                      "url": "/toolcenter/run?toolId=${toolId}",
+                                      "id": "u:c923a341faad",
+                                      "blank": true
+                                    },
                                     {
                                       "label": "修改",
                                       "type": "button",
-                                      "level": "primary",
                                       "actionType": "drawer",
                                       "drawer": {
                                         "title": "编辑工具",
@@ -288,6 +337,16 @@
                                               "label": "工具名称"
                                             },
                                             {
+                                              "name": "desc",
+                                              "label": "工具描述",
+                                              "type": "textarea",
+                                              "clearable": true,
+                                              "id": "u:f84bea7b88cc",
+                                              "showCounter": true,
+                                              "maxLength": 30,
+                                              "placeholder": "限制30个字"
+                                            },
+                                            {
                                               "type": "select",
                                               "name": "type",
                                               "label": "类型",
@@ -296,12 +355,12 @@
                                               "id": "u:5f43212ae5d8",
                                               "options": [
                                                 {
-                                                  "label": "java",
-                                                  "value": "Java"
+                                                  "label": "Java",
+                                                  "value": "java"
                                                 },
                                                 {
-                                                  "label": "http",
-                                                  "value": "Http"
+                                                  "label": "Http",
+                                                  "value": "http"
                                                 }
                                               ],
                                               "multiple": false
@@ -314,15 +373,8 @@
                                             },
                                             {
                                               "type": "input-text",
-                                              "name": "bean",
-                                              "label": "Bean",
-                                              "hiddenOn": "this.type === 'http'"
-                                            },
-                                            {
-                                              "type": "input-text",
-                                              "name": "url",
-                                              "label": "Url",
-                                              "hiddenOn": "this.type === 'java'"
+                                              "name": "api",
+                                              "label": "API"
                                             },
                                             {
                                               "type": "input-text",

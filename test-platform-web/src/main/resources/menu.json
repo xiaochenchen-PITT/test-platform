@@ -5,9 +5,11 @@
     "icon": "/svg/home.svg"
   },
   {
-    "label": "工具中心",
+    "label": "开放工具中心",
     "icon": "/svg/tool_center.svg",
-    "unfolded": false,
+    "customText": "HOT",
+    "customLevel": "danger",
+    "unfolded": true,
     "children": [
       {
         "label": "工具新增",
@@ -27,18 +29,18 @@
     ]
   },
   {
-    "label": "数据迁移",
+    "label": "数据迁移验证",
     "icon": "/svg/migration_check.svg",
-    "unfolded": false,
+    "unfolded": true,
     "children": [
       {
         "label": "配置录入",
-        "to": "/migrationcheck/config_set",
+        "to": "/migrationcheck/set",
         "icon": "/svg/add.svg"
       },
       {
         "label": "配置管理",
-        "to": "/migrationcheck/config_manage",
+        "to": "/migrationcheck/manage",
         "icon": "/svg/list.svg"
       }
     ]
@@ -46,7 +48,7 @@
   {
     "label": "仪表盘",
     "icon": "/svg/dashboard.svg",
-    "unfolded": false,
+    "unfolded": true,
     "children": [
       {
         "label": "自动化大盘",
