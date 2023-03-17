@@ -51,7 +51,8 @@ public class MigrationConfigConverter {
                 mappingRulePO.setTargetTableName(mappingRule.getTargetMappingItem().getTableName());
                 mappingRulePO.setTargetFieldName(mappingRule.getTargetMappingItem().getFieldName());
                 mappingRulePO.setFieldCheckMethodName(mappingRule.getFieldCheckMethod().getBeanName());
-                mappingRulePO.setFieldCheckMethodArgs(String.valueOf(mappingRule.getFieldCheckMethod().getArgs()));
+                mappingRulePO.setFieldCheckMethodArgs(CollectionUtils.isNotEmpty(mappingRule.getFieldCheckMethod().getArgs()) ?
+                    String.valueOf(mappingRule.getFieldCheckMethod().getArgs()) : "");
 
                 mappingRulePOList.add(mappingRulePO);
             }
@@ -87,7 +88,8 @@ public class MigrationConfigConverter {
                 sourceLocatorPO.setTargetTableName(entry.getKey());
                 sourceLocatorPO.setLocateField(entry.getValue().getLocateField());
                 sourceLocatorPO.setLocateMethodName(entry.getValue().getLocateMethod().getBeanName());
-                sourceLocatorPO.setLocateMethodArgs(String.valueOf(entry.getValue().getLocateMethod().getArgs()));
+                sourceLocatorPO.setLocateMethodArgs(CollectionUtils.isNotEmpty(entry.getValue().getLocateMethod().getArgs()) ?
+                    String.valueOf(entry.getValue().getLocateMethod().getArgs()) : null);
 
                 sourceLocatorPOList.add(sourceLocatorPO);
             }

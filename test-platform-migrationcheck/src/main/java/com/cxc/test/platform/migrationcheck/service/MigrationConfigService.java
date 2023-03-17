@@ -44,6 +44,9 @@ public class MigrationConfigService {
     @Resource
     DiffResultMapper diffResultMapper;
 
+    @Resource
+    DiffDetailMapper diffDetailMapper;
+
     @Transactional
     public ResultDO<Long> addConfig(MigrationConfig migrationConfig) {
         try {
@@ -64,6 +67,36 @@ public class MigrationConfigService {
             log.error("addConfig failed. ", e);
 //            return ResultDO.fail(ErrorMessageUtils.getMessage(e)); // 回滚必须要抛异常，这里不return了
             throw new RuntimeException("addConfig failed, please check log"); // 回滚默认需要抛RuntimeException或者Error类
+        }
+    }
+
+    public ResultDO<Boolean> deleteConfig(Long configId, boolean isDeleteDiffResult) {
+        try {
+            int ret1 = migrationConfigMapper.deleteByConfigId(configId);
+            Assert.isTrue(ret1 == 1, "failed to delete migrationConfig");
+
+            int ret2 = mappingRuleMapper.deleteByConfigId(configId);
+            Assert.isTrue(ret2 >= 1, "failed to delete mappingRule");
+
+            int ret3 = sourceInitSqlMapper.deleteByConfigId(configId);
+            Assert.isTrue(ret3 >= 1, "failed to delete sourceInitSql");
+
+            int ret4 = sourceLocatorMapper.deleteByConfigId(configId);
+            Assert.isTrue(ret4 >= 1, "failed to delete sourceLocator");
+
+            if (isDeleteDiffResult) {
+                int ret5 = diffResultMapper.deleteByConfigId(configId);
+                Assert.isTrue(ret5 >= 1, "failed to delete diffResult");
+
+                int ret6 = diffDetailMapper.deleteByConfigId(configId);
+                Assert.isTrue(ret6 >= 1, "failed to delete diffDetail");
+            }
+
+            return ResultDO.success(Boolean.TRUE);
+        } catch (Exception e) {
+            log.error("deleteConfig failed. ", e);
+//            return ResultDO.fail(ErrorMessageUtils.getMessage(e)); // 回滚必须要抛异常，这里不return了
+            throw new RuntimeException("deleteConfig failed, please check log"); // 回滚默认需要抛RuntimeException或者Error类
         }
     }
 
@@ -88,6 +121,11 @@ public class MigrationConfigService {
         }
     }
 
+    /**
+     *
+     * @param configIdSearch
+     * @return key:configId, value: batch（结果）列表
+     */
     public ResultDO<Map<Long, List<DiffResultPO>>> getConfigList(Long configIdSearch) {
         try {
             List<MigrationConfigPO> migrationConfigPOList = new ArrayList<>();

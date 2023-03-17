@@ -18,4 +18,6 @@ public interface MigrationConfigMapper {
     List<MigrationConfigPO> getAll();
 
     int update(MigrationConfigPO migrationConfigPO);
+
+    int deleteByConfigId(Long configId);
 }

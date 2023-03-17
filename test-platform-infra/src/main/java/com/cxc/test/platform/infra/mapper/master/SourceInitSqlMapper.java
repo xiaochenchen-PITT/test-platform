@@ -15,4 +15,6 @@ public interface SourceInitSqlMapper {
     List<SourceInitSqlPO> getByConfigId(Long configId);
 
     int update(SourceInitSqlPO sourceInitSqlPO);
+
+    int deleteByConfigId(Long configId);
 }

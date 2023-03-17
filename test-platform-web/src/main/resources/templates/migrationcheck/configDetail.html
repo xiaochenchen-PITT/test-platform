@@ -260,6 +260,23 @@
                                     {
                                       "type": "crud",
                                       "name": "mappingRuleCrud",
+                                      "headerToolbar": [
+                                        {
+                                          "type": "export-excel",
+                                          "label": "全量导出excel",
+                                          "filename": "数据迁移字段映射关系_config_id_${configId}",
+                                          "api": "/migrationcheck/export_mapping_rule?configId=${configId}",
+                                          "columns": [
+                                            "sourceTableName",
+                                            "sourceFieldNames",
+                                            "isPrimaryKey",
+                                            "targetTableName",
+                                            "targetFieldName",
+                                            "fieldCheckMethodName",
+                                            "fieldCheckMethodArgs"
+                                          ]
+                                        }
+                                      ],
                                       "api": {
                                         "method": "get",
                                         "url": "/migrationcheck/get_mapping_rule_config?configId=${configId}",
@@ -306,56 +323,42 @@
                                         {
                                           "name": "id",
                                           "label": "ID",
-                                          "groupName": "ID",
-                                          "id": "u:97e6ae8cc007"
-                                        },
-                                        {
-                                          "name": "configId",
-                                          "label": "配置id",
-                                          "groupName": "ID",
                                           "id": "u:97e6ae8cc007"
                                         },
                                         {
                                           "name": "sourceTableName",
-                                          "label": "表名",
-                                          "groupName": "原表",
+                                          "label": "原表表名",
                                           "id": "u:97e6ae8cc007"
                                         },
                                         {
                                           "name": "sourceFieldNames",
-                                          "label": "字段名(s)",
-                                          "groupName": "原表",
+                                          "label": "原表字段名",
                                           "id": "u:92fdad445603"
                                         },
                                         {
                                           "name": "isPrimaryKey",
-                                          "label": "主键？",
-                                          "groupName": "原表",
+                                          "label": "是否主键",
                                           "id": "u:3a9c584a5cc3"
                                         },
                                         {
                                           "name": "targetTableName",
-                                          "label": "表名",
-                                          "groupName": "目标表",
+                                          "label": "目标表表名",
                                           "id": "u:e2b9df648687"
                                         },
                                         {
                                           "name": "targetFieldName",
-                                          "label": "字段名",
-                                          "groupName": "目标表",
+                                          "label": "目标表字段名",
                                           "id": "u:86cbcf96da7c"
                                         },
                                         {
                                           "name": "fieldCheckMethodName",
-                                          "label": "方法",
-                                          "groupName": "自定义处理逻辑",
+                                          "label": "自定义方法",
                                           "id": "u:1dadd1276db4"
                                         },
                                         {
-                                          "label": "入参",
+                                          "label": "自定义入参",
                                           "id": "u:1dadd1276db4",
-                                          "name": "fieldCheckMethodArgs",
-                                          "groupName": "自定义处理逻辑"
+                                          "name": "fieldCheckMethodArgs"
                                         },
                                         {
                                           "type": "button-toolbar",
@@ -380,12 +383,12 @@
                                                     {
                                                       "type": "input-text",
                                                       "name": "sourceFieldNames",
-                                                      "label": "原表字段名(s)"
+                                                      "label": "原表字段名"
                                                     },
                                                     {
                                                       "type": "input-text",
                                                       "name": "isPrimaryKey",
-                                                      "label": "是否是主键"
+                                                      "label": "是否主键"
                                                     },
                                                     {
                                                       "type": "input-text",
@@ -400,12 +403,12 @@
                                                     {
                                                       "type": "input-text",
                                                       "name": "fieldCheckMethodName",
-                                                      "label": "自定义处理逻辑"
+                                                      "label": "自定义方法"
                                                     },
                                                     {
                                                       "type": "input-text",
                                                       "name": "fieldCheckMethodArgs",
-                                                      "label": "自定义处理逻辑入参"
+                                                      "label": "自定义入参"
                                                     }
                                                   ]
                                                 }
@@ -417,7 +420,7 @@
                                               "type": "button",
                                               "actionType": "ajax",
                                               "level": "danger",
-                                              "confirmText": "确认要删除？",
+                                              "confirmText": "确认删除该映射关系？该操作不可逆",
                                               "api": "get:/migrationcheck/delete_mapping_rule?id=${id}",
                                               "id": "u:1fd57e4b4497"
                                             }
@@ -476,7 +479,7 @@
                                         },
                                         {
                                           "name": "configId",
-                                          "label": "配置id",
+                                          "label": "配置ID",
                                           "id": "u:97e6ae8cc007"
                                         },
                                         {
@@ -595,7 +598,7 @@
                                         },
                                         {
                                           "name": "configId",
-                                          "label": "配置id",
+                                          "label": "配置ID",
                                           "id": "u:97e6ae8cc007"
                                         },
                                         {

@@ -14,11 +14,11 @@ public class MappingRule {
      */
     public final static String EXCEL_SOURCE_TABLE_NAME = "原表表名";
     public final static String EXCEL_SOURCE_FIELD_NAME = "原表字段名";
-    public final static String EXCEL_IS_PRIMARY_KEY = "是否是主键";
+    public final static String EXCEL_IS_PRIMARY_KEY = "是否主键";
     public final static String EXCEL_TARGET_TABLE_NAME = "目标表表名";
     public final static String EXCEL_TARGET_FIELD_NAME = "目标表字段名";
-    public final static String EXCEL_FIELD_CHECK_METHOD_NAME = "自定义处理逻辑";
-    public final static String EXCEL_FIELD_CHECK_METHOD_ARGS = "自定义处理逻辑入参";
+    public final static String EXCEL_FIELD_CHECK_METHOD_NAME = "自定义方法";
+    public final static String EXCEL_FIELD_CHECK_METHOD_ARGS = "自定义入参";
 
     @Getter
     @Setter

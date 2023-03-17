@@ -19,4 +19,6 @@ public interface MappingRuleMapper {
     int update(MappingRulePO mappingRulePO);
 
     int delete(Long id);
+
+    int deleteByConfigId(Long configId);
 }

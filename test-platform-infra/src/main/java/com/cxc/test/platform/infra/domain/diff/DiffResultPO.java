@@ -1,6 +1,6 @@
 package com.cxc.test.platform.infra.domain.diff;
 
-import com.cxc.test.platform.common.domain.diff.TaskStatusConstant;
+import com.cxc.test.platform.common.domain.diff.TaskStatusEnum;
 import lombok.Data;
 
 import java.util.Date;
@@ -28,7 +28,7 @@ public class DiffResultPO {
     private int isEqual;
 
     /**
-     * @see TaskStatusConstant
+     * @see TaskStatusEnum 的status
      */
     private String status;
 

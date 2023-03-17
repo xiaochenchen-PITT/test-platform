@@ -13,4 +13,6 @@ public interface DiffDetailMapper {
     int insert(DiffDetailPO diffDetailPO);
 
     List<DiffDetailPO> getByBatchId(Long batchId);
+
+    int deleteByConfigId(Long configId);
 }

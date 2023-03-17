@@ -17,4 +17,6 @@ public interface DiffResultMapper {
     List<DiffResultPO> getByConfigId(Long configId);
 
     DiffResultPO getByBatchId(Long batchId);
+
+    int deleteByConfigId(Long configId);
 }

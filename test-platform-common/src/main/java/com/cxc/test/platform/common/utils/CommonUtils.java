@@ -81,6 +81,13 @@ public class CommonUtils {
      * @return
      */
     public static String getPrettyPercentage(Long a, Long b) {
+        if (a == null) {
+            a = 0L;
+        }
+        if (b == null) {
+            b = 0L;
+        }
+
         return String.format("%.2f", ((a.doubleValue() / b.doubleValue()) * 100)) + "%";
     }
 

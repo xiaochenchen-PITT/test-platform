@@ -64,4 +64,8 @@
         where config_id = #{configId}
     </update>
 
+    <delete id="deleteByConfigId">
+        delete from t_migration_config where config_id = #{configId}
+    </delete>
+
 </mapper>

@@ -253,6 +253,8 @@
                                 {
                                   "name": "toolId",
                                   "label": "工具ID",
+                                  "copyable": true,
+                                  "sortable": true,
                                   "id": "u:97e6ae8cc007"
                                 },
                                 {
@@ -392,7 +394,7 @@
                                       "visibleOn": "this.status === 'active'",
                                       "actionType": "ajax",
                                       "level": "danger",
-                                      "confirmText": "确认要删除？",
+                                      "confirmText": "确认删除该工具？",
                                       "api": "get:/toolcenter/delete_tool?toolId=${toolId}",
                                       "id": "u:1fd57e4b4497"
                                     },
@@ -401,7 +403,7 @@
                                       "type": "button",
                                       "visibleOn": "this.status === 'deleted'",
                                       "actionType": "ajax",
-                                      "confirmText": "确认要恢复？",
+                                      "confirmText": "确认恢复该工具？",
                                       "api": "get:/toolcenter/restore_tool?toolId=${toolId}",
                                       "id": "u:1fd57e4b4497"
                                     }

@@ -15,4 +15,6 @@ public interface SourceLocatorMapper {
     List<SourceLocatorPO> getByConfigId(Long configId);
 
     int update(SourceLocatorPO sourceLocatorPO);
+
+    int deleteByConfigId(Long configId);
 }

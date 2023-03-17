@@ -6,7 +6,7 @@ import com.cxc.test.platform.common.domain.AmisResult;
 import com.cxc.test.platform.common.domain.FeatureKeyConstant;
 import com.cxc.test.platform.common.domain.ResultDO;
 import com.cxc.test.platform.common.domain.diff.DiffResult;
-import com.cxc.test.platform.common.domain.diff.TaskStatusConstant;
+import com.cxc.test.platform.common.domain.diff.TaskStatusEnum;
 import com.cxc.test.platform.common.utils.CommonUtils;
 import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import com.cxc.test.platform.common.utils.ExcelUtils;
@@ -151,7 +151,7 @@ public class MigrationCheckController extends BaseController {
         }
     }
 
-    private DiffResultPO getLastDiffResult(List<DiffResultPO> diffResultPOList) {
+    private DiffResultPO getLastDiffResult(List<DiffResultPO> diffResultPOList, Long batchIdSearch) {
         DiffResultPO last = null;
 
         if (CollectionUtils.isEmpty(diffResultPOList)) {
@@ -159,6 +159,11 @@ public class MigrationCheckController extends BaseController {
         }
 
         for (DiffResultPO diffResultPO : diffResultPOList) {
+            // 指定batchId查询
+            if (batchIdSearch != null && batchIdSearch.equals(diffResultPO.getBatchId())) {
+                return diffResultPO;
+            }
+
             if (last == null) {
                 last = diffResultPO;
             } else {
@@ -190,7 +195,7 @@ public class MigrationCheckController extends BaseController {
         }
 
         // 需要单独处理一下not_started，因为这是个默认值，不在diffResultPOList中
-        if (diffResultPO == null && TaskStatusConstant.NOT_STARTED.equalsIgnoreCase(statusSearch)) {
+        if (diffResultPO == null && TaskStatusEnum.NOT_STARTED.getStatus().equalsIgnoreCase(statusSearch)) {
             return true;
         }
 
@@ -203,7 +208,8 @@ public class MigrationCheckController extends BaseController {
 
     @RequestMapping(value = "/get_config_list", method = RequestMethod.GET)
     @ResponseBody
-    public AmisResult getConfigList(@RequestParam(required = false) Long configIdSearch, @RequestParam(required = false) String statusSearch) {
+    public AmisResult getConfigList(@RequestParam(required = false) Long configIdSearch, @RequestParam(required = false) Long batchIdSearch,
+                                    @RequestParam(required = false) String statusSearch) {
         String triggerUrl = buildTriggerUrl();
 
         ResultDO<Map<Long, List<DiffResultPO>>> queryRet = migrationConfigService.getConfigList(configIdSearch);
@@ -214,18 +220,19 @@ public class MigrationCheckController extends BaseController {
         List<MigrationRunningItemVO> migrationRunningItemVOList = new ArrayList<>();
         for (Map.Entry<Long, List<DiffResultPO>> entry : queryRet.getData().entrySet()) {
             Long configId = entry.getKey();
-            DiffResultPO lastDiffResultPO = getLastDiffResult(entry.getValue());
+            DiffResultPO lastDiffResultPO = getLastDiffResult(entry.getValue(), batchIdSearch);
 
             if (filterStatusSearch(statusSearch, lastDiffResultPO)) {
                 MigrationRunningItemVO migrationRunningItemVO = MigrationRunningItemVO.builder()
                     .batchId(lastDiffResultPO == null ? null : lastDiffResultPO.getBatchId())
                     .configId(configId)
                     .mappingRuleCount(parseMappingRuleCount(lastDiffResultPO))
-                    .status(lastDiffResultPO == null ? TaskStatusConstant.NOT_STARTED : lastDiffResultPO.getStatus())
+                    .status(lastDiffResultPO == null ? TaskStatusEnum.NOT_STARTED.getStatus() : lastDiffResultPO.getStatus())
                     .progress(lastDiffResultPO == null ? "0" : lastDiffResultPO.getProgress().substring(0, lastDiffResultPO.getProgress().length() - 1))
                     .runner(lastDiffResultPO == null || StringUtils.isBlank(lastDiffResultPO.getRunner()) ? "" :
                         lastDiffResultPO.getRunner())
-                    .totalTaskCount(lastDiffResultPO == null ? 0 : lastDiffResultPO.getTotalCount())
+                    .totalTaskCount(lastDiffResultPO == null || lastDiffResultPO.getTotalCount() == null ? 0 :
+                        lastDiffResultPO.getTotalCount())
                     .failedTaskCount(lastDiffResultPO == null || lastDiffResultPO.getFailedCount() == null ? 0 :
                         lastDiffResultPO.getFailedCount())
                     .createdTime(lastDiffResultPO == null ? "" : CommonUtils.getPrettyDate(lastDiffResultPO.getCreatedTime()))
@@ -250,14 +257,27 @@ public class MigrationCheckController extends BaseController {
 
         MigrationConfig migrationConfig = convert(migrationConfigVO);
 
-        Assert.isTrue(migrationConfig.getTableAndInitSqlMap().size() == migrationConfig.getRelatedSourceTables().size(),
-            "【源数据初始化】和【字段映射关系】中源表数量不一致，请检查配置");
-        Assert.isTrue(migrationConfig.getTableAndLocatorMap().size() == migrationConfig.getRelatedTargetTables().size(),
-            "【目标表中源数据定位】和【字段映射关系】中目标表数量不一致，请检查配置");
+        Assert.isTrue(CollectionUtils.isEqualCollection(migrationConfig.getTableAndInitSqlMap().keySet(), migrationConfig.getRelatedSourceTables()),
+            "【源数据初始化】和【字段映射关系】中源表不一致，请检查配置");
+        Assert.isTrue(CollectionUtils.isEqualCollection(migrationConfig.getTableAndLocatorMap().keySet(), migrationConfig.getRelatedTargetTables()),
+            "【目标表中源数据定位】和【字段映射关系】中目标表不一致，请检查配置");
 
         ResultDO<Long> ret = migrationConfigService.addConfig(migrationConfig);
         if (ret.getIsSuccess()) {
             return AmisResult.simpleSuccess("success", "保存成功，config id:" + ret.getData());
+        } else {
+            return AmisResult.fail(ret.getErrorMessage(), null);
+        }
+    }
+
+    @RequestMapping(value = "/delete_config", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult deleteConfig(@RequestParam Long configId) {
+        String triggerUrl = buildTriggerUrl();
+
+        ResultDO<Boolean> ret = migrationConfigService.deleteConfig(configId, false);
+        if (ret.getIsSuccess()) {
+            return AmisResult.simpleSuccess("success", "删除成功，config id:" + configId);
         } else {
             return AmisResult.fail(ret.getErrorMessage(), null);
         }
@@ -290,7 +310,7 @@ public class MigrationCheckController extends BaseController {
 
     @RequestMapping(value = "/update_migration_db_config", method = RequestMethod.POST)
     @ResponseBody
-    public AmisResult updateMappingRuleConfig(@RequestParam Long configId, @RequestBody MigrationDbConfigVO migrationDbConfigVO) {
+    public AmisResult updateMigrationDbConfig(@RequestParam Long configId, @RequestBody MigrationDbConfigVO migrationDbConfigVO) {
         String triggerUrl = buildTriggerUrl();
 
         MigrationConfigPO migrationConfigPO = new MigrationConfigPO();
@@ -355,6 +375,14 @@ public class MigrationCheckController extends BaseController {
         return AmisResult.success(retData, "ok");
     }
 
+    @RequestMapping(value = "/export_mapping_rule", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult exportMappingRule(@RequestParam Long configId) {
+        String triggerUrl = buildTriggerUrl();
+
+        return getMappingRuleConfig(configId, null, null);
+    }
+
     @RequestMapping(value = "/update_mapping_rule", method = RequestMethod.POST)
     @ResponseBody
     public AmisResult updateMappingRuleConfig(@RequestParam Long id, @RequestBody MappingRuleVO mappingRuleVO) {
@@ -368,7 +396,7 @@ public class MigrationCheckController extends BaseController {
         mappingRulePO.setTargetTableName(mappingRuleVO.getTargetTableName());
         mappingRulePO.setTargetFieldName(mappingRuleVO.getTargetFieldName());
         mappingRulePO.setFieldCheckMethodName(mappingRuleVO.getFieldCheckMethodName());
-        mappingRulePO.setFieldCheckMethodArgs(mappingRuleVO.getFieldCheckMethodArgs());
+        mappingRulePO.setFieldCheckMethodArgs(convertArgsFromVO2PO(mappingRuleVO.getFieldCheckMethodArgs()));
 
         int ret = mappingRuleMapper.update(mappingRulePO);
         Assert.isTrue(ret == 1, "update mapping rule failed");
@@ -439,7 +467,7 @@ public class MigrationCheckController extends BaseController {
         sourceLocatorPO.setTargetTableName(sourceLocatorVO.getTargetTableName());
         sourceLocatorPO.setLocateField(sourceLocatorVO.getLocateField());
         sourceLocatorPO.setLocateMethodName(sourceLocatorVO.getLocateMethodName());
-        sourceLocatorPO.setLocateMethodArgs(sourceLocatorVO.getLocateMethodArgs());
+        sourceLocatorPO.setLocateMethodArgs(convertArgsFromVO2PO(sourceLocatorVO.getLocateMethodArgs()));
 
         int ret = sourceLocatorMapper.update(sourceLocatorPO);
         Assert.isTrue(ret == 1, "update source locator failed");
@@ -518,7 +546,7 @@ public class MigrationCheckController extends BaseController {
             .configId(diffResultPO.getConfigId())
             .isSuccess(diffResultPO.getIsSuccess() == 1 ? "成功" : "失败")
             .isEqual(diffResultPO.getIsEqual() == 1 ? "一致" : "不一致")
-            .status(diffResultPO.getStatus())
+            .status(TaskStatusEnum.getByStatus(diffResultPO.getStatus()).getLabel())
             .progress(diffResultPO.getProgress().substring(0, diffResultPO.getProgress().length() - 1))
             .runner(diffResultPO.getRunner())
             .errorMessage(diffResultPO.getErrorMessage())
@@ -678,9 +706,25 @@ public class MigrationCheckController extends BaseController {
             return null;
         }
 
+        argsStr = argsStr.replace("[", "").replace("]", "");
+
+        if (StringUtils.isBlank(argsStr)) {
+            return null;
+        }
+
         return Arrays.stream(argsStr.split(","))
             .map(s -> trim(s))
             .collect(Collectors.toList());
+    }
+
+    private String convertArgsFromVO2PO(String argsStr) {
+        List<Object> argList = parseArgFromVO(argsStr);
+
+        if (CollectionUtils.isEmpty(argList)) {
+            return "";
+        }
+
+        return String.valueOf(argList);
     }
 
     /**********************************************************************************

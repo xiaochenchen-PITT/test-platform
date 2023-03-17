@@ -67,4 +67,8 @@
         delete from t_migration_mapping_rule where id = #{id}
     </delete>
 
+    <delete id="deleteByConfigId">
+        delete from t_migration_mapping_rule where config_id = #{configId}
+    </delete>
+
 </mapper>

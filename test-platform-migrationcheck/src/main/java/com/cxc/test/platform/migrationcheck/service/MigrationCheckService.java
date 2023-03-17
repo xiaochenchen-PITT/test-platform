@@ -151,7 +151,7 @@ public class MigrationCheckService {
     public void updateDiffResultOnTime() {
         try {
             if (isRunning) {
-                diffResult.setStatus(TaskStatusConstant.RUNNING);
+                diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
                 diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
                 diffResult.setFailedCount(failedCount.get());
 
@@ -247,11 +247,11 @@ public class MigrationCheckService {
                 }
             }
             diffResult.setFailedCount((long) diffResult.getDiffDetailList().size());
-            diffResult.setStatus(TaskStatusConstant.FINISHED);
+            diffResult.setStatus(TaskStatusEnum.FINISHED.getStatus());
         } catch (Exception e) {
             log.error("Failed to execute compare because " + ErrorMessageUtils.getMessage(e), e);
             diffResult.setIsSuccess(false);
-            diffResult.setStatus(TaskStatusConstant.FAILED);
+            diffResult.setStatus(TaskStatusEnum.FAILED.getStatus());
             diffResult.setErrorMessage(ErrorMessageUtils.getMessage(e));
         } finally {
             end(diffResult);
@@ -275,7 +275,7 @@ public class MigrationCheckService {
         diffResult.setBatchId(batchId);
         diffResult.setConfigId(configId);
         diffResult.setIsSuccess(true);
-        diffResult.setStatus(TaskStatusConstant.RUNNING);
+        diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
         diffResult.setProgress("1%");
         diffResult.setTriggerUrl(triggerUrl);
 
@@ -285,7 +285,12 @@ public class MigrationCheckService {
     private DiffResult end(DiffResult diffResult) {
         isRunning = false;
 
+        if (diffResult.getTotalCount() == null) {
+            diffResult.setTotalCount(count.get());
+        }
+
         diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
+
         diffResult.setFailedCount(failedCount.get());
 
         count.set(0);

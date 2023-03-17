@@ -92,7 +92,14 @@ public class DiffService {
             diffResult.setModifiedTime(new Date(System.currentTimeMillis()));
         }
 
-        int ret = diffResultMapper.update(diffConverter.convertDO2PO(diffResult));
+        int ret;
+        DiffResultPO diffResultQuery = diffResultMapper.getByBatchId(diffResult.getBatchId());
+        if (diffResultQuery == null) {
+            ret = diffResultMapper.insert(diffConverter.convertDO2PO(diffResult));
+        } else {
+            ret = diffResultMapper.update(diffConverter.convertDO2PO(diffResult));
+        }
+
         if (ret != 1) {
             saveRet = false;
         }

@@ -32,4 +32,8 @@
     select * from t_compare_diff_detail where batch_id = #{batchId}
   </select>
 
+  <delete id="deleteByConfigId">
+    delete from t_compare_diff_detail where config_id = #{configId}
+  </delete>
+
 </mapper>

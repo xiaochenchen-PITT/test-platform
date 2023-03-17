@@ -36,4 +36,8 @@
         where id = #{id}
     </update>
 
+    <delete id="deleteByConfigId">
+        delete from t_migration_source_init_sql where config_id = #{configId}
+    </delete>
+
 </mapper>

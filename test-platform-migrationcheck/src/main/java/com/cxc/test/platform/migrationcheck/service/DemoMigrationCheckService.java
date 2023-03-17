@@ -1,10 +1,7 @@
 package com.cxc.test.platform.migrationcheck.service;
 
 import com.cxc.test.platform.common.domain.ResultDO;
-import com.cxc.test.platform.common.domain.diff.DiffDetail;
-import com.cxc.test.platform.common.domain.diff.DiffResult;
-import com.cxc.test.platform.common.domain.diff.DiffTypeConstant;
-import com.cxc.test.platform.common.domain.diff.TaskStatusConstant;
+import com.cxc.test.platform.common.domain.diff.*;
 import com.cxc.test.platform.common.utils.CommonUtils;
 import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import com.cxc.test.platform.migrationcheck.domain.config.MigrationCheckConfig;
@@ -94,7 +91,7 @@ public class DemoMigrationCheckService {
     public void updateDiffResultOnTime() {
         try {
             if (isRunning) {
-                diffResult.setStatus(TaskStatusConstant.RUNNING);
+                diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
                 diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
                 diffResult.setFailedCount(failedCount.get());
 
@@ -162,11 +159,11 @@ public class DemoMigrationCheckService {
                 }
             }
             diffResult.setFailedCount((long) diffResult.getDiffDetailList().size());
-            diffResult.setStatus(TaskStatusConstant.FINISHED);
+            diffResult.setStatus(TaskStatusEnum.FINISHED.getStatus());
         } catch (Exception e) {
             log.error("Failed to execute compare because " + ErrorMessageUtils.getMessage(e), e);
             diffResult.setIsSuccess(false);
-            diffResult.setStatus(TaskStatusConstant.FAILED);
+            diffResult.setStatus(TaskStatusEnum.FAILED.getStatus());
             diffResult.setErrorMessage(ErrorMessageUtils.getMessage(e));
         } finally {
             end(diffResult);
@@ -190,7 +187,7 @@ public class DemoMigrationCheckService {
         diffResult.setBatchId(batchId);
         diffResult.setConfigId(configId);
         diffResult.setIsSuccess(true);
-        diffResult.setStatus(TaskStatusConstant.RUNNING);
+        diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
         diffResult.setProgress("1%");
         diffResult.setTriggerUrl(triggerUrl);
 

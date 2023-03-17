@@ -22,7 +22,7 @@ public class DiffResult {
     private Boolean isEqual;
 
     /**
-     * @see TaskStatusConstant
+     * @see TaskStatusEnum 的status
      */
     private String status;
 

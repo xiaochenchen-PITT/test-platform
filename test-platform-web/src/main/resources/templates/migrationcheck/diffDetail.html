@@ -195,6 +195,12 @@
                                       "span": 4
                                     },
                                     {
+                                      "label": "报错信息",
+                                      "content": "${errorMessage}",
+                                      "visibleOn": "this.errorMessage",
+                                      "span": 4
+                                    },
+                                    {
                                       "label": "触发url",
                                       "content": "${triggerUrl}",
                                       "span": 4
@@ -288,18 +294,6 @@
                                   "name": "id",
                                   "label": "ID",
                                   "id": "u:97e6ae8cc007"
-                                },
-                                {
-                                  "type": "mapping",
-                                  "name": "status",
-                                  "label": "运行状态",
-                                  "map": {
-                                    "not_started": "<span class='label label-warning'>未开始</span>",
-                                    "running": "<span class='label label-success'>运行中</span>",
-                                    "finished": "<span class='label label-primary'>已结束</span>",
-                                    "failed": "<span class='label label-danger'>失败</span>"
-                                  },
-                                  "id": "u:4f09127c1920"
                                 },
                                 {
                                   "type": "mapping",

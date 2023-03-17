@@ -139,6 +139,7 @@
                                 "url": "/migrationcheck/get_config_list",
                                 "data": {
                                   "configIdSearch": "${configIdSearch | default:undefined}",
+                                  "batchIdSearch": "${batchIdSearch | default:undefined}",
                                   "statusSearch": "${statusSearch | default:undefined}"
                                 }
                               },
@@ -155,7 +156,16 @@
                                       {
                                         "type": "input-text",
                                         "name": "configIdSearch",
-                                        "label": "配置id",
+                                        "label": "配置ID",
+                                        "clearable": true,
+                                        "size": "sm",
+                                        "placeholder": "精确搜索",
+                                        "id": "u:bdbc1cbbcb6c"
+                                      },
+                                      {
+                                        "type": "input-text",
+                                        "name": "batchIdSearch",
+                                        "label": "批次ID",
                                         "clearable": true,
                                         "size": "sm",
                                         "placeholder": "精确搜索",
@@ -197,13 +207,17 @@
                               "columns": [
                                 {
                                   "name": "batchId",
-                                  "label": "批次id",
-                                  "remark": "为该配置id的最近一次运行记录批次",
+                                  "label": "批次ID",
+                                  "remark": "为该配置ID的最近一次运行记录批次",
+                                  "copyable": true,
+                                  "sortable": true,
                                   "id": "u:97e6ae8cc007"
                                 },
                                 {
                                   "name": "configId",
-                                  "label": "配置id",
+                                  "label": "配置ID",
+                                  "copyable": true,
+                                  "sortable": true,
                                   "id": "u:97e6ae8cc007"
                                 },
                                 {
@@ -233,16 +247,11 @@
                                   "id": "u:92fdad445603"
                                 },
                                 {
-                                  "label": "失败任务总数",
+                                  "label": "失败总数",
                                   "id": "u:92fdad445603",
                                   "name": "failedTaskCount"
                                 },
                                 {
-                                  "label": "字段映射总数",
-                                  "id": "u:92fdad445603",
-                                  "name": "mappingRuleCount"
-                                },
-                                 {
                                   "label": "创建时间",
                                   "id": "u:92fdad445603",
                                   "name": "createdTime"
@@ -276,6 +285,15 @@
                                       "level": "danger",
                                       "disabledOn": "status!==\"running\"",
                                       "api": "/migrationcheck/stop"
+                                    },
+                                    {
+                                      "label": "删除",
+                                      "type": "button",
+                                      "actionType": "ajax",
+                                      "confirmText": "确认删除该配置ID相关配置？包括DB链接信息，字段映射关系等，该操作不可逆",
+                                      "level": "danger",
+                                      "disabledOn": "status===\"running\"",
+                                      "api": "get:/migrationcheck/delete_config?configId=${configId}"
                                     },
                                     {
                                       "label": "执行详情",
