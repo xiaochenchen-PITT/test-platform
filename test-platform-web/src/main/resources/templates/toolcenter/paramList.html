@@ -192,8 +192,8 @@
                                   "name": "isRequired",
                                   "label": "是否必填",
                                   "map": {
-                                    "True": "<span class='label label-primary'>是</span>",
-                                    "False": "<span class='label label-success'>否</span>"
+                                    true: "<span class='label label-primary'>是</span>",
+                                    false: "<span class='label label-success'>否</span>"
                                   },
                                   "id": "u:4f09127c1920"
                                 },
@@ -202,8 +202,8 @@
                                   "name": "hasDefault",
                                   "label": "是否有默认值",
                                   "map": {
-                                    "True": "<span class='label label-primary'>是</span>",
-                                    "False": "<span class='label label-success'>否</span>"
+                                    true: "<span class='label label-primary'>是</span>",
+                                    false: "<span class='label label-success'>否</span>"
                                   },
                                   "id": "u:4f09127c1920"
                                 },
@@ -218,12 +218,12 @@
                                   "label": "入参输入类型",
                                   "map": {
                                     "input": "<span class='label label-primary'>输入</span>",
-                                    "select": "<span class='label label-success'>单选</span>"
+                                    "select": "<span class='label label-warning'>单选</span>"
                                   },
                                   "id": "u:4f09127c1920"
                                 },
                                 {
-                                  "name": "optionValueList",
+                                  "name": "optionValues",
                                   "label": "可选值列表",
                                   "id": "u:1dadd1276db4",
                                 },
@@ -309,6 +309,7 @@
                                               "type": "input-text",
                                               "name": "defaultValue",
                                               "label": "默认值",
+                                              "description": "当类型为单选时，这里填value的值，而不是label的值",
                                               "hiddenOn": "this.hasDefault !== true"
                                             },
                                             {
@@ -332,10 +333,10 @@
                                             },
                                             {
                                               "type": "input-text",
-                                              "name": "optionValueList",
+                                              "name": "optionValues",
                                               "label": "可选值列表",
                                               "hiddenOn": "this.inputType !== 'select'",
-                                              "description": "json格式，例如{\"a\":\"AA\",\"bb\":\"BBB\"}",
+                                              "description": "单层kv对的json格式，例如{\"a\":\"AA\",\"bb\":\"BBB\"}",
                                               "validations": {
                                                 "isJson": true
                                               }

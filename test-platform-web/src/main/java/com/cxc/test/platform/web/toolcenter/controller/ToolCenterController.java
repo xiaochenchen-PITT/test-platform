@@ -190,6 +190,30 @@ public class ToolCenterController extends BaseController {
         return true;
     }
 
+    @RequestMapping(value = "/get_tool", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult getTool(@RequestParam Long toolId) {
+        String triggerUrl = buildTriggerUrl();
+
+        ToolPO toolPOToQuery = new ToolPO();
+        toolPOToQuery.setToolId(toolId);
+
+        List<ToolPO> toolPOList = toolMapper.selectByCondition(toolPOToQuery);
+        if (CollectionUtils.isEmpty(toolPOList)) {
+            return AmisResult.emptySuccess();
+        }
+
+        ToolPO toolPO = toolPOList.get(0);
+
+        ToolVO toolVO = ToolVO.builder()
+            .toolId(toolPO.getToolId())
+            .desc(toolPO.getDesc())
+            .api("java".equalsIgnoreCase(toolPO.getType()) ? toolPO.getBean() : toolPO.getUrl())
+            .build();
+
+        return AmisResult.success((JSONObject) JSONObject.toJSON(toolVO), "ok");
+    }
+
     @RequestMapping(value = "/get_param_list", method = RequestMethod.GET)
     @ResponseBody
     public AmisResult getParamList(@RequestParam Long toolId, @RequestParam(required = false) String nameSearch) {
@@ -216,8 +240,8 @@ public class ToolCenterController extends BaseController {
                 .label(toolParam.getLabel())
                 .desc(toolParam.getDesc())
                 .paramClass(toolParam.getParamClass())
-                .isRequired(toolParam.isRequired() ? "True" : "False")
-                .hasDefault(toolParam.isHasDefault() ? "True" : "False")
+                .isRequired(toolParam.isRequired())
+                .hasDefault(toolParam.isHasDefault())
                 .defaultValue(toolParam.getDefaultValue())
                 .inputType(toolParam.getInputType())
                 .optionValues(toolParam.getOptionValueListAsStr())
@@ -325,8 +349,8 @@ public class ToolCenterController extends BaseController {
         toolParamPO.setLabel(toolParamVO.getLabel());
         toolParamPO.setDesc(toolParamVO.getDesc());
         toolParamPO.setParamClass(toolParamVO.getParamClass());
-        toolParamPO.setIsRequired("True".equalsIgnoreCase(toolParamVO.getIsRequired()) ? 1 : 0);
-        toolParamPO.setHasDefault("True".equalsIgnoreCase(toolParamVO.getHasDefault()) ? 1 : 0);
+        toolParamPO.setIsRequired(toolParamVO.getIsRequired() ? 1 : 0);
+        toolParamPO.setHasDefault(toolParamVO.getHasDefault() ? 1 : 0);
         toolParamPO.setDefaultValue(toolParamVO.getDefaultValue());
         toolParamPO.setInputType(toolParamVO.getInputType());
         toolParamPO.setOptionValues(toolParamVO.getOptionValues());
@@ -488,10 +512,18 @@ public class ToolCenterController extends BaseController {
     public AmisResult trigger(@RequestParam Long toolId, @RequestBody LinkedHashMap<String, Object> paramMap) {
         String triggerUrl = buildTriggerUrl();
 
-        // amis会自动将表单提交之后的data数据填充到数据域中，所以这里要过滤一下
-        paramMap.remove("ret");
-        paramMap.remove("isSuccess");
-        paramMap.remove("errorMessage");
+        // amis会自动将表单提交之后的data数据填充到数据域中，所以这里要过滤一下除了schema以外的字段
+        AmisResult schemaRet = getAutoSchema(toolId);
+        List<String> schemaParams = schemaRet.getData().getJSONArray("controls").stream()
+            .map(o -> ((JSONObject) o).getString("name"))
+            .collect(Collectors.toList());
+
+        LinkedHashMap<String, Object> filteredParamMap = new LinkedHashMap<>();
+        for (Map.Entry<String, Object> entry : paramMap.entrySet()) {
+            if (schemaParams.contains(entry.getKey())) {
+                filteredParamMap.put(entry.getKey(), entry.getValue());
+            }
+        }
 
         ToolQuery toolQuery = ToolQuery.builder().toolId(toolId).build();
         ResultDO<List<Tool>> queryRet = toolCenterService.queryTools(toolQuery);
@@ -500,7 +532,7 @@ public class ToolCenterController extends BaseController {
         }
 
         Tool tool = queryRet.getData().get(0);
-        ResultDO<String> ret = toolCenterService.triggerTool(tool, paramMap);
+        ResultDO<String> ret = toolCenterService.triggerTool(tool, filteredParamMap);
 
         JSONObject dataJO = new JSONObject();
         dataJO.put("isSuccess", ret.getIsSuccess());

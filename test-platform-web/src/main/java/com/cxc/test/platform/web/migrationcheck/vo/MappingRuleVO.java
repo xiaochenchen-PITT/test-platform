@@ -15,7 +15,7 @@ public class MappingRuleVO {
 
     private String sourceFieldNames;
 
-    private String isPrimaryKey;
+    private Boolean isPrimaryKey;
 
     private String targetTableName;
 

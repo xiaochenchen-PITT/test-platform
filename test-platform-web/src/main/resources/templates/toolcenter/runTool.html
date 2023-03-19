@@ -60,10 +60,10 @@
                                   "height": 50,
                                   "thumbMode": "contain",
                                   "showDimensions": false,
-                                  "innerClassName": "no-border no-bg",
-                                  "className": "no-border no-bg",
-                                  "imageClassName": "no-border no-bg",
-                                  "thumbClassName": "no-border no-bg"
+                                  "innerClassName": "no-border no-bg border-none",
+                                  "className": "no-border no-bg border-none",
+                                  "imageClassName": "no-border no-bg border-none",
+                                  "thumbClassName": "no-border no-bg border-none"
                                 }
                               ],
                               "style": {
@@ -314,6 +314,19 @@
                                               "body": [
                                                 {
                                                   "type": "service",
+                                                  "api": "get:/toolcenter/get_tool?toolId=${toolId}",
+                                                  "body": [
+                                                    {
+                                                      "type": "tpl",
+                                                      "tpl": "API: <span class=\"text-success\">${api} / ${desc}</span>"
+                                                    },
+                                                    {
+                                                      "type": "divider"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "type": "service",
                                                   "schemaApi": "get:/toolcenter/auto_schema?toolId=${toolId}",
                                                   "id": "u:e83be16b2374"
                                                 }
@@ -336,12 +349,8 @@
                                                   "name": "isSuccess",
                                                   "placeholder": "",
                                                   "map": {
-                                                    "true": "<span class='label label-success'>成功</span>",
-                                                    "True": "<span class='label label-success'>成功</span>",
-                                                    "TRUE": "<span class='label label-success'>成功</span>",
-                                                    "false": "<span class='label label-danger'>失败</span>",
-                                                    "False": "<span class='label label-danger'>失败</span>",
-                                                    "FALSE": "<span class='label label-danger'>失败</span>"
+                                                    true: "<span class='label label-success'>成功</span>",
+                                                    false: "<span class='label label-danger'>失败</span>"
                                                   }
                                                 },
                                                 {

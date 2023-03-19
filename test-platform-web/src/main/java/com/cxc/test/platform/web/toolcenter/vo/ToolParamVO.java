@@ -19,9 +19,9 @@ public class ToolParamVO {
 
     private String paramClass;
 
-    private String isRequired;
+    private Boolean isRequired;
 
-    private String hasDefault;
+    private Boolean hasDefault;
 
     private String defaultValue;
 

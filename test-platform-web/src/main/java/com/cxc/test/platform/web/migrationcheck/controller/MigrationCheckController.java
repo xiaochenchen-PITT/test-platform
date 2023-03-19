@@ -360,7 +360,7 @@ public class MigrationCheckController extends BaseController {
                 .configId(mappingRulePO.getConfigId())
                 .sourceTableName(mappingRulePO.getSourceTableName())
                 .sourceFieldNames(mappingRulePO.getSourceFieldNames())
-                .isPrimaryKey(mappingRulePO.getIsPrimaryKey() == 1 ? "true" : "false")
+                .isPrimaryKey(mappingRulePO.getIsPrimaryKey() == 1 ? Boolean.TRUE : Boolean.FALSE)
                 .targetTableName(mappingRulePO.getTargetTableName())
                 .targetFieldName(mappingRulePO.getTargetFieldName())
                 .fieldCheckMethodName(mappingRulePO.getFieldCheckMethodName())
@@ -392,7 +392,7 @@ public class MigrationCheckController extends BaseController {
         mappingRulePO.setId(id);
         mappingRulePO.setSourceTableName(mappingRuleVO.getSourceTableName());
         mappingRulePO.setSourceFieldNames(mappingRuleVO.getSourceFieldNames());
-        mappingRulePO.setIsPrimaryKey(StringUtils.equalsIgnoreCase(mappingRuleVO.getIsPrimaryKey(), "true") ? 1 : 0);
+        mappingRulePO.setIsPrimaryKey(mappingRuleVO.getIsPrimaryKey() ? 1 : 0);
         mappingRulePO.setTargetTableName(mappingRuleVO.getTargetTableName());
         mappingRulePO.setTargetFieldName(mappingRuleVO.getTargetFieldName());
         mappingRulePO.setFieldCheckMethodName(mappingRuleVO.getFieldCheckMethodName());

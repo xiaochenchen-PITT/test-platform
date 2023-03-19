@@ -299,6 +299,7 @@
                                               "type": "input-text",
                                               "name": "defaultValue",
                                               "label": "默认值",
+                                              "description": "当类型为单选时，这里填value的值，而不是label的值",
                                               "hiddenOn": "this.hasDefault !== true"
                                             },
                                             {
@@ -326,7 +327,7 @@
                                               "name": "optionValues",
                                               "label": "可选值列表",
                                               "hiddenOn": "this.inputType !== 'select'",
-                                              "description": "json格式，例如{\"a\":\"AA\",\"bb\":\"BBB\"}",
+                                              "description": "单层kv对的json格式，例如{\"a\":\"AA\",\"bb\":\"BBB\"}",
                                               "validations": {
                                                 "isJson": true
                                               }
