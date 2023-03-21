@@ -71,5 +71,24 @@
         "icon": "/svg/it.svg"
       }
     ]
+  },
+  {
+    "label": "Sonic云真机",
+    "icon": "/svg/cloud.svg",
+    "unfolded": true,
+    "children": [
+      {
+        "label": "云真机测试",
+        "to": "http://127.0.0.1:3000/Index",
+        "icon": "/svg/test.svg",
+        "target": "_blank"
+      },
+      {
+        "label": "设备管理",
+        "to": "http://127.0.0.1:3000/Index/Devices",
+        "icon": "/svg/phone.svg",
+        "target": "_blank"
+      }
+    ]
   }
 ]
