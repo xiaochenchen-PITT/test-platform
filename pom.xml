@@ -22,6 +22,7 @@
         <module>test-platform-infra</module>
         <module>test-platform-toolcenter</module>
         <module>test-platform-web</module>
+        <module>test-platform-apicheck</module>
     </modules>
 
     <properties>
@@ -34,6 +35,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.cxc</groupId>
+                <artifactId>test-platform-apicheck</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.cxc</groupId>
                 <artifactId>test-platform-common</artifactId>

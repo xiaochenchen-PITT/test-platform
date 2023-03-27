@@ -1,12 +1,16 @@
 package com.cxc.test.platform.datacheck.service;
 
+import com.cxc.test.platform.common.diff.GeneralDiffCheckFacade;
+import com.cxc.test.platform.common.diff.GeneralDiffTask;
 import com.cxc.test.platform.common.domain.ResultDO;
-import com.cxc.test.platform.common.domain.diff.*;
+import com.cxc.test.platform.common.domain.diff.DiffDetail;
+import com.cxc.test.platform.common.domain.diff.DiffResult;
+import com.cxc.test.platform.common.domain.diff.DiffTypeConstant;
+import com.cxc.test.platform.common.domain.diff.TaskStatusEnum;
 import com.cxc.test.platform.common.utils.CommonUtils;
 import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import com.cxc.test.platform.datacheck.domain.config.DataCheckConfig;
 import com.cxc.test.platform.datacheck.domain.config.DataConfig;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -16,8 +20,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
@@ -28,7 +32,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Slf4j
 @Component
-public class DemoDataCheckService {
+public class DemoDataCheckServiceImpl implements GeneralDiffCheckFacade {
 
     @Resource
     DiffService diffService;
@@ -37,12 +41,11 @@ public class DemoDataCheckService {
 
     private DiffResult diffResult;
 
-    @Getter
     private boolean isRunning = false;
     private AtomicLong count = new AtomicLong(0);
     private AtomicLong failedCount = new AtomicLong(0);
 
-    class DiffTask implements Callable<DiffDetail> {
+    class DiffTask extends GeneralDiffTask {
 
         private final Long batchId;
         private final Long configId;
@@ -86,41 +89,50 @@ public class DemoDataCheckService {
         }
     }
 
-    // todo 如果是分布式的，需要配合实现分布式锁。或者让定时调度任务只在一台机器上执行
-    @Scheduled(initialDelay = 10000, fixedRate = 10000)
-    public void updateDiffResultOnTime() {
-        try {
-            if (isRunning) {
-                diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
-                diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
-                diffResult.setFailedCount(failedCount.get());
-
-                diffService.updateDiffResultOnTime(diffResult);
-            }
-        } catch (Exception e) {
-            log.error("failed to update DiffResult at regular time", e);
-        }
-    }
-
-    public boolean stop() {
+    @Override
+    public DiffResult init(Long batchId, Long configId, String triggerUrl, String runningIp) {
         isRunning = false;
-        return true;
+        count.set(0);
+        failedCount.set(0);
+
+        DiffResult diffResult = DiffResult.builder().build();
+        diffResult.setBatchId(batchId);
+        diffResult.setConfigId(configId);
+        diffResult.setIsSuccess(true);
+        diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
+        diffResult.setProgress("1%");
+        diffResult.setTriggerUrl(triggerUrl);
+        diffResult.setRunningIp(runningIp);
+
+        return diffResult;
     }
 
-    /**
-     * 对比服务入口
-     *
-     * @param batchId              批次id，每次不同
-     * @param configId             配置id
-     * @param dataConfig      字段对应关系
-     * @param dataCheckConfig 迁移校验的配置
-     * @return
-     */
-    public ResultDO<DiffResult> compare(Long batchId, Long configId, DataConfig dataConfig,
-                                        DataCheckConfig dataCheckConfig, String triggerUrl, String runningIp) {
-        if (isRunning) {
+    @Override
+    public DiffResult end(DiffResult diffResult) {
+        isRunning = false;
+
+        diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
+        diffResult.setFailedCount(failedCount.get());
+
+        count.set(0);
+        failedCount.set(0);
+
+        return diffResult;
+    }
+
+    @Override
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    @Override
+    public ResultDO<DiffResult> run(Long batchId, Long configId, String triggerUrl, String runningIp, Map<String, Object> configMap) {
+        if (isRunning()) {
             return ResultDO.fail("当前机器已有任务在运行，请等待其结束之后再触发");
         }
+
+        DataConfig dataConfig = (DataConfig) configMap.get("dataConfig");
+        DataCheckConfig dataCheckConfig = (DataCheckConfig) configMap.get("dataCheckConfig");
 
         // 修改java parallelStream的并发量
         System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "50");
@@ -178,33 +190,26 @@ public class DemoDataCheckService {
         return ResultDO.success(diffResult);
     }
 
-    private DiffResult init(Long batchId, Long configId, String triggerUrl, String runningIp) {
+    @Override
+    public boolean stop() {
         isRunning = false;
-        count.set(0);
-        failedCount.set(0);
-
-        DiffResult diffResult = DiffResult.builder().build();
-        diffResult.setBatchId(batchId);
-        diffResult.setConfigId(configId);
-        diffResult.setIsSuccess(true);
-        diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
-        diffResult.setProgress("1%");
-        diffResult.setTriggerUrl(triggerUrl);
-        diffResult.setRunningIp(runningIp);
-
-        return diffResult;
+        return true;
     }
 
-    private DiffResult end(DiffResult diffResult) {
-        isRunning = false;
+    // todo 如果是分布式的，需要配合实现分布式锁。或者让定时调度任务只在一台机器上执行
+    @Override
+    @Scheduled(initialDelay = 10000, fixedRate = 10000)
+    public void updateDiffResultOnTime() {
+        try {
+            if (isRunning) {
+                diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
+                diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
+                diffResult.setFailedCount(failedCount.get());
 
-        diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
-        diffResult.setFailedCount(failedCount.get());
-
-        count.set(0);
-        failedCount.set(0);
-
-        return diffResult;
+                diffService.updateDiffResultOnTime(diffResult);
+            }
+        } catch (Exception e) {
+            log.error("failed to update DiffResult at regular time", e);
+        }
     }
-
 }

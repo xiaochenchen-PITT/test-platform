@@ -18,7 +18,7 @@ import com.cxc.test.platform.datacheck.domain.mapping.MappingRule;
 import com.cxc.test.platform.datacheck.domain.mapping.SourceMappingItem;
 import com.cxc.test.platform.datacheck.domain.mapping.TargetMappingItem;
 import com.cxc.test.platform.datacheck.service.DataConfigService;
-import com.cxc.test.platform.datacheck.service.DemoDataCheckService;
+import com.cxc.test.platform.datacheck.service.DemoDataCheckServiceImpl;
 import com.cxc.test.platform.infra.config.DatabaseConfig;
 import com.cxc.test.platform.infra.domain.datacheck.DataConfigPO;
 import com.cxc.test.platform.infra.domain.datacheck.MappingRulePO;
@@ -55,8 +55,8 @@ public class DataCheckController extends BaseController {
 
     @Autowired
     @Qualifier("demoDataCheckService")
-//    DataCheckService dataCheckService;
-    DemoDataCheckService dataCheckService;
+//    DataCheckServiceImpl dataCheckService;
+    DemoDataCheckServiceImpl dataCheckService;
 
     @Resource
     DataConfigService dataConfigService;
@@ -120,12 +120,17 @@ public class DataCheckController extends BaseController {
                 return AmisResult.fail("没有找到配置，config id: " + configId, null);
             }
 
+            Long batchId = System.currentTimeMillis();
+
             DataConfig dataConfig = queryRet.getData();
             DataCheckConfig dataCheckConfig = DataCheckConfig.newInstance(true);
-            Long batchId = System.currentTimeMillis();
+
+            Map<String, Object> configMap = new HashMap<>();
+            configMap.put("dataConfig", dataConfig);
+            configMap.put("dataCheckConfig", dataCheckConfig);
+
             singleExecutorService.submit(() -> {
-                ResultDO<DiffResult> ret = dataCheckService.compare(batchId, configId, dataConfig, dataCheckConfig,
-                    triggerUrl, runningIp);
+                ResultDO<DiffResult> ret = dataCheckService.run(batchId, configId, triggerUrl, runningIp, configMap);
             });
 
             return AmisResult.simpleSuccess("success", "触发成功");

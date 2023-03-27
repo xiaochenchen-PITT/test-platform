@@ -10,15 +10,11 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>test-platform-web</artifactId>
+    <artifactId>test-platform-apicheck</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <dependencies>
-        <dependency>
-            <groupId>com.cxc</groupId>
-            <artifactId>test-platform-apicheck</artifactId>
-        </dependency>
         <dependency>
             <groupId>com.cxc</groupId>
             <artifactId>test-platform-common</artifactId>
@@ -26,14 +22,6 @@
         <dependency>
             <groupId>com.cxc</groupId>
             <artifactId>test-platform-infra</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.cxc</groupId>
-            <artifactId>test-platform-datacheck</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.cxc</groupId>
-            <artifactId>test-platform-toolcenter</artifactId>
         </dependency>
 
         <dependency>
@@ -48,10 +36,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
         <dependency>
@@ -70,11 +54,9 @@
         </dependency>
 
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.11.0</version>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
         </dependency>
-
     </dependencies>
 
 </project>

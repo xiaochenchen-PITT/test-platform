@@ -8,7 +8,7 @@ import com.cxc.test.platform.datacheck.domain.SourceLocator;
 import com.cxc.test.platform.datacheck.domain.config.DataCheckConfig;
 import com.cxc.test.platform.datacheck.domain.config.DataConfig;
 import com.cxc.test.platform.datacheck.domain.mapping.MappingRule;
-import com.cxc.test.platform.datacheck.service.DataCheckService;
+import com.cxc.test.platform.datacheck.service.DataCheckServiceImpl;
 import com.cxc.test.platform.infra.config.DbConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +33,7 @@ public class DemoDataCheckController extends DataCheckController {
     DbConfig dbConfig;
 
     @Resource
-    DataCheckService dataCheckService;
+    DataCheckServiceImpl dataCheckService;
 
     public final ExecutorService singleExecutorService = Executors.newFixedThreadPool(1);
 
@@ -87,13 +87,16 @@ public class DemoDataCheckController extends DataCheckController {
         dataConfig.setTableAndLocatorMap(tableAndLocatorMap);
 
         Long batchId = System.currentTimeMillis();
+        Map<String, Object> configMap = new HashMap<>();
+        configMap.put("dataConfig", dataConfig);
+        configMap.put("dataCheckConfig", dataCheckConfig);
+
         singleExecutorService.submit(() -> {
-            ResultDO<DiffResult> ret = dataCheckService.compare(batchId, 0L, dataConfig, dataCheckConfig,
-                triggerUrl, "127.0.0.1:8080");
+            ResultDO<DiffResult> ret = dataCheckService.run(batchId, 0L, triggerUrl, "127.0.0.1:8080", configMap);
 //        System.out.println(ret);
         });
 
-        String retInfo = String.format("starting migratrion check, env: %s, limit: %s, please check later with batch id: %s", env, limit, batchId);
+        String retInfo = String.format("starting data check, env: %s, limit: %s, please check later with batch id: %s", env, limit, batchId);
         return AmisResult.simpleSuccess(retInfo, null);
     }
 }
