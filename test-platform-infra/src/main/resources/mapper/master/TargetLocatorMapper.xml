@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxc.test.platform.infra.mapper.master.SourceLocatorMapper">
 
-    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.SourceLocatorPO">
+    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.datacheck.SourceLocatorPO">
         <id column="id" property="id"/>
         <id column="config_id" property="configId"/>
         <id column="target_table_name" property="targetTableName"/>
@@ -14,7 +14,7 @@
     </resultMap>
 
     <insert id="insertBatch" parameterType="java.util.List">
-        insert into t_migration_source_locator
+        insert into t_data_source_locator
         (config_id, target_table_name, locate_field, locate_method_name, locate_method_args, created_time, modified_time)
         values
         <foreach collection="list" item="sourceLocatorPO" separator=",">
@@ -23,11 +23,11 @@
     </insert>
 
     <select id="getByConfigId" resultMap="resultMap">
-        select * from t_migration_source_locator where config_id = #{configId}
+        select * from t_data_source_locator where config_id = #{configId}
     </select>
 
-    <update id="update" parameterType="com.cxc.test.platform.infra.domain.migrationcheck.SourceLocatorPO">
-        update t_migration_source_locator set
+    <update id="update" parameterType="com.cxc.test.platform.infra.domain.datacheck.SourceLocatorPO">
+        update t_data_source_locator set
         <if test="targetTableName != null and targetTableName != ''">
             `target_table_name` = #{targetTableName},
         </if>
@@ -45,7 +45,7 @@
     </update>
 
     <delete id="deleteByConfigId">
-        delete from t_migration_source_locator where config_id = #{configId}
+        delete from t_data_source_locator where config_id = #{configId}
     </delete>
 
 </mapper>

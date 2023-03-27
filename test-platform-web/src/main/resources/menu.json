@@ -29,18 +29,18 @@
     ]
   },
   {
-    "label": "数据迁移验证",
-    "icon": "/svg/migration_check.svg",
+    "label": "数据对比",
+    "icon": "/svg/datacheck.svg",
     "unfolded": true,
     "children": [
       {
         "label": "配置录入",
-        "to": "/migrationcheck/set",
+        "to": "/datacheck/set",
         "icon": "/svg/add.svg"
       },
       {
         "label": "配置管理",
-        "to": "/migrationcheck/manage",
+        "to": "/datacheck/manage",
         "icon": "/svg/list.svg"
       }
     ]

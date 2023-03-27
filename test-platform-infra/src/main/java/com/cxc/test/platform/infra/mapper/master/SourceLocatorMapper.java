@@ -1,6 +1,6 @@
 package com.cxc.test.platform.infra.mapper.master;
 
-import com.cxc.test.platform.infra.domain.migrationcheck.SourceLocatorPO;
+import com.cxc.test.platform.infra.domain.datacheck.SourceLocatorPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 

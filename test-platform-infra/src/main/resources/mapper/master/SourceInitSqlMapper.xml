@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxc.test.platform.infra.mapper.master.SourceInitSqlMapper">
 
-    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO">
+    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.datacheck.SourceInitSqlPO">
         <id column="id" property="id"/>
         <id column="config_id" property="configId"/>
         <id column="source_table_name" property="sourceTableName"/>
@@ -12,7 +12,7 @@
     </resultMap>
 
     <insert id="insertBatch" parameterType="java.util.List">
-        insert into t_migration_source_init_sql
+        insert into t_data_source_init_sql
         (config_id, source_table_name, init_sql, created_time, modified_time)
         values
         <foreach collection="list" item="sourceInitSqlPO" separator=",">
@@ -21,11 +21,11 @@
     </insert>
 
     <select id="getByConfigId" resultMap="resultMap">
-        select * from t_migration_source_init_sql where config_id = #{configId}
+        select * from t_data_source_init_sql where config_id = #{configId}
     </select>
 
-    <update id="update" parameterType="com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO">
-        update t_migration_source_init_sql set
+    <update id="update" parameterType="com.cxc.test.platform.infra.domain.datacheck.SourceInitSqlPO">
+        update t_data_source_init_sql set
         <if test="sourceTableName != null and sourceTableName != ''">
             `source_table_name` = #{sourceTableName},
         </if>
@@ -37,7 +37,7 @@
     </update>
 
     <delete id="deleteByConfigId">
-        delete from t_migration_source_init_sql where config_id = #{configId}
+        delete from t_data_source_init_sql where config_id = #{configId}
     </delete>
 
 </mapper>

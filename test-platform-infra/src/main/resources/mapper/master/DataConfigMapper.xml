@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxc.test.platform.infra.mapper.master.DataConfigMapper">
+
+    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.datacheck.DataConfigPO">
+        <id column="id" property="id"/>
+        <id column="config_id" property="configId"/>
+        <id column="source_driver_class_name" property="sourceDriverClassName"/>
+        <id column="source_db_url" property="sourceDbUrl"/>
+        <id column="source_user_name" property="sourceUserName"/>
+        <id column="source_password" property="sourcePassword"/>
+        <id column="target_driver_class_name" property="targetDriverClassName"/>
+        <id column="target_db_url" property="targetDbUrl"/>
+        <id column="target_user_name" property="targetUserName"/>
+        <id column="target_password" property="targetPassword"/>
+        <id column="created_time" property="createdTime"/>
+        <id column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.cxc.test.platform.infra.domain.datacheck.DataConfigPO">
+        insert into t_data_config
+        (config_id, source_driver_class_name, source_db_url, source_user_name, source_password,
+        target_driver_class_name, target_db_url, target_user_name, target_password, created_time, modified_time)
+        values
+        (#{configId}, #{sourceDriverClassName}, #{sourceDbUrl}, #{sourceUserName}, #{sourcePassword},
+        #{targetDriverClassName}, #{targetDbUrl}, #{targetUserName}, #{targetPassword}, now(), now())
+    </insert>
+
+    <select id="getByConfigId" resultMap="resultMap">
+        select * from t_data_config where config_id = #{configId}
+    </select>
+
+    <select id="getAll" resultMap="resultMap">
+        select * from t_data_config
+    </select>
+
+    <update id="update" parameterType="com.cxc.test.platform.infra.domain.datacheck.DataConfigPO">
+        update t_data_config set
+        <if test="sourceDriverClassName != null and sourceDriverClassName != ''">
+            `source_driver_class_name` = #{sourceDriverClassName},
+        </if>
+        <if test="sourceDbUrl != null and sourceDbUrl != ''">
+            `source_db_url` = #{sourceDbUrl},
+        </if>
+        <if test="sourceUserName != null and sourceUserName != ''">
+            `source_user_name` = #{sourceUserName},
+        </if>
+        <if test="sourcePassword != null and sourcePassword != ''">
+            `source_password` = #{sourcePassword},
+        </if>
+        <if test="targetDriverClassName != null and targetDriverClassName != ''">
+            `target_driver_class_name` = #{targetDriverClassName},
+        </if>
+        <if test="targetDbUrl != null and targetDbUrl != ''">
+            `target_db_url` = #{targetDbUrl},
+        </if>
+        <if test="targetUserName != null and targetUserName != ''">
+            `target_user_name` = #{targetUserName},
+        </if>
+        <if test="targetPassword != null and targetPassword != ''">
+            `target_password` = #{targetPassword},
+        </if>
+        `modified_time` = now()
+        where config_id = #{configId}
+    </update>
+
+    <delete id="deleteByConfigId">
+        delete from t_data_config where config_id = #{configId}
+    </delete>
+
+</mapper>

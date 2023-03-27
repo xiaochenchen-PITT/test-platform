@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxc.test.platform.infra.mapper.master.MappingRuleMapper">
 
-    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO">
+    <resultMap id="resultMap" type="com.cxc.test.platform.infra.domain.datacheck.MappingRulePO">
         <id column="id" property="id"/>
         <id column="config_id" property="configId"/>
         <id column="source_table_name" property="sourceTableName"/>
@@ -17,7 +17,7 @@
     </resultMap>
 
     <insert id="insertBatch" parameterType="java.util.List">
-        insert into t_migration_mapping_rule
+        insert into t_data_mapping_rule
         (config_id, source_table_name, source_field_names, is_primary_key, target_table_name, target_field_name,
         field_check_method_name, field_check_method_args, created_time, modified_time)
         values
@@ -29,15 +29,15 @@
     </insert>
 
     <select id="getByConfigId" resultMap="resultMap">
-        select * from t_migration_mapping_rule where config_id = #{configId}
+        select * from t_data_mapping_rule where config_id = #{configId}
     </select>
 
-    <select id="getById" resultType="com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO">
-        select * from t_migration_mapping_rule where id = #{id}
+    <select id="getById" resultType="com.cxc.test.platform.infra.domain.datacheck.MappingRulePO">
+        select * from t_data_mapping_rule where id = #{id}
     </select>
 
-    <update id="update" parameterType="com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO">
-        update t_migration_mapping_rule set
+    <update id="update" parameterType="com.cxc.test.platform.infra.domain.datacheck.MappingRulePO">
+        update t_data_mapping_rule set
         <if test="sourceTableName != null and sourceTableName != ''">
             `source_table_name` = #{sourceTableName},
         </if>
@@ -64,11 +64,11 @@
     </update>
 
     <delete id="delete">
-        delete from t_migration_mapping_rule where id = #{id}
+        delete from t_data_mapping_rule where id = #{id}
     </delete>
 
     <delete id="deleteByConfigId">
-        delete from t_migration_mapping_rule where config_id = #{configId}
+        delete from t_data_mapping_rule where config_id = #{configId}
     </delete>
 
 </mapper>

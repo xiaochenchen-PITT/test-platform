@@ -1,6 +1,6 @@
 package com.cxc.test.platform.infra.mapper.master;
 
-import com.cxc.test.platform.infra.domain.migrationcheck.SourceInitSqlPO;
+import com.cxc.test.platform.infra.domain.datacheck.SourceInitSqlPO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 

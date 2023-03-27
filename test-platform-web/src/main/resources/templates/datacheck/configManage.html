@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试效能平台</title>
+    <!-- 引入sdk的css文件 -->
+    <link rel="stylesheet" href="/sdk/sdk.css">
+    <link rel="stylesheet" href="/sdk/helper.css">
+    <link rel="stylesheet" href="/sdk/iconfont.css">
+    <!-- antd主题 -->
+    <link rel="stylesheet" href="/sdk/antd.css">
+    <!-- 引入sdk.js -->
+    <script src="/sdk/sdk.js"></script>
+    <!-- 页面的样式 -->
+    <style>
+        html,
+        body,
+        .app-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body background="/index/img/img-edu-hero-1.jpg">
+<!-- 渲染的容器 -->
+<div id="root" class="app-wrapper"></div>
+<!-- 页面的内容 -->
+<script type="text/javascript">
+        (function () {
+            // 初始化
+            let amis = amisRequire('amis/embed');
+            // 通过替换下面这个配置来生成不同页面
+            let amisJSON = {
+                  "type": "page",
+                  "regions": [
+                    "body"
+                  ],
+                  "initApi": "/get_menu",
+                  "body": [
+                    {
+                      "type": "flex",
+                      "className": "p-1",
+                      "items": [
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "flex",
+                              "id": "u:5448a684939",
+                              "items": [
+                                {
+                                  "type": "image",
+                                  "id": "u:54892a625bc4",
+                                  "src": "/svg/qa.svg",
+                                  "width": 50,
+                                  "height": 50,
+                                  "thumbMode": "contain",
+                                  "showDimensions": false,
+                                  "innerClassName": "no-border no-bg",
+                                  "className": "no-border no-bg",
+                                  "imageClassName": "no-border no-bg",
+                                  "thumbClassName": "no-border no-bg"
+                                }
+                              ],
+                              "style": {
+                                "position": "static",
+                                "flexWrap": "nowrap",
+                                "overflowY": "auto"
+                              },
+                              "direction": "row",
+                              "isFixedHeight": false,
+                              "isFixedWidth": false,
+                              "justify": "center",
+                              "alignItems": "flex-start"
+                            },
+                            {
+                              "type": "nav",
+                              "stacked": true,
+                              "source": "${nav}",
+                              "id": "u:b057407f2664",
+                              "itemBadge": {
+                                "mode": "ribbon",
+                                "text": "${customText}",
+                                "position": "top-right",
+                                "visibleOn": "this.customText",
+                                "level": "${customLevel}"
+                              }
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "0 0 200px",
+                            "overflowX": "auto",
+                            "fontFamily": "",
+                            "fontSize": 16,
+                            "textAlign": "left",
+                            "flexBasis": "200px"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:04792b608d52",
+                          "wrapperComponent": "aside",
+                          "bodyClassName": "bg-light text-muted b-light"
+                        },
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "tpl",
+                              "tpl": "配置管理",
+                              "inline": true,
+                              "wrapperComponent": "",
+                              "id": "u:0113ac9a5359",
+                              "style": {
+                                "fontFamily": "",
+                                "fontSize": 25
+                              }
+                            },
+                            {
+                              "type": "divider",
+                              "id": "u:9e26253a40dd"
+                            },
+                            {
+                              "id": "u:28024f3e550b",
+                              "type": "crud",
+                              "name": "dataConfigCrud",
+                              "autoFillHeight": true,
+                              "columnsTogglable": false,
+                              "api": {
+                                "method": "get",
+                                "url": "/datacheck/get_config_list",
+                                "data": {
+                                  "configIdSearch": "${configIdSearch | default:undefined}",
+                                  "batchIdSearch": "${batchIdSearch | default:undefined}",
+                                  "statusSearch": "${statusSearch | default:undefined}"
+                                }
+                              },
+                              "loadDataOnce": true,
+                              "syncLocation": false,
+                              "filter": {
+                                "debug": false,
+                                "title": "条件搜索",
+                                "submitText": "查询",
+                                "body": [
+                                  {
+                                    "type": "group",
+                                    "body": [
+                                      {
+                                        "type": "input-text",
+                                        "name": "configIdSearch",
+                                        "label": "配置ID",
+                                        "clearable": true,
+                                        "size": "sm",
+                                        "placeholder": "精确搜索",
+                                        "id": "u:bdbc1cbbcb6c"
+                                      },
+                                      {
+                                        "type": "input-text",
+                                        "name": "batchIdSearch",
+                                        "label": "批次ID",
+                                        "clearable": true,
+                                        "size": "sm",
+                                        "placeholder": "精确搜索",
+                                        "id": "u:bdbc1cbbcb6c"
+                                      },
+                                      {
+                                        "type": "select",
+                                        "name": "statusSearch",
+                                        "label": "运行状态",
+                                        "clearable": true,
+                                        "size": "sm",
+                                        "id": "u:5f43212ae5d8",
+                                        "options": [
+                                          {
+                                            "label": "未开始",
+                                            "value": "not_started"
+                                          },
+                                          {
+                                            "label": "运行中",
+                                            "value": "running"
+                                          },
+                                          {
+                                            "label": "已结束",
+                                            "value": "finished"
+                                          },
+                                          {
+                                            "label": "失败",
+                                            "value": "failed"
+                                          }
+                                        ],
+                                        "multiple": false
+                                      }
+                                    ],
+                                    "id": "u:edbf77d9c5d8"
+                                  }
+                                ],
+                                "id": "u:a00bd4fb9858"
+                              },
+                              "columns": [
+                                {
+                                  "name": "batchId",
+                                  "label": "批次ID",
+                                  "remark": "为该配置ID的最近一次运行记录批次",
+                                  "copyable": true,
+                                  "sortable": true,
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "name": "configId",
+                                  "label": "配置ID",
+                                  "copyable": true,
+                                  "sortable": true,
+                                  "id": "u:97e6ae8cc007"
+                                },
+                                {
+                                  "type": "mapping",
+                                  "name": "status",
+                                  "label": "运行状态",
+                                  "map": {
+                                    "not_started": "<span class='label label-warning'>未开始</span>",
+                                    "running": "<span class='label label-success'>运行中</span>",
+                                    "finished": "<span class='label label-primary'>已结束</span>",
+                                    "failed": "<span class='label label-danger'>失败</span>"
+                                  },
+                                  "id": "u:4f09127c1920"
+                                },
+                                {
+                                  "name": "progress",
+                                  "label": "运行进展",
+                                  "type": "progress",
+                                  "width": 150,
+                                  "id": "u:30601388518c",
+                                  "animate": true,
+                                  "stripe": true
+                                },
+                                {
+                                  "label": "任务数",
+                                  "remark": "任务总数 / 失败总数",
+                                  "id": "u:92fdad445603",
+                                  "name": "taskCount"
+                                },
+                                {
+                                  "label": "运行IP",
+                                  "id": "u:92fdad445603",
+                                  "name": "runningIp"
+                                },
+                                {
+                                  "label": "创建时间",
+                                  "id": "u:92fdad445603",
+                                  "name": "createdTime"
+                                },
+                                {
+                                  "label": "编辑时间",
+                                  "id": "u:92fdad445603",
+                                  "name": "modifiedTime"
+                                },
+                                {
+                                  "label": "操作",
+                                  "id": "u:0bdd3201ab9f",
+                                  "className": "word-break ",
+                                  "width": 180,
+                                  "type": "button-toolbar",
+                                  "buttons": [
+                                    {
+                                      "label": "执行",
+                                      "type": "button",
+                                      "level": "primary",
+                                      "actionType": "dialog",
+                                      "disabledOn": "status===\"running\"",
+                                      "dialog": {
+                                        "title": "确认触发执行？",
+                                        "body": {
+                                          "type": "form",
+                                          "api": "http://${ip}/datacheck/trigger?configId=${configId}",
+                                          "body": [
+                                            {
+                                              "type": "select",
+                                              "name": "ip",
+                                              "label": "IP[:端口]",
+                                              "source": "/datacheck/get_ips"
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "label": "停止",
+                                      "type": "button",
+                                      "actionType": "ajax",
+                                      "confirmText": "确认停止该任务？",
+                                      "level": "danger",
+                                      "disabledOn": "status!==\"running\"",
+                                      "api": "http://${runningIp}/datacheck/stop"
+                                    },
+                                    {
+                                      "label": "删除",
+                                      "type": "button",
+                                      "actionType": "ajax",
+                                      "confirmText": "确认删除该配置ID相关配置？包括DB链接信息，字段映射关系等，该操作不可逆",
+                                      "level": "danger",
+                                      "disabledOn": "status===\"running\"",
+                                      "api": "get:/datacheck/delete_config?configId=${configId}"
+                                    },
+                                    {
+                                      "label": "执行详情",
+                                      "type": "button",
+                                      "actionType": "url",
+                                      "disabledOn": "status===\"not_started\"",
+                                      "url": "/datacheck/diff?batchId=${batchId}",
+                                      "id": "u:c923a341faad",
+                                      "blank": true
+                                    },
+                                    {
+                                      "label": "配置详情",
+                                      "type": "button",
+                                      "actionType": "url",
+                                      "url": "/datacheck/detail?configId=${configId}",
+                                      "id": "u:c923a341faad",
+                                      "blank": true
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "1 1 auto",
+                            "flexGrow": 1,
+                            "flexBasis": "auto"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:4a30e3ab29f8"
+                        }
+                      ],
+                      "style": {
+                        "position": "static"
+                      },
+                      "direction": "row",
+                      "justify": "flex-start",
+                      "alignItems": "stretch",
+                      "id": "u:e99611baa91f"
+                    }
+                  ],
+                  "id": "u:75f4ece8449d",
+                  "pullRefresh": {
+                    "disabled": true
+                  },
+                  "style": {
+                    "backgroundImage": "/image/bg.jpg",
+                    "backgroundSize": "100%"
+                  }
+                };
+
+
+            // 开始渲染，放入渲染容器#root，渲染的页面内容是amisJSON
+            let amisScoped = amis.embed(
+                '#root',
+                amisJSON,
+                {
+                    // 这里是初始 props
+                },
+                {
+                    theme: 'antd'
+                }
+            );
+        })();
+    </script>
+</body>
+
+</html>

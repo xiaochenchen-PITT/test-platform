@@ -1,6 +1,6 @@
 package com.cxc.test.platform.infra.mapper.master;
 
-import com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO;
+import com.cxc.test.platform.infra.domain.datacheck.MappingRulePO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 

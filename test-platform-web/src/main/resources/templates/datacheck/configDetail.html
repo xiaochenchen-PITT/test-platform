@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试效能平台</title>
+    <!-- 引入sdk的css文件 -->
+    <link rel="stylesheet" href="/sdk/sdk.css">
+    <link rel="stylesheet" href="/sdk/helper.css">
+    <link rel="stylesheet" href="/sdk/iconfont.css">
+    <!-- antd主题 -->
+    <link rel="stylesheet" href="/sdk/antd.css">
+    <!-- 引入sdk.js -->
+    <script src="/sdk/sdk.js"></script>
+    <!-- 页面的样式 -->
+    <style>
+        html,
+        body,
+        .app-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body background="/index/img/img-edu-hero-1.jpg">
+<!-- 渲染的容器 -->
+<div id="root" class="app-wrapper"></div>
+<!-- 页面的内容 -->
+<script type="text/javascript">
+        (function () {
+            // 初始化
+            let amis = amisRequire('amis/embed');
+            // 通过替换下面这个配置来生成不同页面
+            let amisJSON = {
+                  "type": "page",
+                  "body": [
+                    {
+                      "type": "flex",
+                      "className": "p-1",
+                      "items": [
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "flex",
+                              "id": "u:5448a684939",
+                              "items": [
+                                {
+                                  "type": "image",
+                                  "id": "u:54892a625bc4",
+                                  "src": "/svg/qa.svg",
+                                  "width": 50,
+                                  "height": 50,
+                                  "thumbMode": "contain",
+                                  "showDimensions": false,
+                                  "innerClassName": "no-border no-bg",
+                                  "className": "no-border no-bg",
+                                  "imageClassName": "no-border no-bg",
+                                  "thumbClassName": "no-border no-bg"
+                                }
+                              ],
+                              "style": {
+                                "position": "static",
+                                "flexWrap": "nowrap",
+                                "overflowY": "auto"
+                              },
+                              "direction": "row",
+                              "isFixedHeight": false,
+                              "isFixedWidth": false,
+                              "justify": "center",
+                              "alignItems": "flex-start"
+                            },
+                            {
+                              "type": "nav",
+                              "stacked": true,
+                              "source": "${nav}",
+                              "id": "u:b057407f2664",
+                              "itemBadge": {
+                                "mode": "ribbon",
+                                "text": "${customText}",
+                                "position": "top-right",
+                                "visibleOn": "this.customText",
+                                "level": "${customLevel}"
+                              }
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "0 0 200px",
+                            "overflowX": "auto",
+                            "fontFamily": "",
+                            "fontSize": 16,
+                            "textAlign": "left",
+                            "flexBasis": "200px"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:04792b608d52",
+                          "wrapperComponent": "aside",
+                          "bodyClassName": "bg-light text-muted b-light"
+                        },
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "tpl",
+                              "tpl": "配置详情",
+                              "inline": true,
+                              "wrapperComponent": "",
+                              "id": "u:0113ac9a5359",
+                              "style": {
+                                "fontFamily": "",
+                                "fontSize": 25
+                              }
+                            },
+                            {
+                              "type": "divider",
+                              "id": "u:9e26253a40dd"
+                            },
+                            {
+                              "type": "tabs",
+                              "id": "u:dd788efa5149",
+                              "tabsMode": "strong",
+                              "tabs": [
+                                {
+                                  "title": "数据库链接信息",
+                                  "body": [
+                                    {
+                                      "type": "service",
+                                      "api": "/datacheck/get_db_config?configId=${configId}",
+                                      "body": [
+                                        {
+                                          "type": "property",
+                                          "labelStyle": {
+                                            "textAlign": "left",
+                                            "verticalAlign": "top"
+                                          },
+                                          "contentStyle": {
+                                            "verticalAlign": "top"
+                                          },
+                                          "items": [
+                                            {
+                                              "label": "源数据库Url",
+                                              "content": "${sourceDbUrl}",
+                                              "span": 2
+                                            },
+                                            {
+                                              "label": "源数据库用户名",
+                                              "content": "${sourceUserName}",
+                                              "span": 1
+                                            },
+                                            {
+                                              "label": "源数据库密码",
+                                              "content": "${sourcePassword}",
+                                              "span": 1
+                                            },
+                                            {
+                                              "label": "目标数据库Url",
+                                              "content": "${targetDbUrl}",
+                                              "span": 2
+                                            },
+                                            {
+                                              "label": "目标数据库用户名",
+                                              "content": "${targetUserName}",
+                                              "span": 1
+                                            },
+                                            {
+                                              "label": "目标数据库密码",
+                                              "content": "${targetPassword}",
+                                              "span": 1
+                                            },
+                                            {
+                                              "label": "DriverClassName",
+                                              "content": "${sourceDriverClassName}",
+                                              "span": 4
+                                            }
+                                          ],
+                                          "id": "u:550550c2f6db",
+                                          "column": 4,
+                                          "mode": "table"
+                                        },
+                                        {
+                                          "type": "divider",
+                                          "id": "u:7961d74d4689"
+                                        },
+                                        {
+                                          "label": "修改",
+                                          "type": "button",
+                                          "actionType": "drawer",
+                                          "drawer": {
+                                            "title": "编辑数据库链接信息",
+                                            "size": "lg",
+                                            "body": {
+                                              "type": "form",
+                                              "api": "post:/datacheck/update_db_config?configId=${configId}",
+                                              "body": [
+                                                {
+                                                  "name": "sourceDbUrl",
+                                                  "label": "源数据库Url",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "sourceUserName",
+                                                  "label": "源数据库用户名",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "sourcePassword",
+                                                  "label": "源数据库密码",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "sourceDriverClassName",
+                                                  "label": "源数据库DriverClassName",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "targetDbUrl",
+                                                  "label": "目标数据库Url",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "targetUserName",
+                                                  "label": "目标数据库用户名",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "targetPassword",
+                                                  "label": "目标数据库密码",
+                                                  "type": "input-text"
+                                                },
+                                                {
+                                                  "name": "targetDriverClassName",
+                                                  "label": "目标数据库DriverClassName",
+                                                  "type": "input-text"
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          "id": "u:46e308e46b4c"
+                                        }
+                                      ],
+                                      "id": "u:c070942f001f"
+                                    }
+                                  ],
+                                  "id": "u:b523ba08103b"
+                                },
+                                {
+                                  "title": "字段映射关系",
+                                  "body": [
+                                    {
+                                      "type": "crud",
+                                      "name": "mappingRuleCrud",
+                                      "autoFillHeight": true,
+                                      "columnsTogglable": false,
+                                      "headerToolbar": [
+                                        {
+                                          "type": "export-excel",
+                                          "label": "全量导出excel",
+                                          "filename": "数据对比字段映射关系_config_id_${configId}",
+                                          "api": "/datacheck/export_mapping_rule?configId=${configId}",
+                                          "columns": [
+                                            "sourceTableName",
+                                            "sourceFieldNames",
+                                            "isPrimaryKey",
+                                            "targetTableName",
+                                            "targetFieldName",
+                                            "fieldCheckMethodName",
+                                            "fieldCheckMethodArgs"
+                                          ]
+                                        }
+                                      ],
+                                      "api": {
+                                        "method": "get",
+                                        "url": "/datacheck/get_mapping_rule_config?configId=${configId}",
+                                        "data": {
+                                          "sourceTableNameSearch": "${sourceTableNameSearch | default:undefined}",
+                                          "targetTableNameSearch": "${targetTableNameSearch | default:undefined}"
+                                        }
+                                      },
+                                      "loadDataOnce": true,
+                                      "syncLocation": false,
+                                      "filter": {
+                                        "debug": false,
+                                        "title": "条件搜索",
+                                        "submitText": "查询",
+                                        "body": [
+                                          {
+                                            "type": "group",
+                                            "body": [
+                                              {
+                                                "type": "input-text",
+                                                "name": "sourceTableNameSearch",
+                                                "label": "原表表名",
+                                                "clearable": true,
+                                                "size": "md",
+                                                "placeholder": "模糊搜索",
+                                                "id": "u:bdbc1cbbcb6c"
+                                              },
+                                              {
+                                                "type": "input-text",
+                                                "name": "targetTableNameSearch",
+                                                "label": "目标表表名",
+                                                "clearable": true,
+                                                "size": "md",
+                                                "placeholder": "模糊搜索",
+                                                "id": "u:bdbc1cbbcb6c"
+                                              }
+                                            ],
+                                            "id": "u:edbf77d9c5d8"
+                                          }
+                                        ],
+                                        "id": "u:a00bd4fb9858"
+                                      },
+                                      "columns": [
+                                        {
+                                          "name": "id",
+                                          "label": "ID",
+                                          "id": "u:97e6ae8cc007"
+                                        },
+                                        {
+                                          "name": "sourceTableName",
+                                          "label": "原表表名",
+                                          "id": "u:97e6ae8cc007"
+                                        },
+                                        {
+                                          "name": "sourceFieldNames",
+                                          "label": "原表字段名",
+                                          "id": "u:92fdad445603"
+                                        },
+                                        {
+                                          "name": "isPrimaryKey",
+                                          "label": "是否主键",
+                                          "id": "u:3a9c584a5cc3"
+                                        },
+                                        {
+                                          "name": "targetTableName",
+                                          "label": "目标表表名",
+                                          "id": "u:e2b9df648687"
+                                        },
+                                        {
+                                          "name": "targetFieldName",
+                                          "label": "目标表字段名",
+                                          "id": "u:86cbcf96da7c"
+                                        },
+                                        {
+                                          "name": "fieldCheckMethodName",
+                                          "label": "自定义方法",
+                                          "id": "u:1dadd1276db4"
+                                        },
+                                        {
+                                          "label": "自定义入参",
+                                          "id": "u:1dadd1276db4",
+                                          "name": "fieldCheckMethodArgs"
+                                        },
+                                        {
+                                          "type": "button-toolbar",
+                                          "label": "操作",
+                                          "buttons": [
+                                            {
+                                              "label": "修改",
+                                              "type": "button",
+                                              "actionType": "drawer",
+                                              "drawer": {
+                                                "title": "编辑字段映射关系",
+                                                "size": "lg",
+                                                "body": {
+                                                  "type": "form",
+                                                  "api": "post:/datacheck/update_mapping_rule?id=${id}",
+                                                  "body": [
+                                                    {
+                                                      "type": "input-text",
+                                                      "name": "sourceTableName",
+                                                      "label": "原表表名"
+                                                    },
+                                                    {
+                                                      "type": "input-text",
+                                                      "name": "sourceFieldNames",
+                                                      "label": "原表字段名"
+                                                    },
+                                                    {
+                                                      "type": "input-text",
+                                                      "name": "isPrimaryKey",
+                                                      "label": "是否主键"
+                                                    },
+                                                    {
+                                                      "type": "input-text",
+                                                      "name": "targetTableName",
+                                                      "label": "目标表表名"
+                                                    },
+                                                    {
+                                                      "type": "input-text",
+                                                      "name": "targetFieldName",
+                                                      "label": "目标表字段名"
+                                                    },
+                                                    {
+                                                      "type": "input-text",
+                                                      "name": "fieldCheckMethodName",
+                                                      "label": "自定义方法"
+                                                    },
+                                                    {
+                                                      "type": "input-text",
+                                                      "name": "fieldCheckMethodArgs",
+                                                      "label": "自定义入参"
+                                                    }
+                                                  ]
+                                                }
+                                              },
+                                              "id": "u:46e308e46b4c"
+                                            },
+                                            {
+                                              "label": "删除",
+                                              "type": "button",
+                                              "actionType": "ajax",
+                                              "level": "danger",
+                                              "confirmText": "确认删除该映射关系？该操作不可逆",
+                                              "api": "get:/datacheck/delete_mapping_rule?id=${id}",
+                                              "id": "u:1fd57e4b4497"
+                                            }
+                                          ],
+                                          "id": "u:0bdd3201ab9f"
+                                        }
+                                      ],
+                                      "id": "u:28024f3e550b"
+                                    }
+                                  ],
+                                  "id": "u:077145d8de4c"
+                                },
+                                {
+                                  "title": "目标表中源数据定位",
+                                  "body": [
+                                    {
+                                      "type": "crud",
+                                      "name": "locatorCrud",
+                                      "autoFillHeight": true,
+                                      "columnsTogglable": false,
+                                      "api": {
+                                        "method": "get",
+                                        "url": "/datacheck/get_locator_config?configId=${configId}",
+                                        "data": {
+                                          "targetTableNameSearch": "${targetTableNameSearch | default:undefined}"
+                                        }
+                                      },
+                                      "loadDataOnce": true,
+                                      "syncLocation": false,
+                                      "filter": {
+                                        "debug": false,
+                                        "submitText": "查询",
+                                        "title": "条件搜索",
+                                        "body": [
+                                          {
+                                            "type": "group",
+                                            "body": [
+                                              {
+                                                "type": "input-text",
+                                                "name": "targetTableNameSearch",
+                                                "label": "目标表表名",
+                                                "clearable": true,
+                                                "size": "md",
+                                                "placeholder": "模糊搜索",
+                                                "id": "u:bdbc1cbbcb6c"
+                                              }
+                                            ],
+                                            "id": "u:edbf77d9c5d8"
+                                          }
+                                        ],
+                                        "id": "u:a00bd4fb9858"
+                                      },
+                                      "columns": [
+                                        {
+                                          "name": "id",
+                                          "label": "ID",
+                                          "id": "u:97e6ae8cc007"
+                                        },
+                                        {
+                                          "name": "configId",
+                                          "label": "配置ID",
+                                          "id": "u:97e6ae8cc007"
+                                        },
+                                        {
+                                          "name": "targetTableName",
+                                          "label": "目标表名",
+                                          "id": "u:97e6ae8cc007"
+                                        },
+                                        {
+                                          "name": "locateField",
+                                          "label": "sourceId承载字段",
+                                          "id": "u:92fdad445603"
+                                        },
+                                        {
+                                          "name": "locateMethodName",
+                                          "label": "定位source表主键id的逻辑",
+                                          "id": "u:3a9c584a5cc3"
+                                        },
+                                        {
+                                          "name": "locateMethodArgs",
+                                          "label": "定位source表主键id的逻辑参数",
+                                          "id": "u:e2b9df648687"
+                                        },
+                                        {
+                                          "type": "button-toolbar",
+                                          "label": "操作",
+                                          "buttons": [
+                                            {
+                                              "label": "修改",
+                                              "type": "button",
+                                              "actionType": "drawer",
+                                              "drawer": {
+                                                "title": "编辑源数据定位",
+                                                "size": "lg",
+                                                "body": {
+                                                  "type": "form",
+                                                  "api": "post:/datacheck/update_locator?id=${id}",
+                                                  "body": [
+                                                    {
+                                                      "name": "targetTableName",
+                                                      "label": "目标表名",
+                                                      "type": "input-text"
+                                                    },
+                                                    {
+                                                      "name": "locateField",
+                                                      "label": "sourceId承载字段",
+                                                      "type": "input-text"
+                                                    },
+                                                    {
+                                                      "name": "locateMethodName",
+                                                      "label": "定位source表主键id的逻辑",
+                                                      "type": "input-text"
+                                                    },
+                                                    {
+                                                      "name": "locateMethodArgs",
+                                                      "label": "定位source表主键id的逻辑参数",
+                                                      "type": "input-text"
+                                                    }
+                                                  ]
+                                                }
+                                              },
+                                              "id": "u:46e308e46b4c"
+                                            }
+                                          ],
+                                          "id": "u:0bdd3201ab9f"
+                                        }
+                                      ],
+                                      "id": "u:28024f3e550b"
+                                    }
+                                  ],
+                                  "id": "u:18e93972399e"
+                                },
+                                {
+                                  "title": "源数据初始化",
+                                  "body": [
+                                    {
+                                      "type": "crud",
+                                      "id": "u:28024f3e550b",
+                                      "autoFillHeight": true,
+                                      "columnsTogglable": false,
+                                      "name": "locatorCrud",
+                                      "api": {
+                                        "method": "get",
+                                        "url": "/datacheck/get_init_sql_config?configId=${configId}",
+                                        "data": {
+                                          "sourceTableNameSearch": "${sourceTableNameSearch | default:undefined}"
+                                        }
+                                      },
+                                      "loadDataOnce": true,
+                                      "syncLocation": false,
+                                      "filter": {
+                                        "debug": false,
+                                        "title": "条件搜索",
+                                        "submitText": "查询",
+                                        "body": [
+                                          {
+                                            "type": "group",
+                                            "body": [
+                                              {
+                                                "type": "input-text",
+                                                "name": "sourceTableNameSearch",
+                                                "label": "原表表名",
+                                                "clearable": true,
+                                                "size": "md",
+                                                "placeholder": "模糊搜索",
+                                                "id": "u:bdbc1cbbcb6c"
+                                              }
+                                            ],
+                                            "id": "u:edbf77d9c5d8"
+                                          }
+                                        ],
+                                        "id": "u:a00bd4fb9858"
+                                      },
+                                      "columns": [
+                                        {
+                                          "name": "id",
+                                          "label": "ID",
+                                          "id": "u:97e6ae8cc007"
+                                        },
+                                        {
+                                          "name": "configId",
+                                          "label": "配置ID",
+                                          "id": "u:97e6ae8cc007"
+                                        },
+                                        {
+                                          "name": "sourceTableName",
+                                          "label": "原表表名",
+                                          "id": "u:97e6ae8cc007"
+                                        },
+                                        {
+                                          "name": "initSql",
+                                          "label": "初始化sql",
+                                          "id": "u:92fdad445603"
+                                        },
+                                        {
+                                          "label": "操作",
+                                          "id": "u:0bdd3201ab9f",
+                                          "type": "button-toolbar",
+                                          "buttons": [
+                                            {
+                                              "label": "修改",
+                                              "type": "button",
+                                              "actionType": "drawer",
+                                              "drawer": {
+                                                "title": "编辑源数据初始化",
+                                                "size": "lg",
+                                                "body": {
+                                                  "type": "form",
+                                                  "api": "post:/datacheck/update_init_sql?id=${id}",
+                                                  "body": [
+                                                    {
+                                                      "name": "sourceTableName",
+                                                      "label": "源表表名",
+                                                      "type": "input-text"
+                                                    },
+                                                    {
+                                                      "name": "initSql",
+                                                      "label": "初始化sql",
+                                                      "type": "input-text"
+                                                    }
+                                                  ]
+                                                }
+                                              },
+                                              "id": "u:46e308e46b4c"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ],
+                                  "id": "u:18e93972399e"
+                                }
+                              ],
+                              "mountOnEnter": false,
+                              "unmountOnExit": false
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "1 1 auto",
+                            "flexGrow": 1,
+                            "flexBasis": "auto"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:4a30e3ab29f8"
+                        }
+                      ],
+                      "style": {
+                        "position": "static"
+                      },
+                      "direction": "row",
+                      "justify": "flex-start",
+                      "alignItems": "stretch",
+                      "id": "u:ae1362d2b1c9"
+                    }
+                  ],
+                  "id": "u:29fb1317b6af",
+                  "pullRefresh": {
+                    "disabled": true
+                  },
+                  "regions": [
+                    "body"
+                  ],
+                  "initApi": "/get_menu",
+                  "style": {
+                    "backgroundImage": "/image/bg.jpg",
+                    "backgroundSize": "100%"
+                  }
+                };
+
+
+            // 开始渲染，放入渲染容器#root，渲染的页面内容是amisJSON
+            let amisScoped = amis.embed(
+                '#root',
+                amisJSON,
+                {
+                    // 这里是初始 props
+                },
+                {
+                    theme: 'antd'
+                }
+            );
+        })();
+    </script>
+</body>
+
+</html>
