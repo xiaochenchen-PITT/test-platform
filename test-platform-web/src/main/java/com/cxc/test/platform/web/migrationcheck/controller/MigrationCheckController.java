@@ -25,8 +25,9 @@ import com.cxc.test.platform.migrationcheck.domain.config.MigrationConfig;
 import com.cxc.test.platform.migrationcheck.domain.mapping.MappingRule;
 import com.cxc.test.platform.migrationcheck.domain.mapping.SourceMappingItem;
 import com.cxc.test.platform.migrationcheck.domain.mapping.TargetMappingItem;
-import com.cxc.test.platform.migrationcheck.service.MigrationCheckService;
+import com.cxc.test.platform.migrationcheck.service.DemoMigrationCheckService;
 import com.cxc.test.platform.migrationcheck.service.MigrationConfigService;
+import com.cxc.test.platform.toolcenter.domain.ToolQuery;
 import com.cxc.test.platform.web.BaseController;
 import com.cxc.test.platform.web.migrationcheck.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -53,9 +54,9 @@ import java.util.stream.Collectors;
 public class MigrationCheckController extends BaseController {
 
     @Autowired
-    @Qualifier("migrationCheckService")
-    MigrationCheckService migrationCheckService;
-//    DemoMigrationCheckService migrationCheckService;
+    @Qualifier("demoMigrationCheckService")
+//    MigrationCheckService migrationCheckService;
+    DemoMigrationCheckService migrationCheckService;
 
     @Resource
     MigrationConfigService migrationConfigService;
@@ -105,13 +106,14 @@ public class MigrationCheckController extends BaseController {
 
     @RequestMapping(value = "/trigger", method = RequestMethod.POST)
     @ResponseBody
-    public AmisResult trigger(@RequestParam Long configId) {
+    public AmisResult trigger(@RequestParam Long configId, @RequestBody LinkedHashMap<String, Object> paramMap) {
         try {
             if (migrationCheckService.isRunning()) {
                 return AmisResult.fail("当前机器已有任务在运行，请等待其结束之后再触发", null);
             }
 
             String triggerUrl = buildTriggerUrl();
+            String runningIp = String.valueOf(paramMap.get("ip"));
 
             ResultDO<MigrationConfig> queryRet = migrationConfigService.getConfig(configId);
             if (!queryRet.getIsSuccess()) {
@@ -122,7 +124,8 @@ public class MigrationCheckController extends BaseController {
             MigrationCheckConfig migrationCheckConfig = MigrationCheckConfig.newInstance(true);
             Long batchId = System.currentTimeMillis();
             singleExecutorService.submit(() -> {
-                ResultDO<DiffResult> ret = migrationCheckService.compare(batchId, configId, migrationConfig, migrationCheckConfig, triggerUrl);
+                ResultDO<DiffResult> ret = migrationCheckService.compare(batchId, configId, migrationConfig, migrationCheckConfig,
+                    triggerUrl, runningIp);
             });
 
             return AmisResult.simpleSuccess("success", "触发成功");
@@ -144,7 +147,6 @@ public class MigrationCheckController extends BaseController {
             } else {
                 return AmisResult.fail("停止失败", null);
             }
-
         } catch (Exception e) {
             log.error("failed to stop compare", e);
             return AmisResult.fail(ErrorMessageUtils.getMessage(e), null);
@@ -158,12 +160,19 @@ public class MigrationCheckController extends BaseController {
             return last;
         }
 
-        for (DiffResultPO diffResultPO : diffResultPOList) {
-            // 指定batchId查询
-            if (batchIdSearch != null && batchIdSearch.equals(diffResultPO.getBatchId())) {
-                return diffResultPO;
+        // 指定batchId查询，最多只有一个
+        if (batchIdSearch != null && batchIdSearch > 0) {
+            for (DiffResultPO diffResultPO : diffResultPOList) {
+                if (batchIdSearch.equals(diffResultPO.getBatchId())) {
+                    return diffResultPO;
+                }
             }
 
+            return null;
+        }
+
+        // 通过时间倒排
+        for (DiffResultPO diffResultPO : diffResultPOList) {
             if (last == null) {
                 last = diffResultPO;
             } else {
@@ -187,6 +196,20 @@ public class MigrationCheckController extends BaseController {
         }
 
         return 0L;
+    }
+
+    private String parseTaskCount(DiffResultPO diffResultPO) {
+        StringBuffer sb = new StringBuffer();
+        if (diffResultPO != null && diffResultPO.getTotalCount() != null) {
+            sb.append(diffResultPO.getTotalCount());
+            sb.append(" / ");
+        }
+
+        if (diffResultPO != null && diffResultPO.getFailedCount() != null) {
+            sb.append(diffResultPO.getFailedCount());
+        }
+
+        return sb.toString();
     }
 
     private boolean filterStatusSearch(String statusSearch, DiffResultPO diffResultPO) {
@@ -231,10 +254,8 @@ public class MigrationCheckController extends BaseController {
                     .progress(lastDiffResultPO == null ? "0" : lastDiffResultPO.getProgress().substring(0, lastDiffResultPO.getProgress().length() - 1))
                     .runner(lastDiffResultPO == null || StringUtils.isBlank(lastDiffResultPO.getRunner()) ? "" :
                         lastDiffResultPO.getRunner())
-                    .totalTaskCount(lastDiffResultPO == null || lastDiffResultPO.getTotalCount() == null ? 0 :
-                        lastDiffResultPO.getTotalCount())
-                    .failedTaskCount(lastDiffResultPO == null || lastDiffResultPO.getFailedCount() == null ? 0 :
-                        lastDiffResultPO.getFailedCount())
+                    .taskCount(parseTaskCount(lastDiffResultPO))
+                    .runningIp(lastDiffResultPO == null ? null : lastDiffResultPO.getRunningIp())
                     .createdTime(lastDiffResultPO == null ? "" : CommonUtils.getPrettyDate(lastDiffResultPO.getCreatedTime()))
                     .modifiedTime(lastDiffResultPO == null ? "" : CommonUtils.getPrettyDate(lastDiffResultPO.getModifiedTime()))
                     .build();
@@ -553,6 +574,7 @@ public class MigrationCheckController extends BaseController {
             .triggerUrl(diffResultPO.getTriggerUrl())
             .totalCount(diffResultPO.getTotalCount())
             .failedCount(diffResultPO.getFailedCount())
+            .runningIp(diffResultPO.getRunningIp())
             .build();
 
         return AmisResult.success((JSONObject) JSONObject.toJSON(diffResultVO), "ok");
@@ -581,11 +603,13 @@ public class MigrationCheckController extends BaseController {
                 continue;
             }
 
-            if (StringUtils.isNotEmpty(sourceSearch) && !sourceSearch.equalsIgnoreCase(diffDetailPO.getSourceQuery())) {
+            if (StringUtils.isNotEmpty(sourceSearch) && StringUtils.isNotEmpty(diffDetailPO.getSourceQuery()) &&
+                !diffDetailPO.getSourceQuery().contains(sourceSearch)) {
                 continue;
             }
 
-            if (StringUtils.isNotEmpty(targetSearch) && !targetSearch.equalsIgnoreCase(diffDetailPO.getTargetQuery())) {
+            if (StringUtils.isNotEmpty(targetSearch) && StringUtils.isNotEmpty(diffDetailPO.getTargetQuery()) &&
+                !diffDetailPO.getTargetQuery().contains(targetSearch)) {
                 continue;
             }
 
@@ -612,6 +636,23 @@ public class MigrationCheckController extends BaseController {
         JSONObject retData = new JSONObject();
         retData.put("rows", detailVOList);
         retData.put("count", detailVOList.size());
+
+        return AmisResult.success(retData, "ok");
+    }
+
+    @RequestMapping(value = "/get_ips", method = RequestMethod.GET)
+    @ResponseBody
+    public AmisResult getIps() {
+        String triggerUrl = buildTriggerUrl();
+
+        ToolQuery toolQuery = ToolQuery.builder().build();
+        ResultDO<List<String>> queryRet = migrationConfigService.getSelfIps();
+        if (!queryRet.getIsSuccess()) {
+            return AmisResult.emptySuccess();
+        }
+
+        JSONObject retData = new JSONObject();
+        retData.put("options", queryRet.getData());
 
         return AmisResult.success(retData, "ok");
     }

@@ -15,13 +15,22 @@ public class MigrationRunningItemVO {
 
     private String status;
 
+    /**
+     * 例如20.25%
+     */
     private String progress;
 
     private String runner;
 
-    private Long totalTaskCount;
+    /**
+     * 任务总数 / 失败总数
+     */
+    private String taskCount;
 
-    private Long failedTaskCount;
+    /**
+     * IP[:端口]
+     */
+    private String runningIp;
 
     private String createdTime;
 

@@ -51,6 +51,11 @@ public class DiffResultPO {
     private Long failedCount;
 
     /**
+     * IP[:端口]
+     */
+    private String runningIp;
+
+    /**
      * 扩展字段，json格式
      */
     private String features;

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 原表+数据维度
+ * 一张表的一行记录对应一个MigrationData
  */
 @Data
 public class MigrationData {

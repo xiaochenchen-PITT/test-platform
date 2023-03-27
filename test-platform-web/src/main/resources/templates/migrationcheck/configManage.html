@@ -244,14 +244,15 @@
                                   "stripe": true
                                 },
                                 {
-                                  "name": "totalTaskCount",
-                                  "label": "任务总数",
-                                  "id": "u:92fdad445603"
+                                  "label": "任务数",
+                                  "remark": "任务总数 / 失败总数",
+                                  "id": "u:92fdad445603",
+                                  "name": "taskCount"
                                 },
                                 {
-                                  "label": "失败总数",
+                                  "label": "运行IP",
                                   "id": "u:92fdad445603",
-                                  "name": "failedTaskCount"
+                                  "name": "runningIp"
                                 },
                                 {
                                   "label": "创建时间",
@@ -273,11 +274,24 @@
                                     {
                                       "label": "执行",
                                       "type": "button",
-                                      "actionType": "ajax",
-                                      "confirmText": "确认触发执行？",
                                       "level": "primary",
+                                      "actionType": "dialog",
                                       "disabledOn": "status===\"running\"",
-                                      "api": "/migrationcheck/trigger?configId=${configId}"
+                                      "dialog": {
+                                        "title": "确认触发执行？",
+                                        "body": {
+                                          "type": "form",
+                                          "api": "http://${ip}/migrationcheck/trigger?configId=${configId}",
+                                          "body": [
+                                            {
+                                              "type": "select",
+                                              "name": "ip",
+                                              "label": "IP[:端口]",
+                                              "source": "/migrationcheck/get_ips"
+                                            }
+                                          ]
+                                        }
+                                      }
                                     },
                                     {
                                       "label": "停止",
@@ -286,7 +300,7 @@
                                       "confirmText": "确认停止该任务？",
                                       "level": "danger",
                                       "disabledOn": "status!==\"running\"",
-                                      "api": "/migrationcheck/stop"
+                                      "api": "http://${runningIp}/migrationcheck/stop"
                                     },
                                     {
                                       "label": "删除",

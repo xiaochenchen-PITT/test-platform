@@ -15,6 +15,7 @@
         <id column="trigger_url" property="triggerUrl"/>
         <id column="total_count" property="totalCount"/>
         <id column="failed_count" property="failedCount"/>
+        <id column="running_ip" property="runningIp"/>
         <id column="features" property="features"/>
         <id column="created_time" property="createdTime"/>
         <id column="modified_time" property="modifiedTime"/>
@@ -22,9 +23,9 @@
 
     <insert id="insert" parameterType="com.cxc.test.platform.infra.domain.diff.DiffResultPO">
         insert into t_compare_diff_result
-        (batch_id, config_id, is_success, is_equal, status, progress, runner, error_message, trigger_url, total_count, failed_count, features, created_time, modified_time)
+        (batch_id, config_id, is_success, is_equal, status, progress, runner, error_message, trigger_url, total_count, failed_count, running_ip, features, created_time, modified_time)
         values
-        (#{batchId}, #{configId}, #{isSuccess}, #{isEqual}, #{status}, #{progress}, #{runner}, #{errorMessage}, #{triggerUrl}, #{totalCount}, #{failedCount}, #{features}, now(), now())
+        (#{batchId}, #{configId}, #{isSuccess}, #{isEqual}, #{status}, #{progress}, #{runner}, #{errorMessage}, #{triggerUrl}, #{totalCount}, #{failedCount}, #{runningIp}, #{features}, now(), now())
     </insert>
 
     <update id="update" parameterType="com.cxc.test.platform.infra.domain.diff.DiffResultPO">

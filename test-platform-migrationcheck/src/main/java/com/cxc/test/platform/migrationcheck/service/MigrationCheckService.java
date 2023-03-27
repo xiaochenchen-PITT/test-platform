@@ -177,7 +177,7 @@ public class MigrationCheckService {
      * @return
      */
     public ResultDO<DiffResult> compare(Long batchId, Long configId, MigrationConfig migrationConfig,
-                                        MigrationCheckConfig migrationCheckConfig, String triggerUrl) {
+                                        MigrationCheckConfig migrationCheckConfig, String triggerUrl, String runningIp) {
         if (isRunning) {
             return ResultDO.fail("当前机器已有任务在运行，请等待其结束之后再触发");
         }
@@ -185,7 +185,7 @@ public class MigrationCheckService {
         // 修改java parallelStream的并发量
         System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "50");
 
-        diffResult = init(batchId, configId, triggerUrl);
+        diffResult = init(batchId, configId, triggerUrl, runningIp);
         try {
             sourceDataSource = JdbcUtils.intiDataSource(migrationConfig.getSourceDbConfig());
             targetDataSource = JdbcUtils.intiDataSource(migrationConfig.getTargetDbConfig());
@@ -266,7 +266,7 @@ public class MigrationCheckService {
         return ResultDO.success(diffResult);
     }
 
-    private DiffResult init(Long batchId, Long configId, String triggerUrl) {
+    private DiffResult init(Long batchId, Long configId, String triggerUrl, String runningIp) {
         isRunning = false;
         count.set(0);
         failedCount.set(0);
@@ -278,6 +278,7 @@ public class MigrationCheckService {
         diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
         diffResult.setProgress("1%");
         diffResult.setTriggerUrl(triggerUrl);
+        diffResult.setRunningIp(runningIp);
 
         return diffResult;
     }

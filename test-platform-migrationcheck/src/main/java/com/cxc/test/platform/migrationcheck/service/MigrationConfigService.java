@@ -2,6 +2,7 @@ package com.cxc.test.platform.migrationcheck.service;
 
 import com.cxc.test.platform.common.domain.ResultDO;
 import com.cxc.test.platform.common.utils.ErrorMessageUtils;
+import com.cxc.test.platform.infra.config.MachineUtils;
 import com.cxc.test.platform.infra.domain.diff.DiffResultPO;
 import com.cxc.test.platform.infra.domain.migrationcheck.MappingRulePO;
 import com.cxc.test.platform.infra.domain.migrationcheck.MigrationConfigPO;
@@ -46,6 +47,9 @@ public class MigrationConfigService {
 
     @Resource
     DiffDetailMapper diffDetailMapper;
+
+    @Resource
+    MachineUtils machineUtils;
 
     @Transactional
     public ResultDO<Long> addConfig(MigrationConfig migrationConfig) {
@@ -156,6 +160,10 @@ public class MigrationConfigService {
             log.error("getConfigList failed. ", e);
             return ResultDO.fail(ErrorMessageUtils.getMessage(e));
         }
+    }
+
+    public ResultDO<List<String>> getSelfIps() {
+        return ResultDO.success(machineUtils.getIps());
     }
 
 }

@@ -28,4 +28,6 @@ public class DiffResultVO {
     private Long totalCount;
 
     private Long failedCount;
+
+    private String runningIp;
 }

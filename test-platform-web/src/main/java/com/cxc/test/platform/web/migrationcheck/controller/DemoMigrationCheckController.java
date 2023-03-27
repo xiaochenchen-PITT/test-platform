@@ -88,7 +88,8 @@ public class DemoMigrationCheckController extends MigrationCheckController {
 
         Long batchId = System.currentTimeMillis();
         singleExecutorService.submit(() -> {
-            ResultDO<DiffResult> ret = migrationCheckService.compare(batchId, 0L, migrationConfig, migrationCheckConfig, triggerUrl);
+            ResultDO<DiffResult> ret = migrationCheckService.compare(batchId, 0L, migrationConfig, migrationCheckConfig,
+                triggerUrl, "127.0.0.1:8080");
 //        System.out.println(ret);
         });
 

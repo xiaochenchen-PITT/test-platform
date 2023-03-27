@@ -1,9 +1,12 @@
 server:
-  port: 8080
+  port: 8081
 spring:
   profiles:
     active: test
 
 logging:
   config: classpath:logback-spring.xml
+
+machine:
+  ips: [127.0.0.1:8080, 127.0.0.1:8081]
 

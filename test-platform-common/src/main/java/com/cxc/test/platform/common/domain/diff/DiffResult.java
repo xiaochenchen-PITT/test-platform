@@ -46,6 +46,11 @@ public class DiffResult {
 
     private Long failedCount;
 
+    /**
+     * IP[:端口]
+     */
+    private String runningIp;
+
     private Map<String, String> features = new HashMap<>();
 
     private Date createdTime;

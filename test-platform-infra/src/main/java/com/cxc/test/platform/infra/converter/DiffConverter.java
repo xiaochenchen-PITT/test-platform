@@ -28,6 +28,7 @@ public class DiffConverter {
         diffResultPO.setTriggerUrl(diffResult.getTriggerUrl());
         diffResultPO.setTotalCount(diffResult.getTotalCount());
         diffResultPO.setFailedCount(diffResult.getFailedCount());
+        diffResultPO.setRunningIp(diffResult.getRunningIp());
         diffResultPO.setFeatures(String.valueOf(diffResult.getFeatures()));
         diffResultPO.setCreatedTime(diffResult.getCreatedTime());
         diffResultPO.setModifiedTime(diffResult.getModifiedTime());
@@ -80,6 +81,7 @@ public class DiffConverter {
             .triggerUrl(diffResultPO.getTriggerUrl())
             .totalCount(diffResultPO.getTotalCount())
             .failedCount(diffResultPO.getFailedCount())
+            .runningIp(diffResultPO.getRunningIp())
             .features(CommonUtils.convterToMap(diffResultPO.getFeatures()))
             .diffDetailList(convertPO2DO(diffDetailPOList))
             .createdTime(diffResultPO.getCreatedTime())
