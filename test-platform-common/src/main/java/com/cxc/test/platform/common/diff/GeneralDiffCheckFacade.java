@@ -28,9 +28,11 @@ public interface GeneralDiffCheckFacade {
 
     /**
      * 该批次是否在运行
+     *
+     * @param batchId 批次id
      * @return
      */
-    boolean isRunning();
+    boolean isRunning(Long batchId);
 
     /**
      * 触发执行校验
@@ -46,9 +48,11 @@ public interface GeneralDiffCheckFacade {
 
     /**
      * 手动停止该批次校验
+     *
+     * @param batchId 批次id
      * @return
      */
-    boolean stop();
+    boolean stop(Long batchId);
 
     /**
      * 定时更新校验结果

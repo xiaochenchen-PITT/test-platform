@@ -116,7 +116,7 @@
                             {
                               "type": "tpl",
                               "id": "u:0113ac9a5359",
-                              "tpl": "配置录入",
+                              "tpl": "对比配置录入",
                               "inline": true,
                               "wrapperComponent": "",
                               "style": {
@@ -347,7 +347,7 @@
                                           "items": [
                                             {
                                               "type": "tpl",
-                                              "tpl": "<%= this.index + 1%>",
+                                              "tpl": "# <%= this.index + 1%>",
                                               "className": "p-t-xs",
                                               "mode": "inline"
                                             },
@@ -359,18 +359,18 @@
                                               "unique": true
                                             },
                                             {
-                                              "name": "targetLocateField",
+                                              "name": "locateField",
                                               "label": "sourceId承载字段",
                                               "type": "input-text",
                                               "required": true
                                             },
                                             {
-                                              "name": "targetLocateMethod",
+                                              "name": "locateMethodName",
                                               "label": "定位source表主键id的逻辑",
                                               "type": "input-text"
                                             },
                                             {
-                                              "name": "targetLocateMethodArgs",
+                                              "name": "locateMethodArgs",
                                               "label": "定位source表主键id的逻辑参数",
                                               "type": "input-text"
                                             }
@@ -412,7 +412,7 @@
                                           "items": [
                                             {
                                               "type": "tpl",
-                                              "tpl": "<%= this.index + 1%>",
+                                              "tpl": "# <%= this.index + 1%>",
                                               "className": "p-t-xs",
                                               "mode": "inline"
                                             },

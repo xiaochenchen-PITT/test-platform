@@ -2,26 +2,24 @@ package com.cxc.test.platform.datacheck.service;
 
 import com.cxc.test.platform.common.diff.GeneralDiffCheckFacade;
 import com.cxc.test.platform.common.diff.GeneralDiffTask;
+import com.cxc.test.platform.common.diff.ThreadPoolFactory;
 import com.cxc.test.platform.common.domain.ResultDO;
-import com.cxc.test.platform.common.domain.diff.DiffDetail;
-import com.cxc.test.platform.common.domain.diff.DiffResult;
-import com.cxc.test.platform.common.domain.diff.DiffTypeConstant;
-import com.cxc.test.platform.common.domain.diff.TaskStatusEnum;
+import com.cxc.test.platform.common.domain.diff.*;
 import com.cxc.test.platform.common.utils.CommonUtils;
 import com.cxc.test.platform.common.utils.ErrorMessageUtils;
 import com.cxc.test.platform.datacheck.domain.config.DataCheckConfig;
 import com.cxc.test.platform.datacheck.domain.config.DataConfig;
+import com.cxc.test.platform.datacheck.ext.skip.SkipCheckHandlerChain;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicLong;
@@ -37,28 +35,23 @@ public class DemoDataCheckServiceImpl implements GeneralDiffCheckFacade {
     @Resource
     DiffService diffService;
 
-    private final ExecutorService executorService = ThreadPoolFactory.getExecutorService();
+    @Resource
+    SkipCheckHandlerChain skipCheckHandlerChain;
 
-    private DiffResult diffResult;
+    private Map<Long, BatchRunningBundle> batchIdAndBundleMap = new HashMap<>();
 
-    private boolean isRunning = false;
-    private AtomicLong count = new AtomicLong(0);
-    private AtomicLong failedCount = new AtomicLong(0);
+    private final ExecutorService executorService = ThreadPoolFactory.getDataCheckExecutorService();
 
+    @AllArgsConstructor
     class DiffTask extends GeneralDiffTask {
 
         private final Long batchId;
         private final Long configId;
 
-        public DiffTask(Long batchId, Long configId) {
-            this.batchId = batchId;
-            this.configId = configId;
-        }
-
         @Override
         public DiffDetail call() throws Exception {
             // debug
-            if (!isRunning) {
+            if (!isRunning(batchId)) {
                 return null;
             }
             Thread.sleep(1000);
@@ -80,20 +73,25 @@ public class DemoDataCheckServiceImpl implements GeneralDiffCheckFacade {
                 .build();
 
             DiffDetail ret = RandomUtils.nextBoolean() ? diffDetail : null;
-            count.incrementAndGet();
-            if (ret != null) {
-                failedCount.incrementAndGet();
+            batchIdAndBundleMap.get(batchId).getCount().incrementAndGet();
+            if (diffDetail != null) {
+                batchIdAndBundleMap.get(batchId).getFailedCount().incrementAndGet();
             }
-
             return ret;
         }
     }
 
     @Override
     public DiffResult init(Long batchId, Long configId, String triggerUrl, String runningIp) {
-        isRunning = false;
-        count.set(0);
-        failedCount.set(0);
+        if (MapUtils.isEmpty(batchIdAndBundleMap)) {
+            batchIdAndBundleMap = new HashMap<>();
+        }
+
+        batchIdAndBundleMap.put(batchId, new BatchRunningBundle());
+        batchIdAndBundleMap.get(batchId).setBatchId(batchId);
+        batchIdAndBundleMap.get(batchId).setRunning(false);
+        batchIdAndBundleMap.get(batchId).setCount(new AtomicLong(0));
+        batchIdAndBundleMap.get(batchId).setFailedCount(new AtomicLong(0));
 
         DiffResult diffResult = DiffResult.builder().build();
         diffResult.setBatchId(batchId);
@@ -104,40 +102,42 @@ public class DemoDataCheckServiceImpl implements GeneralDiffCheckFacade {
         diffResult.setTriggerUrl(triggerUrl);
         diffResult.setRunningIp(runningIp);
 
+        batchIdAndBundleMap.get(batchId).setDiffResult(diffResult);
         return diffResult;
     }
 
     @Override
     public DiffResult end(DiffResult diffResult) {
-        isRunning = false;
+        Long batchId = diffResult.getBatchId();
 
-        diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
-        diffResult.setFailedCount(failedCount.get());
+        if (diffResult.getTotalCount() == null) {
+            diffResult.setTotalCount(batchIdAndBundleMap.get(batchId).getCount().get());
+        }
 
-        count.set(0);
-        failedCount.set(0);
+        diffResult.setFailedCount(batchIdAndBundleMap.get(batchId).getFailedCount().get());
+
+        diffResult.setProgress(CommonUtils.getPrettyPercentage(batchIdAndBundleMap.get(batchId).getCount().get(),
+            diffResult.getTotalCount()));
+
+        batchIdAndBundleMap.remove(batchId);
 
         return diffResult;
     }
 
     @Override
-    public boolean isRunning() {
-        return isRunning;
+    public boolean isRunning(Long batchId) {
+        return batchIdAndBundleMap.get(batchId) != null && batchIdAndBundleMap.get(batchId).isRunning();
     }
 
     @Override
     public ResultDO<DiffResult> run(Long batchId, Long configId, String triggerUrl, String runningIp, Map<String, Object> configMap) {
-        if (isRunning()) {
-            return ResultDO.fail("当前机器已有任务在运行，请等待其结束之后再触发");
-        }
+        DiffResult diffResult = init(batchId, configId, triggerUrl, runningIp);
 
         DataConfig dataConfig = (DataConfig) configMap.get("dataConfig");
         DataCheckConfig dataCheckConfig = (DataCheckConfig) configMap.get("dataCheckConfig");
 
         // 修改java parallelStream的并发量
         System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "50");
-
-        diffResult = init(batchId, configId, triggerUrl, runningIp);
         try {
             List<DiffTask> diffTaskList = new ArrayList<>();
             for (int i = 0; i < 10000; i++) {
@@ -149,7 +149,8 @@ public class DemoDataCheckServiceImpl implements GeneralDiffCheckFacade {
             diffResult.setTotalCount((long) diffTaskList.size());
 
             // 先初始化t_compare_diff_result
-            isRunning = diffService.initDiffResult(diffResult, dataConfig.getValidMappingRuleList().size());
+            boolean isRunning = diffService.initDiffResult(diffResult, dataConfig.getValidMappingRuleList().size());
+            batchIdAndBundleMap.get(batchId).setRunning(isRunning);
 
             // 执行对比
             if (dataCheckConfig.getRunAsync()) {
@@ -162,7 +163,7 @@ public class DemoDataCheckServiceImpl implements GeneralDiffCheckFacade {
                     }
                 }
             } else {
-                for (DiffTask diffTask : diffTaskList) {
+                for (DemoDataCheckServiceImpl.DiffTask diffTask : diffTaskList) {
                     DiffDetail diffDetail = diffTask.call();
                     if (diffDetail != null) {
                         diffResult.getDiffDetailList().add(diffDetail);
@@ -178,7 +179,7 @@ public class DemoDataCheckServiceImpl implements GeneralDiffCheckFacade {
             diffResult.setStatus(TaskStatusEnum.FAILED.getStatus());
             diffResult.setErrorMessage(ErrorMessageUtils.getMessage(e));
         } finally {
-            end(diffResult);
+            diffResult = end(diffResult);
 
             System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism",
                 String.valueOf(Runtime.getRuntime().availableProcessors()));
@@ -191,8 +192,11 @@ public class DemoDataCheckServiceImpl implements GeneralDiffCheckFacade {
     }
 
     @Override
-    public boolean stop() {
-        isRunning = false;
+    public boolean stop(Long batchId) {
+        if (batchIdAndBundleMap.get(batchId) != null) {
+            batchIdAndBundleMap.get(batchId).setRunning(false);
+        }
+
         return true;
     }
 
@@ -201,13 +205,20 @@ public class DemoDataCheckServiceImpl implements GeneralDiffCheckFacade {
     @Scheduled(initialDelay = 10000, fixedRate = 10000)
     public void updateDiffResultOnTime() {
         try {
-            if (isRunning) {
-                diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
-                diffResult.setProgress(CommonUtils.getPrettyPercentage(count.get(), diffResult.getTotalCount()));
-                diffResult.setFailedCount(failedCount.get());
+            ExecutorService timerExecutorService = ThreadPoolFactory.getDataCheckTimerExecutorService();
 
-                diffService.updateDiffResultOnTime(diffResult);
-            }
+            timerExecutorService.submit(() -> {
+                for (Map.Entry<Long, BatchRunningBundle> entry : batchIdAndBundleMap.entrySet()) {
+                    if (entry.getValue().isRunning()) {
+                        DiffResult diffResult = entry.getValue().getDiffResult();
+                        diffResult.setStatus(TaskStatusEnum.RUNNING.getStatus());
+                        diffResult.setProgress(CommonUtils.getPrettyPercentage(entry.getValue().getCount().get(), diffResult.getTotalCount()));
+                        diffResult.setFailedCount(entry.getValue().getFailedCount().get());
+
+                        diffService.updateDiffResultOnTime(diffResult);
+                    }
+                }
+            });
         } catch (Exception e) {
             log.error("failed to update DiffResult at regular time", e);
         }

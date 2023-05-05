@@ -2,6 +2,7 @@ package com.cxc.test.platform.web.datacheck.controller;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.cxc.test.platform.common.diff.ThreadPoolFactory;
 import com.cxc.test.platform.common.domain.AmisResult;
 import com.cxc.test.platform.common.domain.FeatureKeyConstant;
 import com.cxc.test.platform.common.domain.ResultDO;
@@ -20,6 +21,7 @@ import com.cxc.test.platform.datacheck.domain.mapping.TargetMappingItem;
 import com.cxc.test.platform.datacheck.service.DataConfigService;
 import com.cxc.test.platform.datacheck.service.DemoDataCheckServiceImpl;
 import com.cxc.test.platform.infra.config.DatabaseConfig;
+import com.cxc.test.platform.infra.config.MachineUtils;
 import com.cxc.test.platform.infra.domain.datacheck.DataConfigPO;
 import com.cxc.test.platform.infra.domain.datacheck.MappingRulePO;
 import com.cxc.test.platform.infra.domain.datacheck.SourceInitSqlPO;
@@ -42,7 +44,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 // TODO: 2023/3/8 断点续跑
@@ -54,7 +55,7 @@ import java.util.stream.Collectors;
 public class DataCheckController extends BaseController {
 
     @Autowired
-    @Qualifier("demoDataCheckService")
+    @Qualifier("demoDataCheckServiceImpl")
 //    DataCheckServiceImpl dataCheckService;
     DemoDataCheckServiceImpl dataCheckService;
 
@@ -79,7 +80,8 @@ public class DataCheckController extends BaseController {
     @Resource
     DiffDetailMapper diffDetailMapper;
 
-    public final ExecutorService singleExecutorService = Executors.newFixedThreadPool(1);
+    // 限制同时最多3个并发
+    public final ExecutorService executorService = ThreadPoolFactory.getGeneralExecutorService();
 
     private final String CONFIG_TABLE_SPLIT = "@";
     private final String CONFIG_FIELD_SPLIT = ",";
@@ -104,16 +106,35 @@ public class DataCheckController extends BaseController {
         return "datacheck/diffDetail";
     }
 
+    @RequestMapping(value = "/add_config", method = RequestMethod.POST)
+    @ResponseBody
+    public AmisResult addConfig(@RequestBody DataConfigVO dataConfigVO) {
+        String triggerUrl = buildTriggerUrl();
+
+        DataConfig dataConfig = convert(dataConfigVO);
+
+        Assert.isTrue(CollectionUtils.isEqualCollection(dataConfig.getTableAndInitSqlMap().keySet(), dataConfig.getRelatedSourceTables()),
+            "【源数据初始化】和【字段映射关系】中源表不一致，请检查配置");
+        Assert.isTrue(CollectionUtils.isEqualCollection(dataConfig.getTableAndLocatorMap().keySet(), dataConfig.getRelatedTargetTables()),
+            "【目标表中源数据定位】和【字段映射关系】中目标表不一致，请检查配置");
+
+        ResultDO<Long> ret = dataConfigService.addConfig(dataConfig);
+        if (ret.getIsSuccess()) {
+            return AmisResult.simpleSuccess("success", "保存成功，config id:" + ret.getData());
+        } else {
+            return AmisResult.fail(ret.getErrorMessage(), null);
+        }
+    }
+
     @RequestMapping(value = "/trigger", method = RequestMethod.POST)
     @ResponseBody
     public AmisResult trigger(@RequestParam Long configId, @RequestBody LinkedHashMap<String, Object> paramMap) {
         try {
-            if (dataCheckService.isRunning()) {
-                return AmisResult.fail("当前机器已有任务在运行，请等待其结束之后再触发", null);
-            }
-
             String triggerUrl = buildTriggerUrl();
             String runningIp = String.valueOf(paramMap.get("ip"));
+            if (StringUtils.isEmpty(runningIp)) {
+                runningIp = MachineUtils.getLocalIP();
+            }
 
             ResultDO<DataConfig> queryRet = dataConfigService.getConfig(configId);
             if (!queryRet.getIsSuccess()) {
@@ -129,8 +150,9 @@ public class DataCheckController extends BaseController {
             configMap.put("dataConfig", dataConfig);
             configMap.put("dataCheckConfig", dataCheckConfig);
 
-            singleExecutorService.submit(() -> {
-                ResultDO<DiffResult> ret = dataCheckService.run(batchId, configId, triggerUrl, runningIp, configMap);
+            String finalRunningIp = runningIp;
+            executorService.submit(() -> {
+                ResultDO<DiffResult> ret = dataCheckService.run(batchId, configId, triggerUrl, finalRunningIp, configMap);
             });
 
             return AmisResult.simpleSuccess("success", "触发成功");
@@ -142,11 +164,11 @@ public class DataCheckController extends BaseController {
 
     @RequestMapping(value = "/stop", method = RequestMethod.POST)
     @ResponseBody
-    public AmisResult stop() {
+    public AmisResult stop(@RequestParam Long batchId) {
         try {
             String triggerUrl = buildTriggerUrl();
 
-            boolean ret = dataCheckService.stop();
+            boolean ret = dataCheckService.stop(batchId);
             if (ret) {
                 return AmisResult.simpleSuccess("success", "停止成功");
             } else {
@@ -217,27 +239,34 @@ public class DataCheckController extends BaseController {
         return sb.toString();
     }
 
-    private boolean filterStatusSearch(String statusSearch, DiffResultPO diffResultPO) {
-        if (StringUtils.isEmpty(statusSearch)) {
-            return true;
+    private boolean filterSearch(String runningIpSearch, String statusSearch, DiffResultPO diffResultPO) {
+        if (diffResultPO == null) {
+            // 需要单独处理一下not_started，因为这是个默认值，不在diffResultPO中
+            return StringUtils.isEmpty(runningIpSearch) &&
+                (TaskStatusEnum.NOT_STARTED.getStatus().equalsIgnoreCase(statusSearch) || StringUtils.isEmpty(statusSearch));
         }
 
-        // 需要单独处理一下not_started，因为这是个默认值，不在diffResultPOList中
-        if (diffResultPO == null && TaskStatusEnum.NOT_STARTED.getStatus().equalsIgnoreCase(statusSearch)) {
-            return true;
+        // runningIpSearch
+        if (StringUtils.isNotEmpty(runningIpSearch)) {
+            if (!runningIpSearch.equals(diffResultPO.getRunningIp())) {
+                return false;
+            }
         }
 
-        if (diffResultPO != null && statusSearch.equalsIgnoreCase(diffResultPO.getStatus())) {
-            return true;
+        // statusSearch
+        if (StringUtils.isNotEmpty(statusSearch)) {
+            if (!statusSearch.equals(diffResultPO.getStatus())) {
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 
     @RequestMapping(value = "/get_config_list", method = RequestMethod.GET)
     @ResponseBody
     public AmisResult getConfigList(@RequestParam(required = false) Long configIdSearch, @RequestParam(required = false) Long batchIdSearch,
-                                    @RequestParam(required = false) String statusSearch) {
+                                    @RequestParam(required = false) String runningIpSearch, @RequestParam(required = false) String statusSearch) {
         String triggerUrl = buildTriggerUrl();
 
         ResultDO<Map<Long, List<DiffResultPO>>> queryRet = dataConfigService.getConfigList(configIdSearch);
@@ -250,7 +279,7 @@ public class DataCheckController extends BaseController {
             Long configId = entry.getKey();
             DiffResultPO lastDiffResultPO = getLastDiffResult(entry.getValue(), batchIdSearch);
 
-            if (filterStatusSearch(statusSearch, lastDiffResultPO)) {
+            if (filterSearch(runningIpSearch, statusSearch, lastDiffResultPO)) {
                 DataCheckRunningItemVO dataCheckRunningItemVO = DataCheckRunningItemVO.builder()
                     .batchId(lastDiffResultPO == null ? null : lastDiffResultPO.getBatchId())
                     .configId(configId)
@@ -274,26 +303,6 @@ public class DataCheckController extends BaseController {
         retData.put("count", dataCheckRunningItemVOList.size());
 
         return AmisResult.success(retData, "ok");
-    }
-
-    @RequestMapping(value = "/add_config", method = RequestMethod.POST)
-    @ResponseBody
-    public AmisResult addConfig(@RequestBody DataConfigVO dataConfigVO) {
-        String triggerUrl = buildTriggerUrl();
-
-        DataConfig dataConfig = convert(dataConfigVO);
-
-        Assert.isTrue(CollectionUtils.isEqualCollection(dataConfig.getTableAndInitSqlMap().keySet(), dataConfig.getRelatedSourceTables()),
-            "【源数据初始化】和【字段映射关系】中源表不一致，请检查配置");
-        Assert.isTrue(CollectionUtils.isEqualCollection(dataConfig.getTableAndLocatorMap().keySet(), dataConfig.getRelatedTargetTables()),
-            "【目标表中源数据定位】和【字段映射关系】中目标表不一致，请检查配置");
-
-        ResultDO<Long> ret = dataConfigService.addConfig(dataConfig);
-        if (ret.getIsSuccess()) {
-            return AmisResult.simpleSuccess("success", "保存成功，config id:" + ret.getData());
-        } else {
-            return AmisResult.fail(ret.getErrorMessage(), null);
-        }
     }
 
     @RequestMapping(value = "/delete_config", method = RequestMethod.GET)
@@ -525,7 +534,7 @@ public class DataCheckController extends BaseController {
                 .id(sourceInitSqlPO.getId())
                 .configId(sourceInitSqlPO.getConfigId())
                 .sourceTableName(sourceTable)
-                .initSql(sourceInitSqlPO.getInitSql())
+                .sourceDataSql(sourceInitSqlPO.getInitSql())
                 .build();
 
             rowJA.add(sourceInitSqlVO);
@@ -544,7 +553,7 @@ public class DataCheckController extends BaseController {
         SourceInitSqlPO sourceInitSqlPO = new SourceInitSqlPO();
         sourceInitSqlPO.setId(id);
         sourceInitSqlPO.setSourceTableName(sourceInitSqlVO.getSourceTableName());
-        sourceInitSqlPO.setInitSql(sourceInitSqlVO.getInitSql());
+        sourceInitSqlPO.setInitSql(sourceInitSqlVO.getSourceDataSql());
 
         int ret = sourceInitSqlMapper.update(sourceInitSqlPO);
         Assert.isTrue(ret == 1, "update source init sql failed");
@@ -717,30 +726,28 @@ public class DataCheckController extends BaseController {
             tableAndInitSqlMap.put(sourceTable, "select * from " + sourceTable);
         }
 
-        JSONArray initSqlComboJA = dataConfigVO.getInitSqlCombo();
-        if (initSqlComboJA != null) {
-            for (Object initSqlComboO : initSqlComboJA) {
-                JSONObject initSqlComboJO = new JSONObject((LinkedHashMap) initSqlComboO);
+        List<SourceInitSqlVO>  sourceInitSqlVOList = dataConfigVO.getInitSqlCombo();
+        if (CollectionUtils.isNotEmpty(sourceInitSqlVOList)) {
+            for (SourceInitSqlVO sourceInitSqlVO : sourceInitSqlVOList) {
                 // 自定义初始化sql
-                tableAndInitSqlMap.put(trim(initSqlComboJO.getString("sourceTableName")), trim(initSqlComboJO.getString("sourceDataSql")));
+                tableAndInitSqlMap.put(trim(sourceInitSqlVO.getSourceTableName()), trim(sourceInitSqlVO.getSourceDataSql()));
             }
         }
         dataConfig.setTableAndInitSqlMap(tableAndInitSqlMap);
 
         // tableAndLocatorMethodMap
         Map<String, SourceLocator> tableAndLocatorMap = new HashMap<>();
-        JSONArray locatorComboJA = dataConfigVO.getLocatorCombo();
-        for (Object locatorComboO : locatorComboJA) {
-            JSONObject locatorComboJO = new JSONObject((LinkedHashMap) locatorComboO);
+        List<SourceLocatorVO> sourceLocatorVOList = dataConfigVO.getLocatorCombo();
+        for (SourceLocatorVO sourceLocatorVO : sourceLocatorVOList) {
             SourceLocator sourceLocator = SourceLocator.builder()
-                .locateField(trim(locatorComboJO.getString("targetLocateField")))
+                .locateField(trim(sourceLocatorVO.getLocateField()))
                 .locateMethod(CustomizedMethod.builder()
-                    .beanName(trim(locatorComboJO.getString("targetLocateMethod")))
-                    .args(parseArgFromVO(locatorComboJO.getString("targetLocateMethodArgs")))
+                    .beanName(trim(sourceLocatorVO.getLocateMethodName()))
+                    .args(parseArgFromVO(sourceLocatorVO.getLocateMethodArgs()))
                     .build())
                 .build();
 
-            tableAndLocatorMap.put(trim(locatorComboJO.getString("targetTableName")), sourceLocator);
+            tableAndLocatorMap.put(trim(sourceLocatorVO.getTargetTableName()), sourceLocator);
         }
         dataConfig.setTableAndLocatorMap(tableAndLocatorMap);
 

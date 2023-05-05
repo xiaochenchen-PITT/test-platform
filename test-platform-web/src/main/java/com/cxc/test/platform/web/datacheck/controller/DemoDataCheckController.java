@@ -1,5 +1,6 @@
 package com.cxc.test.platform.web.datacheck.controller;
 
+import com.cxc.test.platform.common.diff.ThreadPoolFactory;
 import com.cxc.test.platform.common.domain.AmisResult;
 import com.cxc.test.platform.common.domain.ResultDO;
 import com.cxc.test.platform.common.domain.diff.DiffResult;
@@ -18,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * 作为一个例子参考
@@ -35,7 +35,7 @@ public class DemoDataCheckController extends DataCheckController {
     @Resource
     DataCheckServiceImpl dataCheckService;
 
-    public final ExecutorService singleExecutorService = Executors.newFixedThreadPool(1);
+    public final ExecutorService singleExecutorService = ThreadPoolFactory.getGeneralExecutorService();
 
     // config的格式：表1@字段1,字段2,...,字段n;表2@字段1,字段2,...,字段n
     // /testCbgCrm?env=test&config=table1@f1,f2;table2@f3,f4

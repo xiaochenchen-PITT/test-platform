@@ -1,5 +1,6 @@
 package com.cxc.test.platform.datacheck.service;
 
+import com.cxc.test.platform.common.diff.ThreadPoolFactory;
 import com.cxc.test.platform.common.domain.FeatureKeyConstant;
 import com.cxc.test.platform.common.domain.diff.DiffDetail;
 import com.cxc.test.platform.common.domain.diff.DiffResult;
@@ -33,7 +34,7 @@ public class DiffService {
     @Resource
     DiffConverter diffConverter;
 
-    private final ExecutorService executorService = ThreadPoolFactory.getExecutorService();
+    private final ExecutorService executorService = ThreadPoolFactory.getDataCheckExecutorService();
 
     class DbOperateTask implements Callable<Integer> {
 

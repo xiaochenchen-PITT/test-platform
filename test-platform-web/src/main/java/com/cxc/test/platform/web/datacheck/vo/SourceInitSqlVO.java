@@ -13,5 +13,5 @@ public class SourceInitSqlVO {
 
     private String sourceTableName;
 
-    private String initSql;
+    private String sourceDataSql;
 }

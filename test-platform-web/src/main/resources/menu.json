@@ -6,7 +6,7 @@
   },
   {
     "label": "开放工具中心",
-    "icon": "/svg/tool_center.svg",
+    "icon": "/svg/tool.svg",
     "customText": "HOT",
     "customLevel": "danger",
     "unfolded": true,
@@ -29,17 +29,36 @@
     ]
   },
   {
+    "label": "接口对比",
+    "icon": "/svg/apicheck.svg",
+    "customText": "HOT",
+    "customLevel": "danger",
+    "unfolded": true,
+    "children": [
+      {
+        "label": "对比录入",
+        "to": "/apicheck/set",
+        "icon": "/svg/add.svg"
+      },
+      {
+        "label": "对比管理",
+        "to": "/apicheck/manage",
+        "icon": "/svg/list.svg"
+      }
+    ]
+  },
+  {
     "label": "数据对比",
     "icon": "/svg/datacheck.svg",
     "unfolded": true,
     "children": [
       {
-        "label": "配置录入",
+        "label": "对比录入",
         "to": "/datacheck/set",
         "icon": "/svg/add.svg"
       },
       {
-        "label": "配置管理",
+        "label": "对比管理",
         "to": "/datacheck/manage",
         "icon": "/svg/list.svg"
       }

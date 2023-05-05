@@ -4,19 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="改名字 migrationcheck -&gt; datacheck">
-      <change afterPath="$PROJECT_DIR$/test-platform-apicheck/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-apicheck/src/main/java/com/cxc/test/platform/apicheck/service/ApiCheckServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/diff/GeneralDiffCheckFacade.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/diff/GeneralDiffTask.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+    <list default="true" id="fea90128-ffcc-4a47-ab75-483a7e51591e" name="Changes" comment="apicheck">
+      <change afterPath="$PROJECT_DIR$/log/SERVICE_NAME-info-20230329.log.0" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/domain/diff/BatchRunningBundle.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/apicheck/controller/ApiCheckController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/apicheck/vo/ApiCheckDbCombo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/apicheck/vo/ApiConfigVO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/apicheck/vo/CheckFieldVO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/apicheck/vo/HttpGrayVO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/apicheck/vo/SourceFieldVO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/apicheck/vo/WhiteListFieldVO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/apicheck.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/tool.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/apicheck/configSet.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DataCheckService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DataCheckServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DemoDataCheckService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DemoDataCheckServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-platform-web/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-apicheck/src/main/java/com/cxc/test/platform/apicheck/service/ApiCheckServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-apicheck/src/main/java/com/cxc/test/platform/apicheck/service/ApiCheckServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/diff/GeneralDiffCheckFacade.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/diff/GeneralDiffCheckFacade.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DataCheckServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DataCheckServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DemoDataCheckServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DemoDataCheckServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DiffService.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/DiffService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-datacheck/src/main/java/com/cxc/test/platform/datacheck/service/ThreadPoolFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-common/src/main/java/com/cxc/test/platform/common/diff/ThreadPoolFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/MachineUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-infra/src/main/java/com/cxc/test/platform/infra/config/MachineUtils.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/controller/DataCheckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/controller/DataCheckController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/controller/DemoDataCheckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/controller/DemoDataCheckController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/vo/DataConfigVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/vo/DataConfigVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/vo/MappingRuleVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/vo/MappingRuleVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/vo/SourceInitSqlVO.java" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/vo/SourceInitSqlVO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/menu.json" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/menu.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/datacheck.svg" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/datacheck.svg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg/tool_center.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/datacheck/configDetail.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/datacheck/configDetail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/datacheck/configManage.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/datacheck/configManage.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/datacheck/configSet.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/datacheck/configSet.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/datacheck/diffDetail.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/datacheck/diffDetail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter/addTool.html" beforeDir="false" afterPath="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter/addTool.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,8 +52,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Enum" />
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -62,27 +84,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "jdk.selected.JAVA_MODULE": "1.8",
-    "last_opened_file_path": "/Users/cxc/IdeaProjects/personal/test-platform",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.31866953",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/cxc/IdeaProjects/personal/test-platform/test-platform-web/src/main/resources/templates/apicheck&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.31866953&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.javacompiler&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/apicheck" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/toolcenter" />
       <recent name="$PROJECT_DIR$/test-platform-infra/src/main/resources/mapper/master" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/dashboard" />
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates/migrationcheck" />
-      <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/templates" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static/svg" />
@@ -92,17 +114,56 @@
       <recent name="$PROJECT_DIR$/test-platform-web/src/main/resources/static/index_new" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.cxc.test.platform.web.apicheck.controller" />
       <recent name="com.cxc.test.platform.common.domain.diff" />
       <recent name="com.cxc.test.platform.web.toolcenter.vo" />
       <recent name="com.cxc.test.platform.migrationcheck.service" />
       <recent name="com.cxc.test.platform.migrationcheck.domain.config" />
-      <recent name="com.cxc.test.platform.migrationcheck.domain" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Application">
     <configuration name="Application" type="Application" factoryName="Application" singleton="false" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.cxc.test.platform.web.Application" />
       <module name="test-platform-web" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="DataCheckServiceImpl" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.cxc.test.platform.datacheck.service.DataCheckServiceImpl" />
+      <module name="test-platform-datacheck" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cxc.test.platform.datacheck.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MappingRuleVO" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.cxc.test.platform.web.datacheck.vo.MappingRuleVO" />
+      <module name="test-platform-web" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cxc.test.platform.web.datacheck.vo.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.cxc.test.platform.datacheck.service.Test" />
+      <module name="test-platform-datacheck" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.cxc.test.platform.datacheck.service.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -120,9 +181,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <list>
+      <item itemvalue="Application.Test" />
+      <item itemvalue="Application.DataCheckServiceImpl" />
+      <item itemvalue="Application.MappingRuleVO" />
+      <item itemvalue="Application.Application" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Application.Application" />
+        <item itemvalue="Application.DataCheckServiceImpl" />
+        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.MappingRuleVO" />
       </list>
     </recent_temporary>
   </component>
@@ -296,7 +366,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679885588072</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="apicheck">
+      <created>1679895695290</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1679895695290</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -319,10 +396,30 @@
     <MESSAGE value="sonic菜单配置" />
     <MESSAGE value="优化" />
     <MESSAGE value="改名字 migrationcheck -&gt; datacheck" />
-    <option name="LAST_COMMIT_MESSAGE" value="改名字 migrationcheck -&gt; datacheck" />
+    <MESSAGE value="apicheck" />
+    <option name="LAST_COMMIT_MESSAGE" value="apicheck" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/apicheck/controller/ApiCheckController.java</url>
+          <line>45</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/test-platform-web/src/main/java/com/cxc/test/platform/web/datacheck/controller/DataCheckController.java</url>
+          <line>113</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/test_platform$Application.ic" NAME="Application Coverage Results" MODIFIED="1679923564390" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

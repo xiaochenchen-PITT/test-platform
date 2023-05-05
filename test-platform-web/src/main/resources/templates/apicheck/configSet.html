@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试效能平台</title>
+    <!-- 引入sdk的css文件 -->
+    <link rel="stylesheet" href="/sdk/sdk.css">
+    <link rel="stylesheet" href="/sdk/helper.css">
+    <link rel="stylesheet" href="/sdk/iconfont.css">
+    <!-- antd主题 -->
+    <link rel="stylesheet" href="/sdk/antd.css">
+    <!-- 引入sdk.js -->
+    <script src="/sdk/sdk.js"></script>
+    <!-- 页面的样式 -->
+    <style>
+        html,
+        body,
+        .app-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+
+<body>
+<!-- 渲染的容器 -->
+<div id="root" class="app-wrapper"></div>
+<!-- 页面的内容 -->
+<script type="text/javascript">
+        (function () {
+            // 初始化
+            let amis = amisRequire('amis/embed');
+            // 通过替换下面这个配置来生成不同页面
+            let amisJSON = {
+                  "type": "page",
+                  "title": "接口对比配置录入",
+                  "body": [
+                    {
+                      "type": "flex",
+                      "className": "p-1",
+                      "items": [
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "flex",
+                              "id": "u:5448a684939",
+                              "items": [
+                                {
+                                  "type": "image",
+                                  "id": "u:54892a625bc4",
+                                  "src": "/svg/qa.svg",
+                                  "width": 50,
+                                  "height": 50,
+                                  "thumbMode": "contain",
+                                  "showDimensions": false,
+                                  "innerClassName": "no-border no-bg",
+                                  "className": "no-border no-bg",
+                                  "imageClassName": "no-border no-bg",
+                                  "thumbClassName": "no-border no-bg"
+                                }
+                              ],
+                              "style": {
+                                "position": "static",
+                                "flexWrap": "nowrap",
+                                "overflowY": "auto"
+                              },
+                              "direction": "row",
+                              "isFixedHeight": false,
+                              "isFixedWidth": false,
+                              "justify": "center",
+                              "alignItems": "flex-start"
+                            },
+                            {
+                              "type": "nav",
+                              "stacked": true,
+                              "source": "${nav}",
+                              "id": "u:b057407f2664",
+                              "itemBadge": {
+                                "mode": "ribbon",
+                                "text": "${customText}",
+                                "position": "top-right",
+                                "visibleOn": "this.customText",
+                                "level": "${customLevel}"
+                              }
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "0 0 200px",
+                            "flexBasis": "200px",
+                            "overflowX": "auto",
+                            "fontFamily": "",
+                            "fontSize": 16,
+                            "textAlign": "left"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:04792b608d52",
+                          "wrapperComponent": "aside",
+                          "bodyClassName": "bg-light text-muted b-light"
+                        },
+                        {
+                          "type": "container",
+                          "body": [
+                            {
+                              "type": "tpl",
+                              "id": "u:0113ac9a5359",
+                              "tpl": "对比配置录入",
+                              "inline": true,
+                              "wrapperComponent": "",
+                              "style": {
+                                "fontFamily": "",
+                                "fontSize": 25
+                              }
+                            },
+                            {
+                              "type": "divider",
+                              "id": "u:9e26253a40dd"
+                            },
+                            {
+                              "type": "wizard",
+                              "api": "/apicheck/add_config",
+                              "steps": [
+                                {
+                                  "title": "Step 1",
+                                  "body": [
+                                    {
+                                      "type": "panel",
+                                      "title": "数据来源配置",
+                                      "body": [
+                                        {
+                                          "name": "dataSourceType",
+                                          "label": "源数据类型",
+                                          "required": true,
+                                          "type": "select",
+                                          "options": [
+                                            {
+                                              "label": "数据库表",
+                                              "value": "db"
+                                            }
+                                          ],
+                                          "id": "u:5e2dc461335d"
+                                        },
+                                        {
+                                          "name": "sourceDriverClassName",
+                                          "label": "driverClassName",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:9d6c91eaceab",
+                                          "value": "com.mysql.cj.jdbc.Driver",
+                                          "readOnly": true,
+                                          "disabled": true,
+                                          "visibleOn": "this.dataSourceType === 'db'"
+                                        },
+                                        {
+                                          "name": "sourceDbUrl",
+                                          "label": "URL",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:5f94937a07cd",
+                                          "value": "",
+                                          "placeholder": "例如jdbc:mysql://mysql-0.mysql.bbmallun-middleware.svc.cluster.local:3306/oneid_test",
+                                          "visibleOn": "this.dataSourceType === 'db'"
+                                        },
+                                        {
+                                          "name": "sourceUserName",
+                                          "label": "用户名",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:5f94937a07cd",
+                                          "value": "",
+                                          "visibleOn": "this.dataSourceType === 'db'"
+                                        },
+                                        {
+                                          "name": "sourcePassword",
+                                          "label": "密码",
+                                          "type": "input-password",
+                                          "required": true,
+                                          "id": "u:5f94937a07cd",
+                                          "value": "",
+                                          "showCounter": false,
+                                          "visibleOn": "this.dataSourceType === 'db'"
+                                        },
+                                        {
+                                          "name": "sourceTableName",
+                                          "label": "数据表名",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:5f94937a07cd",
+                                          "value": "",
+                                          "visibleOn": "this.dataSourceType === 'db'"
+                                        },
+                                        {
+                                          "type": "combo",
+                                          "name": "sourceFieldCombo",
+                                          "label": "字段名",
+                                          "multiple": true,
+                                          "visibleOn": "this.dataSourceType === 'db'",
+                                          "items": [
+                                            {
+                                              "type": "tpl",
+                                              "tpl": "# <%= this.index + 1%>",
+                                              "className": "p-t-xs",
+                                              "mode": "inline"
+                                            },
+                                            {
+                                              "name": "sourceFieldName",
+                                              "label": "字段名(英文)",
+                                              "type": "input-text",
+                                              "required": true,
+                                              "unique": true
+                                            },
+                                            {
+                                              "name": "sourceFieldClassType",
+                                              "label": "字段类型",
+                                              "type": "select",
+                                              "options": [
+                                                {
+                                                  "label": "数字",
+                                                  "value": "java.lang.Long"
+                                                },
+                                                {
+                                                  "label": "字符串",
+                                                  "value": "java.lang.String"
+                                                }
+                                              ],
+                                              "required": true
+                                            },
+                                            {
+                                              "name": "sourceFieldLabel",
+                                              "label": "字段别名(中文)",
+                                              "type": "input-text",
+                                              "required": true
+                                            }
+                                          ],
+                                          "id": "u:836572dbde62",
+                                          "multiLine": true,
+                                          "required": true
+                                        }
+                                      ],
+                                      "id": "u:6e4c52b492b9",
+                                      "affixFooter": false
+                                    }
+                                  ],
+                                  "id": "u:4a943559b2f2",
+                                  "mode": "normal"
+                                },
+                                {
+                                  "title": "Step 2",
+                                  "body": [
+                                    {
+                                      "type": "panel",
+                                      "title": "接口",
+                                      "body": [
+                                        {
+                                          "name": "apiType",
+                                          "label": "接口类型",
+                                          "required": true,
+                                          "type": "select",
+                                          "options": [
+                                            {
+                                              "label": "Http接口",
+                                              "value": "http"
+                                            },
+                                            {
+                                              "label": "Rpc接口",
+                                              "value": "rpc"
+                                            }
+                                          ],
+                                          "id": "u:cd1ca8f043bb"
+                                        },
+                                        {
+                                          "name": "httpMethod",
+                                          "label": "Http接口类型",
+                                          "visibleOn": "this.apiType === 'http'",
+                                          "type": "select",
+                                          "required": true,
+                                          "options": [
+                                            {
+                                              "label": "GET",
+                                              "value": "get"
+                                            },
+                                            {
+                                              "label": "POST",
+                                              "value": "post"
+                                            }
+                                          ],
+                                          "id": "u:1180ceb3d25f"
+                                        },
+                                        {
+                                          "name": "httpApi",
+                                          "label": "接口定义",
+                                          "visibleOn": "this.apiType === 'http'",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "description": "例如http://127.0.0.1:8080/toolcenter/get_order?data=#{var1}&type=#{var2}",
+                                          "id": "u:1a8fe3a566ca",
+                                          "labelRemark": {
+                                            "icon": "fa fa-question-circle",
+                                            "trigger": [
+                                              "hover"
+                                            ],
+                                            "className": "Remark--warning",
+                                            "placement": "right",
+                                            "content": "变量用\"#{var}\"替换",
+                                            "title": "入参变量"
+                                          }
+                                        },
+                                        {
+                                          "name": "rpcApi",
+                                          "label": "接口定义",
+                                          "visibleOn": "this.apiType === 'rpc'",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:1a8fe3a566ca"
+                                        }
+                                      ],
+                                      "id": "u:279a3eeac51e",
+                                      "affixFooter": false,
+                                      "hidden": false
+                                    },
+                                    {
+                                      "type": "divider",
+                                      "id": "u:610971b00b7c"
+                                    },
+                                    {
+                                      "type": "panel",
+                                      "title": "入参输入",
+                                      "body": [
+                                        {
+                                          "type": "json-editor",
+                                          "name": "param",
+                                          "id": "u:3323a2d67f2a",
+                                          "allowFullscreen": true,
+                                          "required": true,
+                                          "placeholder": "{\n  \"type\": \"add\",\n  \"data\": \"#{productId}\"\n}",
+                                          "labelRemark": {
+                                            "icon": "fa fa-question-circle",
+                                            "trigger": [
+                                              "hover"
+                                            ],
+                                            "className": "Remark--warning",
+                                            "placement": "right",
+                                            "content": "变量用\"#{var}\"替换",
+                                            "title": "入参变量"
+                                          },
+                                          "label": "入参编辑器",
+                                          "validations": {
+                                            "isJson": true
+                                          }
+                                        }
+                                      ],
+                                      "id": "u:279a3eeac51e",
+                                      "affixFooter": false,
+                                      "hidden": false
+                                    },
+                                    {
+                                      "type": "divider",
+                                      "id": "u:610971b00b7c"
+                                    },
+                                    {
+                                      "type": "panel",
+                                      "title": "出参校验",
+                                      "body": [
+                                        {
+                                          "name": "apiCheckSwitch",
+                                          "type": "switch",
+                                          "label": "是否校验接口返回",
+                                          "id": "u:9853d851f08f",
+                                          "value": true,
+                                          "readOnly": true,
+                                          "disabled": true,
+                                          "mode": "horizontal"
+                                        },
+                                        {
+                                          "name": "apiWhiteListFieldCombo",
+                                          "type": "combo",
+                                          "label": "出参白名单字段",
+                                          "id": "u:836572dbde62",
+                                          "visibleOn": "this.apiCheckSwitch === true",
+                                          "multiple": true,
+                                          "items": [
+                                            {
+                                              "type": "tpl",
+                                              "tpl": "# <%= this.index + 1%> ",
+                                              "className": "p-t-xs",
+                                              "mode": "inline"
+                                            },
+                                            {
+                                              "name": "responseJsonPath",
+                                              "label": "字段json path",
+                                              "type": "input-text",
+                                              "required": true,
+                                              "unique": true
+                                            }
+                                          ],
+                                          "required": false
+                                        },
+                                        {
+                                          "type": "divider",
+                                          "id": "u:f69b041a5dcf"
+                                        },
+                                        {
+                                          "name": "dbCheckSwitch",
+                                          "label": "是否校验DB",
+                                          "type": "switch",
+                                          "id": "u:9853d851f08f",
+                                          "value": false,
+                                          "mode": "horizontal"
+                                        },
+                                        {
+                                          "name": "checkDriverClassName",
+                                          "label": "待校验数据库driverClassName",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:9d6c91eaceab",
+                                          "value": "com.mysql.cj.jdbc.Driver",
+                                          "visibleOn": "this.dbCheckSwitch === true",
+                                          "readOnly": true,
+                                          "disabled": true
+                                        },
+                                        {
+                                          "name": "checkDbUrl",
+                                          "label": "待校验数据库URL",
+                                          "type": "input-text",
+                                          "required": true,
+                                          "id": "u:5f94937a07cd",
+                                          "value": "",
+                                          "visibleOn": "this.dbCheckSwitch === true",
+                                          "placeholder": "例如jdbc:mysql://mysql-0.mysql.bbmallun-middleware.svc.cluster.local:3306/oneid_test"
+                                        },
+                                        {
+                                          "type": "input-text",
+                                          "name": "checkUserName",
+                                          "label": "待校验数据库用户名",
+                                          "visibleOn": "this.dbCheckSwitch === true",
+                                          "id": "u:5f94937a07cd",
+                                          "required": true,
+                                          "value": ""
+                                        },
+                                        {
+                                          "type": "input-password",
+                                          "name": "checkPassword",
+                                          "label": "待校验数据库密码",
+                                          "visibleOn": "this.dbCheckSwitch === true",
+                                          "id": "u:5f94937a07cd",
+                                          "required": true,
+                                          "value": "",
+                                          "showCounter": false
+                                        },
+                                        {
+                                          "type": "combo",
+                                          "name": "dbCheckCombo",
+                                          "label": "待校验数据表",
+                                          "visibleOn": "this.dbCheckSwitch === true",
+                                          "multiple": true,
+                                          "items": [
+                                            {
+                                              "type": "tpl",
+                                              "tpl": "# <%= this.index + 1%>",
+                                              "className": "p-t-xs",
+                                              "mode": "inline"
+                                            },
+                                            {
+                                              "name": "checkTableName",
+                                              "label": "待校验数据表名",
+                                              "type": "input-text",
+                                              "required": true,
+                                              "unique": true
+                                            },
+                                            {
+                                              "type": "input-sub-form",
+                                              "name": "checkFieldCombo",
+                                              "label": "数据定位",
+                                              "labelRemark": {
+                                                "icon": "fa fa-question-circle",
+                                                "trigger": [
+                                                  "hover"
+                                                ],
+                                                "className": "Remark--warning",
+                                                "placement": "right",
+                                                "content": "待校验表和源表之间的字段对应关系",
+                                                "title": "数据定位"
+                                              },
+                                              "required": true,
+                                              "multiple": true,
+                                              "btnLabel": "${checkFieldName} = ${sourceFieldName}",
+                                              "form": {
+                                                "title": "字段对应关系",
+                                                "body": [
+                                                  {
+                                                    "name": "checkFieldName",
+                                                    "label": "目标字段名",
+                                                    "required": true,
+                                                    "type": "input-text",
+                                                    "description": "待校验数据表名中的字段名"
+                                                  },
+                                                  {
+                                                    "name": "sourceFieldName",
+                                                    "label": "原字段名",
+                                                    "required": true,
+                                                    "type": "input-text",
+                                                    "description": "源数据表名中的字段名(英文)"
+                                                  }
+                                                ]
+                                              }
+                                            },
+                                            {
+                                              "type": "combo",
+                                              "name": "dbCheckWhiteListFieldCombo",
+                                              "label": "数据库白名单字段",
+                                              "visibleOn": "this.dbCheckSwitch === true",
+                                              "multiple": true,
+                                              "items": [
+                                                {
+                                                  "type": "tpl",
+                                                  "tpl": "# <%= this.index + 1%> ",
+                                                  "className": "p-t-xs",
+                                                  "mode": "inline"
+                                                },
+                                                {
+                                                  "name": "dbField",
+                                                  "label": "数据库字段名",
+                                                  "type": "input-text",
+                                                  "required": true,
+                                                  "unique": true
+                                                }
+                                              ],
+                                              "id": "u:836572dbde62",
+                                              "required": false
+                                            }
+                                          ],
+                                          "id": "u:836572dbde62",
+                                          "required": true,
+                                          "multiLine": true
+                                        }
+                                      ],
+                                      "id": "u:279a3eeac51e",
+                                      "affixFooter": false,
+                                      "hidden": false
+                                    }
+                                  ],
+                                  "mode": "normal",
+                                  "id": "u:182ee2188877"
+                                },
+                                {
+                                  "title": "Step 3",
+                                  "body": [
+                                    {
+                                      "type": "panel",
+                                      "title": "灰度配置",
+                                      "body": [
+                                        {
+                                          "name": "grayDecideType",
+                                          "label": "灰度判定类型",
+                                          "required": true,
+                                          "type": "select",
+                                          "options": [
+                                            {
+                                              "label": "Http Header",
+                                              "value": "header"
+                                            }
+                                          ],
+                                          "id": "u:5e2dc461335d",
+                                          "labelRemark": {
+                                            "icon": "fa fa-question-circle",
+                                            "trigger": [
+                                              "hover"
+                                            ],
+                                            "className": "Remark--warning",
+                                            "placement": "right",
+                                            "content": "配置的为新链路，未配置的为老链路",
+                                            "title": "灰度配置"
+                                          }
+                                        },
+                                        {
+                                          "type": "combo",
+                                          "name": "httpGrayCombo",
+                                          "label": "Http Header",
+                                          "visibleOn": "this.grayDecideType === 'header'",
+                                          "items": [
+                                            {
+                                              "name": "headerKey",
+                                              "label": "Key",
+                                              "type": "input-text",
+                                              "required": true,
+                                              "unique": true
+                                            },
+                                            {
+                                              "name": "headerValue",
+                                              "label": "Value",
+                                              "type": "input-text",
+                                              "required": true
+                                            }
+                                          ],
+                                          "id": "u:836572dbde62",
+                                          "required": true,
+                                          "multiple": true
+                                        }
+                                      ],
+                                      "id": "u:5758819d0edd",
+                                      "affixFooter": false
+                                    }
+                                  ],
+                                  "mode": "normal",
+                                  "id": "u:1a36b75a1cda"
+                                }
+                              ],
+                              "id": "u:add7e767eede",
+                              "mode": "horizontal"
+                            }
+                          ],
+                          "size": "xs",
+                          "style": {
+                            "position": "static",
+                            "display": "block",
+                            "flex": "1 1 auto",
+                            "flexGrow": 1,
+                            "flexBasis": "auto"
+                          },
+                          "wrapperBody": false,
+                          "isFixedHeight": false,
+                          "isFixedWidth": false,
+                          "id": "u:4a30e3ab29f8"
+                        }
+                      ],
+                      "style": {
+                        "position": "static"
+                      },
+                      "direction": "row",
+                      "justify": "flex-start",
+                      "alignItems": "stretch",
+                      "id": "u:8277455b325c"
+                    }
+                  ],
+                  "id": "u:f247edae04a6",
+                  "pullRefresh": {
+                    "disabled": true
+                  },
+                  "regions": [
+                    "body"
+                  ],
+                  "asideResizor": false,
+                  "initApi": {
+                    "url": "/get_menu",
+                    "method": "get"
+                  },
+                  "style": {
+                    "backgroundImage": "/image/bg.jpg",
+                    "backgroundSize": "cover"
+                  }
+                };
+
+
+            // 开始渲染，放入渲染容器#root，渲染的页面内容是amisJSON
+            let amisScoped = amis.embed(
+                '#root',
+                amisJSON,
+                {
+                    // 这里是初始 props
+                },
+                {
+                    theme: 'antd'
+                }
+            );
+        })();
+    </script>
+</body>
+
+</html>

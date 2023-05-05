@@ -23,7 +23,7 @@ public class ApiCheckServiceImpl implements GeneralDiffCheckFacade {
     }
 
     @Override
-    public boolean isRunning() {
+    public boolean isRunning(Long batchId) {
         return false;
     }
 
@@ -33,7 +33,7 @@ public class ApiCheckServiceImpl implements GeneralDiffCheckFacade {
     }
 
     @Override
-    public boolean stop() {
+    public boolean stop(Long batchId) {
         return false;
     }
 
